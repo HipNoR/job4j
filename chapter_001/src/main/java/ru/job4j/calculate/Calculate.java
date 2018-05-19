@@ -6,17 +6,14 @@ package ru.job4j.calculate;
 *@since $Id$
 *@version 0.1
 */
-
 public class Calculate {
 	/**
 	*Метод main
 	*@param args - args
 	*/
-	
 	public static void main(String[] args) {
 		System.out.println("Hello World");
     }
-	
 	/**
 	* Method echo.
 	* @param name Your name.
