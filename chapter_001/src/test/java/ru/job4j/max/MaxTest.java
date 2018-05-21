@@ -17,4 +17,11 @@ public class MaxTest {
         int result = maxim.max(1, 2);
         assertThat(result, is(2));
     }
+
+    @Test
+    public void thenOneBiggerThenTwo() {
+        Max maxim = new Max();
+        int result = maxim.max(3, 5, 1);
+        assertThat(result, is(5));
+    }
 }
