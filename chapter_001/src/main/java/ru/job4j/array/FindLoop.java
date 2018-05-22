@@ -8,7 +8,7 @@ package ru.job4j.array;
  */
 public class FindLoop {
     /**
-     * Method search the a value and returns the index of this value.
+     * Method searches for a value and returns the index of this value.
      * If there are no matches, then -1 is returned.
      * @param data
      * @param el
