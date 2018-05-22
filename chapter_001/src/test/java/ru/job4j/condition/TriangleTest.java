@@ -24,7 +24,7 @@ public class TriangleTest {
     @Test
     public void whenAreaSetThreePointsThenTriangleAreaCantExist() {
         Point a = new Point(0, 0);
-        Point b = new Point(0, 2);
+        Point b = new Point(0, 5);
         Point c = new Point(0, 0);
 
         Triangle triangle = new Triangle(a, b, c);

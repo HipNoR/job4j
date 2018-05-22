@@ -60,6 +60,6 @@ public class Triangle {
      * @return - returns is there a triangle?
      */
     private boolean exist(double ab, double ac, double bc) {
-        return (ab != 0 && ac != 0 && bc != 0);
+        return ab + ac > bc && ac + bc > ab && ab + bc > ac;
     }
 }
