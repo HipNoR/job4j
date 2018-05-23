@@ -21,12 +21,8 @@ public class ArrayChar {
     public boolean startWith(String prefix) {
         boolean result = true;
         char[] value = prefix.toCharArray();
-        char[] trimmedData = new char[value.length];
-        for (int index = 0; index < trimmedData.length; index++) {
-            trimmedData[index] = data[index];
-        }
-        for (int index = 0; index < trimmedData.length; index++) {
-            if (trimmedData[index] != value[index]) {
+        for (int index = 0; index < value.length; index++) {
+            if (data[index] != value[index]) {
                 result = false;
                 break;
             }
