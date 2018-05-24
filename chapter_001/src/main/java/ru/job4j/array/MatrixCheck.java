@@ -24,7 +24,7 @@ public class MatrixCheck {
             if (data[index] [index] == data [index + 1] [index + 1]) {
                 result = true;
             } else {
-                result = false;
+                result = data[index] [index] == data[index + 1] [index + 1];
                 break;
             }
         }
