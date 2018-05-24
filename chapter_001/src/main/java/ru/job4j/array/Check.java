@@ -13,11 +13,9 @@ public class Check {
      * @return - true or false.
      */
     public boolean mono(boolean[] data) {
-        boolean result = false;
-        for (int index = 0; index < data.length - 1; index++) {
-            if (data[index] == data[index + 1]) {
-                result = true;
-            } else {
+        boolean result = true;
+        for (int index = 1; index < data.length - 1; index++) {
+            if (data[0] != data[index]) {
                 result = false;
                 break;
             }
