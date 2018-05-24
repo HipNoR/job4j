@@ -14,18 +14,10 @@ public class Turn {
      */
     public int[] turn(int[] array) {
         int temp;  //временная переменная для хранения значений из массива
-        if (array.length % 2 == 0) {
-            for (int index = 0; index < array.length / 2; index++) {
-                temp = array[index];
-                array[index] = array[array.length - index - 1];
-                array[array.length - index - 1] = temp;
-            }
-        } else {
-            for (int index = 0; index < (array.length - 1) / 2; index++) {
-                temp = array[index];
-                array[index] = array[array.length - index - 1];
-                array[array.length - index - 1] = temp;
-            }
+        for (int index = 0; index < array.length / 2; index++) {
+            temp = array[index];
+            array[index] = array[array.length - index - 1];
+            array[array.length - index - 1] = temp;
         }
         return array;
     }
