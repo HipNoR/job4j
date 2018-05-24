@@ -13,18 +13,16 @@ public class MatrixCheck {
      * @return true or false.
      */
     public boolean mono(boolean[][] data) {
-        boolean result = false;
+        boolean result = true;
         int size; // variable stores the size of the smaller side of the array
         if (data.length > data[0].length) {
             size = data[0].length;
         } else {
             size = data.length;
         }
-        for (int index = 0; index < size - 1; index++) {
-            if (data[index] [index] == data [index + 1] [index + 1]) {
-                result = true;
-            } else {
-                result = data[index] [index] == data[index + 1] [index + 1];
+        for (int index = 1; index != size; index++) {
+            if (data[0] [0] != data[index] [index]) {
+                result = false;
                 break;
             }
         }
