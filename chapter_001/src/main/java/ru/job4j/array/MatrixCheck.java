@@ -1,7 +1,7 @@
 package ru.job4j.array;
 
 /**
- * Class Matrix - ----
+ * Class Matrix - checks the diagonal for equality of elements.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
  * @version 0.1
@@ -9,12 +9,13 @@ package ru.job4j.array;
 public class MatrixCheck {
     /**
      * Method checks the diagonal for equality of elements.
+     *Checks the shortest side of the array to protect against the ArrayOutIndexException.
      * @param data input array.
      * @return true or false.
      */
     public boolean mono(boolean[][] data) {
         boolean result = true;
-        int size; // variable stores the size of the smaller side of the array
+        int size;
         if (data.length > data[0].length) {
             size = data[0].length;
         } else {

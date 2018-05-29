@@ -15,9 +15,9 @@ public class Counter {
      */
     public int add(int start, int finish) {
         int sum = 0;
-        for (int i = start; i <= finish; i++) {
-            if (i % 2 == 0) {
-                sum += i;
+        for (int index = start; index <= finish; index++) {
+            if (index % 2 == 0) {
+                sum += index;
             }
         }
         return sum;

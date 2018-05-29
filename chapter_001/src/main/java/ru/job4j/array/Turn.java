@@ -13,7 +13,7 @@ public class Turn {
      * @return reverted array.
      */
     public int[] turn(int[] array) {
-        int temp;  //временная переменная для хранения значений из массива
+        int temp;
         for (int index = 0; index < array.length / 2; index++) {
             temp = array[index];
             array[index] = array[array.length - index - 1];

@@ -7,7 +7,6 @@ package ru.job4j.array;
  * @version 0.1
  */
 public class Matrix {
-
     /**
      * Method create create a multiplication table.
      * @param size - sets size of the table.
@@ -15,9 +14,9 @@ public class Matrix {
      */
     public int[][] multiple(int size) {
         int[][] table = new int[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                table[i] [j] = (i + 1)  * (j + 1);
+        for (int out = 0; out < size; out++) {
+            for (int in = 0; in < size; in++) {
+                table[out] [in] = (out + 1)  * (in + 1);
             }
         }
         return table;

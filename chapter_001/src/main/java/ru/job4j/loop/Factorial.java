@@ -10,13 +10,13 @@ public class Factorial {
 
     /**
      * Method calculates the factorial of a number.
-     * @param n input the number.
-     * @return factorial of the number n.
+     * @param number input the number.
+     * @return factorial of the number.
      */
-    public int calc(int n) {
+    public int calc(int number) {
         int sum = 1;
-        for (int i = 1; i <= n; i++) {
-            sum *= i;
+        for (int index = 1; index <= number; index++) {
+            sum *= index;
         }
         return sum;
     }
