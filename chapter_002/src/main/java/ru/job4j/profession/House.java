@@ -8,15 +8,15 @@ public class House {
         return this.name;
     }
 
-    public String setName(String name) {
-        return this.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getFloors() {
         return this.floors;
     }
 
-    public int setFloors(int floors) {
-        return  this.floors = floors;
+    public void setFloors(int floors) {
+        this.floors = floors;
     }
 }
