@@ -104,5 +104,20 @@ public class TrackerTest {
         // Сравниваем, что имя возвращенного элемента методом findById равно имени ожидаемого элемента.
         assertThat(tracker.findById(second.getId()).getName(), is("test2"));
     }
+    @Test
+    public void whenFindByIdAndCantFindThenReturnNull() {
+        Tracker tracker = new Tracker();
+        // Создаем три заявки и добавляем их все в трекер. Каждая получает уникальный id.
+        Item first = new Item("test1", "testDescription1", 123L);
+        tracker.add(first);
+        Item second = new Item("test2", "testDescription2", 234L);
+        tracker.add(second);
+        Item third = new Item("test3", "testDescription3", 456L);
+        tracker.add(third);
+        // Создаем объект класса Item и инициализируем его null.
+        Item expected = null;
+        // Сравниваем, что если поиск не нашел элемента, то метод возвращает null.
+        assertThat(tracker.findById("forTest"), is(expected));
+    }
 }
 
