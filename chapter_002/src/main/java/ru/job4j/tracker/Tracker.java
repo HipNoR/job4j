@@ -50,22 +50,14 @@ public class Tracker {
      * @param id input id of item.
      */
     public void delete(String id) {
-        Item[] temp = new Item[this.position];
-        int start = 0;
+        int start;
         for (int index = 0; index < this.position; index++) {
             if (this.items[index].getId().equals(id)) {
-                this.position--;
                 start = index;
+                System.arraycopy(this.items, start + 1, this.items, start, this.position - start - 1);
+                this.items[this.position--] = null;
                 break;
-            } else {
-                start = -1;
             }
-        }
-        if (start >= 0) {
-            System.arraycopy(this.items, 0, temp, 0, start);
-            System.arraycopy(this.items, start + 1, temp, start, this.position - start);
-            this.items[this.position] = null;
-            System.arraycopy(temp, 0, this.items, 0, this.position);
         }
     }
 
