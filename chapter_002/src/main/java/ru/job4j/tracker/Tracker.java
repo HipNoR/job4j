@@ -49,16 +49,19 @@ public class Tracker {
      * Search and delete item by id.
      * @param id input id of item.
      */
-    public void delete(String id) {
+    public boolean delete(String id) {
         int start;
+        boolean deleted = false;
         for (int index = 0; index < this.position; index++) {
             if (this.items[index].getId().equals(id)) {
                 start = index;
                 System.arraycopy(this.items, start + 1, this.items, start, this.position - start - 1);
                 this.items[this.position--] = null;
+                deleted = true;
                 break;
             }
         }
+        return deleted;
     }
 
     /**

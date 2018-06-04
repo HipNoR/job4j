@@ -135,11 +135,11 @@ public class StartUI {
     private void deleteItem() {
         System.out.println("------------ Delete task by id --------------");
         String id = this.input.ask("Enter the task ID that you want to delete :");
-        this.tracker.delete(id);
-        if (this.tracker.findById(id) != null) {
+        boolean deleted = this.tracker.delete(id);
+        if (deleted) {
             System.out.println("------------ Item was deleted --------------");
         } else {
-            System.out.println("There is no task with tis id.");
+            System.out.println("There is no tusks with id " + id);
         }
     }
 
