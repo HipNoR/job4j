@@ -54,6 +54,17 @@ public class Item {
         this.comments = comments;
     }
 
+    public  Item(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
+    }
+
+    public  Item(String id, String name, String desc) {
+        this.id = id;
+        this.name = name;
+        this.desc = desc;
+    }
+
     public  Item(String name, String desc, long created) {
         this.name = name;
         this.desc = desc;

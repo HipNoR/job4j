@@ -92,9 +92,14 @@ public class Tracker {
                 temp[count++] = this.items[index];
             }
         }
-        Item[] listOfNames = new Item[count];
-        for (int index = 0; index < count; index++) {
-            listOfNames[index] = temp[index];
+        Item[] listOfNames;
+        if (count == 0) {
+            listOfNames = null;
+        } else {
+            listOfNames = new Item[count];
+            for (int index = 0; index < count; index++) {
+                listOfNames[index] = temp[index];
+            }
         }
         return  listOfNames;
     }
