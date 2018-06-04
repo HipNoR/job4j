@@ -25,9 +25,10 @@ public class Tracker {
      * Add item to array.
      * @param item input object of class item.
      */
-    public void add(Item item) {
+    public  Item add(Item item) {
         item.setId(generatedId());
         this.items[this.position++] = item;
+        return item;
     }
 
     /**
@@ -57,12 +58,15 @@ public class Tracker {
                 start = index;
                 break;
             } else {
-                temp[index] = this.items[index];
+                start = -1;
             }
         }
-        System.arraycopy(this.items, start + 1, temp, start, this.position - start);
-        this.items[this.position] = null;
-        System.arraycopy(temp, 0, this.items, 0, this.position);
+        if (start >= 0) {
+            System.arraycopy(this.items, 0, temp, 0, start);
+            System.arraycopy(this.items, start + 1, temp, start, this.position - start);
+            this.items[this.position] = null;
+            System.arraycopy(temp, 0, this.items, 0, this.position);
+        }
     }
 
     /**

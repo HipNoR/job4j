@@ -52,6 +52,29 @@ public class TrackerTest {
     }
 
     @Test
+    public void whenDeleteAndCantFindThenReturnNewItem() {
+        Tracker tracker = new Tracker();
+        // Создаем три заявки и добавляем их все в трекер. Каждая получает уникальный id.
+        Item first = new Item("test1", "testDescription1", 123L);
+        tracker.add(first);
+        Item second = new Item("test2", "testDescription2", 234L);
+        tracker.add(second);
+        Item third = new Item("test3", "testDescription3", 456L);
+        tracker.add(third);
+        // Удаляем второй объект Item по его id.
+        tracker.delete(third.getId());
+        tracker.delete(third.getId());
+        tracker.delete(third.getId());
+        // Создаем ожидаемый массив класса Item.
+        Item[] expected = new Item[2];
+        expected[0] = first;
+        expected[1] = second;
+        // Проверяем, что итоговый и ожидаемый массив равны.
+        assertThat(tracker.findAll(), is(expected));
+
+    }
+
+    @Test
     public void whenFindAllThenReturnAll() {
         Tracker tracker = new Tracker();
         // Создаем три заявки и добавляем их все в трекер. Каждая получает уникальный id.
