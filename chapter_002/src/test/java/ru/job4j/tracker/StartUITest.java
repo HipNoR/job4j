@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -44,7 +45,9 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"3", second.getId(), "6"});
         // создаём StartUI и вызываем метод init()
         new StartUI(input, tracker).init();
-        // проверяем, что первый элемент массива в трекере содержит имя, введённое при эмуляции.
+        // проверяем, что возвращаемый массив имеет ожидаемый размер и содержит верные элементы.
+        assertThat(tracker.findAll()[0].getName(), is("test1"));
         assertThat(tracker.findAll()[1].getName(), is("test3"));
+        assertThat(tracker.findAll().length, is(2));
     }
 }
