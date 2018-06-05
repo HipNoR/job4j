@@ -166,7 +166,7 @@ public class StartUI {
         System.out.println("------------ Find task by Name --------------");
         String name = this.input.ask("Enter the tasks name that you want to find :");
         Item[] items = this.tracker.findByName(name);
-        if (items != null) {
+        if (items.length > 0) {
             for (Item item : items) {
                 System.out.println("Id: " + item.getId() + " Name: "
                         + item.getName() + " Description: " + item.getDesc());

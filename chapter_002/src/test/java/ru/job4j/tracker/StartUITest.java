@@ -1,60 +1,211 @@
 package ru.job4j.tracker;
 
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class StartUITest {
+    //создаем поле трекер
+    private final Tracker tracker = new Tracker();
+    // поле ссылки на стандартный вывод в консоль
+    private final PrintStream stdout = System.out;
+    // Поле - буфер для хранения данных вывода
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    // Метод возвращает Итем по порядковому индексу
+    private final Item getItemByIndex(int index) {
+        return this.tracker.findAll()[index];
+    }
+    // Строка Меню для проверки вывода в консоль
+    private final StringBuilder menu = new StringBuilder()
+            .append("Menu.")
+            .append(System.lineSeparator())
+            .append("0. Add new Item.")
+            .append(System.lineSeparator())
+            .append("1. Show all items.")
+            .append(System.lineSeparator())
+            .append("2. Edit item.")
+            .append(System.lineSeparator())
+            .append("3. Delete item.")
+            .append(System.lineSeparator())
+            .append("4. Find item by Id.")
+            .append(System.lineSeparator())
+            .append("5. Find items by name.")
+            .append(System.lineSeparator())
+            .append("6. Exit Program.")
+            .append(System.lineSeparator());
+    // Метод реализует замену стандартного вывода в консоль на вывод в память.
+    @Before
+    public void loadOutput() {
+        System.setOut(new PrintStream(this.out));
+    }
+    //Метод реализует обратный выход в консоль
+    @After
+    public void backOutput() {
+        System.setOut(this.stdout);
+    }
+    // метод реализует иммитацию ввода пользователя и запуск программы
+    public void inputAndStart(String[] input) {
+        Input commands = new StubInput(input);
+        new StartUI(commands, this.tracker).init();
+    }
+    // Метод добавляет в итемы в хранилище через цикл
+    public void addTasks(int number) {
+        for (int index = 0; index < number; index++) {
+            this.tracker.add(new Item("test" + index, "desc" + index));
+        }
+    }
+
+
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        // создаём Tracker
-        Tracker tracker = new Tracker();
-        // создаём StubInput и добавляем две заявки
-        Input input = new StubInput(new String[]{"0", "test name", "desc", "0", "test name2", "desc2", "6"});
-        // создаём StartUI и вызываем метод init()
-        new StartUI(input, tracker).init();
-        // проверяем, что первый элемент массива в трекере содержит имя, введённое при эмуляции.
-        assertThat(tracker.findAll()[1].getName(), is("test name2"));
+        inputAndStart(new String[]{"0", "test name", "desc", "0", "test name2", "desc2", "6"});
+        assertThat(getItemByIndex(1).getName(), is("test name2"));
     }
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
-        // создаём Tracker
-        Tracker tracker = new Tracker();
         //Напрямую добавляем заявку
-        Item item = tracker.add(new Item("test2", "desc2"));
-        //создаём StubInput с последовательным выбором меню редактирование заявки
-        Input input = new StubInput(new String[]{"2", item.getId(), "test name", "desc", "6"});
-        // создаём StartUI и вызываем метод init()
-        new StartUI(input, tracker).init();
-        // проверяем, что в элементе item имя заменилось на введённое при эмуляции.
-        assertThat(tracker.findById(item.getId()).getName(), is("test name"));
+        Item item = this.tracker.add(new Item("test2", "desc2"));
+        inputAndStart(new String[]{"2", item.getId(), "test name", "desc", "6"});
+        assertThat(this.tracker.findById(item.getId()).getName(), is("test name"));
     }
 
     @Test
     public void whenDeleteOneOfThreeThenTrackerContainsTwo() {
-        // Создаём Tracker
-        Tracker tracker = new Tracker();
-        // Напрямую добавляем заявки
-        Item first = tracker.add(new Item("test1", "desc1"));
-        Item second = tracker.add(new Item("test2", "desc2"));
-        Item third = tracker.add(new Item("test3", "desc3"));
-        // Создаём StubInput с последовательностью действий
-        Input input = new StubInput(new String[]{"3", second.getId(), "6"});
+        // Добавляем заявки
+        addTasks(3);
         // Сохраняем id удаляемого элемента
-        String target = second.getId();
-        // Создаём StartUI и вызываем метод init()
-        new StartUI(input, tracker).init();
+        String target = getItemByIndex(1).getId();
+        inputAndStart(new String[] {"3", target, "6"});
         // Проверяем весь выходной массив - действительно ли удаленный элемент отсутсутствует.
         boolean task = true;
-        for (Item item : tracker.findAll()) {
+        for (Item item : this.tracker.findAll()) {
             if (item.getId().equals(target)) {
                 task = false;
             }
         }
         // Проверяем ожидаемый результат
         assertThat(task, is(true));
+    }
+
+    @Test
+    public void whenTrackerContainsOneShowAllShowOneAndMenu() {
+        Item first = this.tracker.add(new Item("test0", "desc0"));
+        inputAndStart(new String[] {"1", "6"});
+        assertThat(
+                new String(out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append(menu)
+                                .append("------------ List of all tasks --------------")
+                                .append(System.lineSeparator())
+                                .append("Id: " + first.getId() + " Name: "
+                                        + first.getName() + " Description: " + first.getDesc())
+                                .append(System.lineSeparator())
+                                .append("------------ End of list --------------")
+                                .append(System.lineSeparator())
+                                .append(menu)
+                                .toString()
+                )
+        );
+    }
+
+    @Test
+    public void whenTrackerContainsThreeFindByIdShowOneAndMenu() {
+        // Добавляем заявки
+        addTasks(3);
+        inputAndStart(new String[] {"4", getItemByIndex(1).getId(), "6"});
+        assertThat(
+                new String(out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append(menu)
+                                .append("------------ Find task by id --------------")
+                                .append(System.lineSeparator())
+                                .append("Id: " + getItemByIndex(1).getId()
+                                        + " Name: " + getItemByIndex(1).getName()
+                                        + " Description: " + getItemByIndex(1).getDesc())
+                                .append(System.lineSeparator())
+                                .append("------------ End of search --------------")
+                                .append(System.lineSeparator())
+                                .append(menu)
+                                .toString()
+                )
+        );
+    }
+
+    @Test
+    public void whenTrackerContainsThreeFindByIdCantFind() {
+        addTasks(3);
+        inputAndStart(new String[] {"4", "123", "6"});
+        assertThat(
+                new String(out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append(menu)
+                                .append("------------ Find task by id --------------")
+                                .append(System.lineSeparator())
+                                .append("There is no task with this id.")
+                                .append(System.lineSeparator())
+                                .append("------------ End of search --------------")
+                                .append(System.lineSeparator())
+                                .append(menu)
+                                .toString()
+                )
+        );
+    }
+
+    @Test
+    public void whenTrackerContainsThreeFindByNameShowTwoAndMenu() {
+        addTasks(3);
+        Item third = this.tracker.add(new Item("test2", "desc2"));
+        inputAndStart(new String[] {"5", "test2", "6"});
+        assertThat(
+                new String(out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append(menu)
+                                .append("------------ Find task by Name --------------")
+                                .append(System.lineSeparator())
+                                .append("Id: " + getItemByIndex(2).getId()
+                                        + " Name: " + getItemByIndex(2).getName()
+                                        + " Description: " + getItemByIndex(2).getDesc())
+                                .append(System.lineSeparator())
+                                .append("Id: " + third.getId() + " Name: "
+                                        + third.getName() + " Description: " + third.getDesc())
+                                .append(System.lineSeparator())
+                                .append("------------ End of search --------------")
+                                .append(System.lineSeparator())
+                                .append(menu)
+                                .toString()
+                )
+        );
+    }
+
+    @Test
+    public void whenTrackerContainsThreeFindByNameCantFindAndMenu() {
+        addTasks(3);
+        inputAndStart(new String[] {"5", "test3", "6"});
+        assertThat(
+                new String(out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append(menu)
+                                .append("------------ Find task by Name --------------")
+                                .append(System.lineSeparator())
+                                .append("There is no tusks with name test3.")
+                                .append(System.lineSeparator())
+                                .append("------------ End of search --------------")
+                                .append(System.lineSeparator())
+                                .append(menu)
+                                .toString()
+                )
+        );
     }
 }
