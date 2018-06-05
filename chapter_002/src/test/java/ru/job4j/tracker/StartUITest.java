@@ -35,19 +35,26 @@ public class StartUITest {
 
     @Test
     public void whenDeleteOneOfThreeThenTrackerContainsTwo() {
-        // создаём Tracker
+        // Создаём Tracker
         Tracker tracker = new Tracker();
-        //Напрямую добавляем заявки
+        // Напрямую добавляем заявки
         Item first = tracker.add(new Item("test1", "desc1"));
         Item second = tracker.add(new Item("test2", "desc2"));
         Item third = tracker.add(new Item("test3", "desc3"));
-        //создаём StubInput с последовательностью действий
+        // Создаём StubInput с последовательностью действий
         Input input = new StubInput(new String[]{"3", second.getId(), "6"});
-        // создаём StartUI и вызываем метод init()
+        // Сохраняем id удаляемого элемента
+        String target = second.getId();
+        // Создаём StartUI и вызываем метод init()
         new StartUI(input, tracker).init();
-        // проверяем, что возвращаемый массив имеет ожидаемый размер и содержит верные элементы.
-        assertThat(tracker.findAll()[0].getName(), is("test1"));
-        assertThat(tracker.findAll()[1].getName(), is("test3"));
-        assertThat(tracker.findAll().length, is(2));
+        // Проверяем весь выходной массив - действительно ли удаленный элемент отсутсутствует.
+        boolean task = true;
+        for (Item item : tracker.findAll()) {
+            if (item.getId().equals(target)) {
+                task = false;
+            }
+        }
+        // Проверяем ожидаемый результат
+        assertThat(task, is(true));
     }
 }
