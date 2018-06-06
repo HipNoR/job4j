@@ -121,12 +121,9 @@ public class StartUI {
         String id = this.input.ask("Enter the task ID that you want to change :");
         String name = this.input.ask("Enter the name of the task :");
         String desc = this.input.ask("Enter the description of the task :");
-        this.tracker.replace(id, new Item(id, name, desc));
+        this.tracker.replace(id, new Item(name, desc));
         System.out.println("------------ Editing complete --------------");
-        /*
-        добавил в класс Item конструктор с id, при вызове метода replace обнуляется Id. правильным будет реализовать
-        решение в методе класса трекер / выяснить требование -  оставлять старый id или генерировать новый
-         */
+
     }
 
     /**
