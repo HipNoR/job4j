@@ -23,21 +23,23 @@ public class StartUITest {
     }
     // Строка Меню для проверки вывода в консоль
     private final StringBuilder menu = new StringBuilder()
-            .append("Menu.")
+            .append("------------------ Menu ------------------")
             .append(System.lineSeparator())
-            .append("0. Add new Item.")
+            .append("0. Add the new task.")
             .append(System.lineSeparator())
-            .append("1. Show all items.")
+            .append("1. Show all task's.")
             .append(System.lineSeparator())
-            .append("2. Edit item.")
+            .append("2. Edit task.")
             .append(System.lineSeparator())
-            .append("3. Delete item.")
+            .append("3. Delete task.")
             .append(System.lineSeparator())
-            .append("4. Find item by Id.")
+            .append("4. Find task by Id.")
             .append(System.lineSeparator())
-            .append("5. Find items by name.")
+            .append("5. Find tasks by Name.")
             .append(System.lineSeparator())
             .append("6. Exit Program.")
+            .append(System.lineSeparator())
+            .append("------------------ End ------------------")
             .append(System.lineSeparator());
     // Метод реализует замену стандартного вывода в консоль на вывод в память.
     @Before
@@ -111,6 +113,8 @@ public class StartUITest {
                                 .append("------------ End of list --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
+                                .append("Exit program.")
+                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -135,6 +139,8 @@ public class StartUITest {
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
+                                .append("Exit program.")
+                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -156,6 +162,8 @@ public class StartUITest {
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
+                                .append("Exit program.")
+                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -183,6 +191,8 @@ public class StartUITest {
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
+                                .append("Exit program.")
+                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -199,11 +209,13 @@ public class StartUITest {
                                 .append(menu)
                                 .append("------------ Find task by Name --------------")
                                 .append(System.lineSeparator())
-                                .append("There is no tusks with name test3.")
+                                .append("There is no tasks with name test3.")
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
+                                .append("Exit program.")
+                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
