@@ -100,6 +100,20 @@ class FindItemByName implements UserAction {
     }
 }
 
+class Exit implements UserAction {
+    public int key() {
+        return 6;
+    }
+
+    public void execute(Input input, Tracker tracker) {
+
+    }
+
+    public String info() {
+        return String.format("%s. %s", this.key(), "Exit Program.");
+    }
+}
+
 /**
  * MenuTracker class that implements menu actions.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
@@ -110,7 +124,7 @@ public class MenuTracker {
 
     private Input input;
     private Tracker tracker;
-    private UserAction[] actions = new UserAction[6];
+    private UserAction[] actions = new UserAction[7];
 
     public MenuTracker(Input input, Tracker tracker) {
         this.input = input;
@@ -124,6 +138,15 @@ public class MenuTracker {
         this.actions[3] = new DeleteItem();
         this.actions[4] = new FindItemById();
         this.actions[5] = new FindItemByName();
+        this.actions[6] = new Exit();
+    }
+
+    public int[] getRange() {
+        int[] range = new int[this.actions.length];
+        for (int index = 0; index < range.length; index++) {
+            range[index] = index;
+        }
+        return range;
     }
 
     public void select(int key) {
@@ -137,7 +160,6 @@ public class MenuTracker {
                 System.out.println(action.info());
             }
         }
-        System.out.println("6. Exit Program.");
         System.out.println("------------------ End ------------------");
     }
 

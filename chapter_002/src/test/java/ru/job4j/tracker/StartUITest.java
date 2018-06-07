@@ -66,7 +66,7 @@ public class StartUITest {
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        inputAndStart(new String[]{"0", "test name", "desc", "0", "test name2", "desc2", "6"});
+        inputAndStart(new String[]{"0", "test name", "desc", "0", "test name2", "desc2", "6", "y"});
         assertThat(getItemByIndex(1).getName(), is("test name2"));
     }
 

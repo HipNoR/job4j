@@ -34,18 +34,10 @@ public class StartUI {
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
         menu.fillActions();
-        int key;
         do {
             menu.show();
-            key = Integer.valueOf(this.input.ask("Select number of menu:"));
-            if (key >= 0 && key < 6) {
-                menu.select(key);
-            } else if (key == 6) {
-                System.out.println("Exit program.");
-            } else {
-                System.out.println("Wrong number.");
-            }
-        } while (key != 6);
+            menu.select(input.ask("Select number of menu:", menu.getRange()));
+        } while (!"y".equals(this.input.ask("Exit? (y): ")));
     }
 
     /**
@@ -53,6 +45,6 @@ public class StartUI {
      * @param args
      */
     public static void main(String[] args) {
-        new StartUI(new ConsoleInput(), new Tracker()).init();
+        new StartUI(new ValidateInput(), new Tracker()).init();
     }
 }
