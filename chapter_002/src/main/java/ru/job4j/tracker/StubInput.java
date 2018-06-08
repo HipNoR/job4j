@@ -20,7 +20,8 @@ public class StubInput implements Input {
 
     @Override
     public int ask(String question, int[] range) {
-        throw new UnsupportedOperationException("UnsupportedOperation");
+        return Integer.valueOf(this.answers[this.position++]);
+       // throw new UnsupportedOperationException("UnsupportedOperation");
     }
 
 }

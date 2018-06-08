@@ -59,23 +59,23 @@ public class StartUITest {
     // Метод добавляет в итемы в хранилище через цикл
     public void addTasks(int number) {
         for (int index = 0; index < number; index++) {
-            this.tracker.add(new Item("test" + index, "desc" + index));
+            this.tracker.add(new Item("00" + index, "00" + index));
         }
     }
 
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        inputAndStart(new String[]{"0", "test name", "desc", "0", "test name2", "desc2", "6", "y"});
-        assertThat(getItemByIndex(1).getName(), is("test name2"));
+        inputAndStart(new String[]{"0", "1", "1", "33", "0", "2", "2", "55"});
+        assertThat(getItemByIndex(1).getName(), is("2"));
     }
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
         //Напрямую добавляем заявку
-        Item item = this.tracker.add(new Item("test2", "desc2"));
-        inputAndStart(new String[]{"2", item.getId(), "test name", "desc", "6"});
-        assertThat(this.tracker.findById(item.getId()).getName(), is("test name"));
+        Item item = this.tracker.add(new Item("22", "22"));
+        inputAndStart(new String[]{"2", item.getId(), "11", "11", "55"});
+        assertThat(this.tracker.findById(item.getId()).getName(), is("11"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class StartUITest {
         addTasks(3);
         // Сохраняем id удаляемого элемента
         String target = getItemByIndex(1).getId();
-        inputAndStart(new String[] {"3", target, "6"});
+        inputAndStart(new String[] {"3", target, "55"});
         // Проверяем весь выходной массив - действительно ли удаленный элемент отсутсутствует.
         boolean task = true;
         for (Item item : this.tracker.findAll()) {
@@ -99,7 +99,7 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsOneShowAllShowOneAndMenu() {
         Item first = this.tracker.add(new Item("test0", "desc0"));
-        inputAndStart(new String[] {"1", "6"});
+        inputAndStart(new String[] {"1", "33", "6", "55"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -113,8 +113,6 @@ public class StartUITest {
                                 .append("------------ End of list --------------")
                                 .append(System.lineSeparator())
                                 .append(menu)
-                                .append("Exit program.")
-                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -124,7 +122,7 @@ public class StartUITest {
     public void whenTrackerContainsThreeFindByIdShowOneAndMenu() {
         // Добавляем заявки
         addTasks(3);
-        inputAndStart(new String[] {"4", getItemByIndex(1).getId(), "6"});
+        inputAndStart(new String[] {"4", getItemByIndex(1).getId(), "55"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -138,9 +136,6 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
-                                .append(menu)
-                                .append("Exit program.")
-                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -149,7 +144,7 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByIdCantFind() {
         addTasks(3);
-        inputAndStart(new String[] {"4", "123", "6"});
+        inputAndStart(new String[] {"4", "123", "55"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -161,9 +156,6 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
-                                .append(menu)
-                                .append("Exit program.")
-                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -172,8 +164,8 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByNameShowTwoAndMenu() {
         addTasks(3);
-        Item third = this.tracker.add(new Item("test2", "desc2"));
-        inputAndStart(new String[] {"5", "test2", "6"});
+        Item third = this.tracker.add(new Item("002", "22"));
+        inputAndStart(new String[] {"5", "002", "55"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -190,9 +182,6 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
-                                .append(menu)
-                                .append("Exit program.")
-                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -201,7 +190,7 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByNameCantFindAndMenu() {
         addTasks(3);
-        inputAndStart(new String[] {"5", "test3", "6"});
+        inputAndStart(new String[] {"5", "151", "55"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -209,12 +198,9 @@ public class StartUITest {
                                 .append(menu)
                                 .append("------------ Find task by Name --------------")
                                 .append(System.lineSeparator())
-                                .append("There is no tasks with name test3.")
+                                .append("There is no tasks with name 151.")
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
-                                .append(System.lineSeparator())
-                                .append(menu)
-                                .append("Exit program.")
                                 .append(System.lineSeparator())
                                 .toString()
                 )

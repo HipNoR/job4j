@@ -37,7 +37,7 @@ public class StartUI {
         do {
             menu.show();
             menu.select(input.ask("Select number of menu:", menu.getRange()));
-        } while (!"y".equals(this.input.ask("Exit? (y): ")));
+        } while (!"55".equals(this.input.ask("Exit? (y): ")));
     }
 
     /**
