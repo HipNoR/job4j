@@ -59,23 +59,23 @@ public class StartUITest {
     // Метод добавляет в итемы в хранилище через цикл
     public void addTasks(int number) {
         for (int index = 0; index < number; index++) {
-            this.tracker.add(new Item("00" + index, "00" + index));
+            this.tracker.add(new Item("name" + index, "desc" + index));
         }
     }
 
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        inputAndStart(new String[]{"0", "1", "1", "33", "0", "2", "2", "55"});
-        assertThat(getItemByIndex(1).getName(), is("2"));
+        inputAndStart(new String[]{"0", "name", "desc", "n", "0", "name2", "desc2", "y"});
+        assertThat(getItemByIndex(1).getName(), is("name2"));
     }
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
         //Напрямую добавляем заявку
-        Item item = this.tracker.add(new Item("22", "22"));
-        inputAndStart(new String[]{"2", item.getId(), "11", "11", "55"});
-        assertThat(this.tracker.findById(item.getId()).getName(), is("11"));
+        Item item = this.tracker.add(new Item("name1", "desc1"));
+        inputAndStart(new String[]{"2", item.getId(), "name2", "desc2", "y"});
+        assertThat(this.tracker.findById(item.getId()).getName(), is("name2"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class StartUITest {
         addTasks(3);
         // Сохраняем id удаляемого элемента
         String target = getItemByIndex(1).getId();
-        inputAndStart(new String[] {"3", target, "55"});
+        inputAndStart(new String[] {"3", target, "y"});
         // Проверяем весь выходной массив - действительно ли удаленный элемент отсутсутствует.
         boolean task = true;
         for (Item item : this.tracker.findAll()) {
@@ -98,8 +98,8 @@ public class StartUITest {
 
     @Test
     public void whenTrackerContainsOneShowAllShowOneAndMenu() {
-        Item first = this.tracker.add(new Item("test0", "desc0"));
-        inputAndStart(new String[] {"1", "33", "6", "55"});
+        Item first = this.tracker.add(new Item("name1", "desc1"));
+        inputAndStart(new String[] {"1", "n", "6", "y"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -122,7 +122,7 @@ public class StartUITest {
     public void whenTrackerContainsThreeFindByIdShowOneAndMenu() {
         // Добавляем заявки
         addTasks(3);
-        inputAndStart(new String[] {"4", getItemByIndex(1).getId(), "55"});
+        inputAndStart(new String[] {"4", getItemByIndex(1).getId(), "y"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -144,7 +144,7 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByIdCantFind() {
         addTasks(3);
-        inputAndStart(new String[] {"4", "123", "55"});
+        inputAndStart(new String[] {"4", "15445454", "y"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -164,8 +164,8 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByNameShowTwoAndMenu() {
         addTasks(3);
-        Item third = this.tracker.add(new Item("002", "22"));
-        inputAndStart(new String[] {"5", "002", "55"});
+        Item third = this.tracker.add(new Item("name2", "desc22"));
+        inputAndStart(new String[] {"5", "name2", "y"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -190,7 +190,7 @@ public class StartUITest {
     @Test
     public void whenTrackerContainsThreeFindByNameCantFindAndMenu() {
         addTasks(3);
-        inputAndStart(new String[] {"5", "151", "55"});
+        inputAndStart(new String[] {"5", "name35", "y"});
         assertThat(
                 new String(out.toByteArray()),
                 is(
@@ -198,7 +198,7 @@ public class StartUITest {
                                 .append(menu)
                                 .append("------------ Find task by Name --------------")
                                 .append(System.lineSeparator())
-                                .append("There is no tasks with name 151.")
+                                .append("There is no tasks with name name35.")
                                 .append(System.lineSeparator())
                                 .append("------------ End of search --------------")
                                 .append(System.lineSeparator())
