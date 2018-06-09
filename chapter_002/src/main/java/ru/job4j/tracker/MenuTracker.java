@@ -53,7 +53,7 @@ class FindItemById extends BaseAction {
         System.out.println("------------ Find task by id --------------");
         String id = input.ask("Enter the task ID that you want to find :");
         Item found = tracker.findById(id);
-        if (tracker.findById(id) != null) {
+        if (found != null) {
             System.out.println("Id: " + found.getId() + " Name: "
                     + found.getName() + " Description: " + found.getDesc());
         } else {
