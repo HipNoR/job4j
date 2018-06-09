@@ -3,9 +3,10 @@ package ru.job4j.tracker;
 /**
  * A class that implements the editing of an task by id.
  */
-class EditItem implements UserAction {
-    public int key() {
-        return 2;
+class EditItem extends BaseAction {
+
+    public EditItem() {
+        super(2, "Edit task.");
     }
 
     public void execute(Input input, Tracker tracker) {
@@ -16,18 +17,15 @@ class EditItem implements UserAction {
         tracker.replace(id, new Item(name, desc));
         System.out.println("------------ Editing complete --------------");
     }
-
-    public String info() {
-        return String.format("%s. %s", this.key(), "Edit task.");
-    }
 }
 
 /**
  * A class that implements the deleting of an task by id.
  */
-class DeleteItem implements UserAction {
-    public int key() {
-        return 3;
+class DeleteItem extends BaseAction {
+
+    public DeleteItem() {
+        super(3, "Delete task.");
     }
 
     public void execute(Input input, Tracker tracker) {
@@ -40,18 +38,15 @@ class DeleteItem implements UserAction {
             System.out.println("There is no tusks with id " + id);
         }
     }
-
-    public String info() {
-        return String.format("%s. %s", this.key(), "Delete task.");
-    }
 }
 
 /**
  * A class that implements the finding of an task by id.
  */
-class FindItemById implements UserAction {
-    public int key() {
-        return 4;
+class FindItemById extends BaseAction {
+
+    public FindItemById() {
+        super(4, "Find task by Id.");
     }
 
     public void execute(Input input, Tracker tracker) {
@@ -66,18 +61,15 @@ class FindItemById implements UserAction {
         }
         System.out.println("------------ End of search --------------");
     }
-
-    public String info() {
-        return String.format("%s. %s", this.key(), "Find task by Id.");
-    }
 }
 
 /**
  * A class that implements the finding of an task by name.
  */
-class FindItemByName implements UserAction {
-    public int key() {
-        return 5;
+class FindItemByName extends BaseAction {
+
+    public FindItemByName() {
+        super(5, "Find tasks by Name.");
     }
 
     public void execute(Input input, Tracker tracker) {
@@ -94,23 +86,16 @@ class FindItemByName implements UserAction {
         }
         System.out.println("------------ End of search --------------");
     }
-
-    public String info() {
-        return String.format("%s. %s", this.key(), "Find tasks by Name.");
-    }
 }
 
-class Exit implements UserAction {
-    public int key() {
-        return 6;
+class Exit extends BaseAction {
+
+    public Exit() {
+        super(6, "Exit Program.");
     }
 
     public void execute(Input input, Tracker tracker) {
 
-    }
-
-    public String info() {
-        return String.format("%s. %s", this.key(), "Exit Program.");
     }
 }
 
@@ -166,9 +151,10 @@ public class MenuTracker {
     /**
      * The class that implements the addition of a new task.
      */
-    private class AddItem implements UserAction {
-        public int key() {
-            return 0;
+    private class AddItem extends BaseAction {
+
+        public AddItem() {
+            super(0, "Add the new task.");
         }
 
         public void execute(Input input, Tracker tracker) {
@@ -178,18 +164,15 @@ public class MenuTracker {
             tracker.add(item);
             System.out.println("------------  A new task with id: " + item.getId() + " -----------");
         }
-
-        public String info() {
-            return String.format("%s. %s", this.key(), "Add the new task.");
-        }
     }
 
     /**
      * A class that implements the mapping of all tasks.
      */
-    private static class ShowAll implements UserAction {
-        public int key() {
-            return 1;
+    private static class ShowAll extends BaseAction {
+
+        public ShowAll() {
+            super(1, "Show all task's.");
         }
 
         public void execute(Input input, Tracker tracker) {
@@ -201,10 +184,5 @@ public class MenuTracker {
             }
             System.out.println("------------ End of list --------------");
         }
-
-        public String info() {
-            return String.format("%s. %s", this.key(), "Show all task's.");
-        }
     }
-
 }
