@@ -18,13 +18,14 @@ public class BishopBlack extends Figure {
     @Override
     public Cell[] way(Cell source, Cell dest) {
         Cell[] steps = new Cell[0];
-        if (source.y == dest.y + 1 && source.x == dest.x + 1) {
+        int move = source.x - dest.x;
+        if (source.y == dest.y + move && source.x == dest.x + move) {
             steps = new Cell[] {dest };
-        } else if(source.y == dest.y + 1 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y + move && source.x == dest.x - move) {
             steps = new Cell[] {dest };
-        } else if (source.y == dest.y - 1 && source.x == dest.x + 1) {
+        } else if (source.y == dest.y - move && source.x == dest.x + move) {
             steps = new Cell[]{dest};
-        } else if(source.y == dest.y - 1 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y - move && source.x == dest.x - move) {
             steps = new Cell[] {dest };
         }
         return steps;

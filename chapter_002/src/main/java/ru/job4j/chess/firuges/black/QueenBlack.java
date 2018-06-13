@@ -18,21 +18,23 @@ public class QueenBlack extends Figure {
     @Override
     public Cell[] way(Cell source, Cell dest) {
         Cell[] steps = new Cell[0];
-        if (source.y == dest.y + 1 && source.x == dest.x + 1) {
+        int moveX = source.x - dest.x;
+        int moveY = source.y - dest.y;
+        if (source.y == dest.y + moveX && source.x == dest.x + moveX) {
             steps = new Cell[] {dest };
-        } else if(source.y == dest.y + 1 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y + moveX && source.x == dest.x - moveX) {
             steps = new Cell[] {dest };
-        } else if (source.y == dest.y - 1 && source.x == dest.x + 1) {
+        } else if (source.y == dest.y - moveX && source.x == dest.x + moveX) {
             steps = new Cell[]{dest};
-        } else if(source.y == dest.y - 1 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y - moveX && source.x == dest.x - moveX) {
             steps = new Cell[] {dest };
-        } else  if (source.y == dest.y + 1 && source.x == dest.x) {
+        } else  if (source.y == dest.y + moveY && source.x == dest.x) {
             steps = new Cell[] {dest };
-        } else if(source.y == dest.y - 1 && source.x == dest.x) {
+        } else if(source.y == dest.y - moveY && source.x == dest.x) {
             steps = new Cell[] {dest };
-        } else if (source.y == dest.y && source.x == dest.x + 1) {
+        } else if (source.y == dest.y && source.x == dest.x + moveX) {
             steps = new Cell[]{dest};
-        } else if(source.y == dest.y && source.x == dest.x - 1) {
+        } else if(source.y == dest.y && source.x == dest.x - moveX) {
             steps = new Cell[] {dest };
         }
         return steps;
