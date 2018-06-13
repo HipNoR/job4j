@@ -9,30 +9,30 @@ import ru.job4j.chess.firuges.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class KnightBlack extends Figure {
+public class QueenBlack extends Figure {
 
-    public KnightBlack(final Cell position) {
+    public QueenBlack(final Cell position) {
         super(position);
     }
 
     @Override
     public Cell[] way(Cell source, Cell dest) {
         Cell[] steps = new Cell[0];
-        if (source.y == dest.y + 2 && source.x == dest.x + 1) {
+        if (source.y == dest.y + 1 && source.x == dest.x + 1) {
             steps = new Cell[] {dest };
-        } else if(source.y == dest.y + 2 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y + 1 && source.x == dest.x - 1) {
             steps = new Cell[] {dest };
-        } else if (source.y == dest.y - 2 && source.x == dest.x + 1) {
+        } else if (source.y == dest.y - 1 && source.x == dest.x + 1) {
             steps = new Cell[]{dest};
-        } else if(source.y == dest.y - 2 && source.x == dest.x - 1) {
+        } else if(source.y == dest.y - 1 && source.x == dest.x - 1) {
             steps = new Cell[] {dest };
-        } else  if (source.y == dest.y + 1 && source.x == dest.x + 2) {
+        } else  if (source.y == dest.y + 1 && source.x == dest.x) {
             steps = new Cell[] {dest };
-        } else if(source.y == dest.y - 1 && source.x == dest.x + 2) {
+        } else if(source.y == dest.y - 1 && source.x == dest.x) {
             steps = new Cell[] {dest };
-        } else if (source.y == dest.y + 1 && source.x == dest.x - 2) {
+        } else if (source.y == dest.y && source.x == dest.x + 1) {
             steps = new Cell[]{dest};
-        } else if(source.y == dest.y - 1&& source.x == dest.x - 2) {
+        } else if(source.y == dest.y && source.x == dest.x - 1) {
             steps = new Cell[] {dest };
         }
         return steps;
@@ -40,6 +40,6 @@ public class KnightBlack extends Figure {
 
     @Override
     public Figure copy(Cell dest) {
-        return new KnightBlack(dest);
+        return new QueenBlack(dest);
     }
 }

@@ -10,16 +10,10 @@ import ru.job4j.chess.firuges.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class PawnWhite implements Figure {
-    private final Cell position;
+public class PawnWhite extends Figure {
 
     public PawnWhite(final Cell position) {
-        this.position = position;
-    }
-
-    @Override
-    public Cell position() {
-        return this.position;
+        super(position);
     }
 
     @Override

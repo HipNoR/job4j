@@ -9,17 +9,12 @@ import ru.job4j.chess.firuges.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class PawnBlack implements Figure {
-    private final Cell position;
+public class PawnBlack extends Figure {
 
     public PawnBlack(final Cell position) {
-        this.position = position;
+        super(position);
     }
 
-    @Override
-    public Cell position() {
-        return this.position;
-    }
 
     @Override
     public Cell[] way(Cell source, Cell dest) {

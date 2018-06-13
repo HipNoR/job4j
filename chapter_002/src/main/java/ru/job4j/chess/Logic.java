@@ -2,6 +2,7 @@ package ru.job4j.chess;
 
 import ru.job4j.chess.firuges.Cell;
 import ru.job4j.chess.firuges.Figure;
+import ru.job4j.chess.exceptions.*;
 
 import java.util.Optional;
 
@@ -20,10 +21,12 @@ public class Logic {
         this.figures[this.index++] = figure;
     }
 
-    public boolean move(Cell source, Cell dest) {
+    public boolean move(Cell source, Cell dest) throws ImpossibleMoveException, OccupiedWayException,
+    FigureNotFoundException {
         boolean rst = false;
         int index = this.findBy(source);
-        if (index != -1) {
+        int target = this.findBy(dest);
+        if (index != -1 && target == -1) {
             Cell[] steps = this.figures[index].way(source, dest);
             if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
