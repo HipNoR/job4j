@@ -22,15 +22,23 @@ public class Logic {
     }
 
     public boolean move(Cell source, Cell dest) throws ImpossibleMoveException, OccupiedWayException,
-    FigureNotFoundException {
+            FigureNotFoundException {
         boolean rst = false;
         int index = this.findBy(source);
         int target = this.findBy(dest);
         if (index != -1 && target == -1) {
-            Cell[] steps = this.figures[index].way(source, dest);
-            if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-                rst = true;
-                this.figures[index] = this.figures[index].copy(dest);
+            try {
+                Cell[] steps = this.figures[index].way(source, dest);
+                if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
+                    rst = true;
+                    this.figures[index] = this.figures[index].copy(dest);
+                }
+            } catch (FigureNotFoundException fnfe) {
+                System.out.println("Empty field!");
+            } catch (ImpossibleMoveException ime) {
+                System.out.println("Impossible move!");
+            } catch (OccupiedWayException owe) {
+                System.out.println("The cell is busy!");
             }
         }
         return rst;

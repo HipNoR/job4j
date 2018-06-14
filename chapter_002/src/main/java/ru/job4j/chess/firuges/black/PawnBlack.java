@@ -19,15 +19,15 @@ public class PawnBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        //boolean move = false;
+        boolean valid = false;
         Cell[] steps = new Cell[0];
         if (source.y == dest.y + 1 && source.x == dest.x) {
             steps = new Cell[] {dest };
-          //  move = true;
+            valid = true;
         }
-      //  if (!move) {
-      //      throw new ImpossibleMoveException();
-      //  }
+        if (!valid) {
+            throw new ImpossibleMoveException();
+        }
         return steps;
     }
 
