@@ -18,60 +18,14 @@ public class QueenBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        boolean valid = false;
-        Cell[] steps = new Cell[0];
+        Cell[] steps;
         int moveX = Math.abs(source.x - dest.x);
         int moveY = Math.abs(source.y - dest.y);
-        if (source.y == dest.y + moveY && source.x == dest.x) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x, source.y - index - 1);
-            }
-            valid = true;
-        } else if (source.y == dest.y - moveY && source.x == dest.x) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x, source.y + index + 1);
-            }
-            valid = true;
-        } else if (source.y == dest.y && source.x == dest.x + moveX) {
-            steps = new Cell[moveX];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x - index - 1, source.y);
-            }
-            valid = true;
-        } else if (source.y == dest.y && source.x == dest.x - moveX) {
-            steps = new Cell[moveX];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x + index + 1, source.y);
-            }
-            valid = true;
-        } else if (source.y == dest.y + moveY && source.x == dest.x + moveY) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x - index - 1, source.y - index - 1);
-            }
-            valid = true;
-        } else if (source.y == dest.y + moveY && source.x == dest.x - moveY) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x + index + 1, source.y - index - 1);
-            }
-            valid = true;
-        } else if (source.y == dest.y - moveY && source.x == dest.x + moveY) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x - index - 1, source.y + index + 1);
-            }
-            valid = true;
-        } else if (source.y == dest.y - moveY && source.x == dest.x - moveY) {
-            steps = new Cell[moveY];
-            for (int index = 0; index < steps.length; index++) {
-                steps[index] = Cell.findCell(source.x + index + 1, source.y + index + 1);
-            }
-            valid = true;
-        }
-        if (!valid) {
+        if (moveX == moveY) {
+            steps = moveDiagonal(source, dest);
+        } else if (moveX == 0 || moveY == 0) {
+            steps = moveForward(source, dest);
+        } else {
             throw new ImpossibleMoveException();
         }
         return steps;

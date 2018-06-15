@@ -18,23 +18,7 @@ public class KnightBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        boolean valid = false;
-        Cell[] steps = new Cell[0];
-        if ((source.y == dest.y + 2 && source.x == dest.x + 1)
-                || (source.y == dest.y + 2 && source.x == dest.x - 1)
-                || (source.y == dest.y - 2 && source.x == dest.x + 1)
-                || (source.y == dest.y - 2 && source.x == dest.x - 1)
-                || (source.y == dest.y + 1 && source.x == dest.x + 2)
-                || (source.y == dest.y - 1 && source.x == dest.x + 2)
-                || (source.y == dest.y + 1 && source.x == dest.x - 2)
-                || (source.y == dest.y - 1 && source.x == dest.x - 2)) {
-            steps = new Cell[] {dest };
-            valid = true;
-        }
-        if (!valid) {
-            throw new ImpossibleMoveException();
-        }
-        return steps;
+       return moveKnight(source, dest);
     }
 
     @Override
