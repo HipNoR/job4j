@@ -7,11 +7,10 @@ import ru.job4j.chess.exceptions.*;
 import java.util.Optional;
 
 /**
- * //TODO add comments.
- *
- * @author Petr Arsentev (parsentev@yandex.ru)
- * @version $Id$
+ * Logic for chess game.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
+ * @version 0.1
  */
 public class Logic {
     private final Figure[] figures = new Figure[32];
@@ -26,9 +25,8 @@ public class Logic {
         boolean rst = false;
         int index = this.findBy(source);
         int target = this.findBy(dest);
-        // boolean free = freeWay(source, dest);
         try {
-            if (index == -1) {                   // реализация не работает - только если схватить белую. вообще неясно назначение этого исключения
+            if (index == -1) {                   // реализация не работает в тестах
                 throw new FigureNotFoundException();
             }
             Cell[] steps = this.figures[index].way(source, dest);

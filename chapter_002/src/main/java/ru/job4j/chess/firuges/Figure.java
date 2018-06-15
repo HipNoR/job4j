@@ -2,6 +2,12 @@ package ru.job4j.chess.firuges;
 
 import ru.job4j.chess.exceptions.ImpossibleMoveException;
 
+/**
+ * Abstract class of all figures.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
+ * @since 0.1
+ * @version 0.1
+ */
 public abstract class Figure {
     private final Cell position;
 
@@ -93,10 +99,17 @@ public abstract class Figure {
         return steps;
     }
 
-    public Cell[] movePawn(Cell source, Cell dest) throws ImpossibleMoveException {
+    public Cell[] movePawn(Cell source, Cell dest, Boolean color) throws ImpossibleMoveException {
         boolean valid = false;
+        int move = 0;  //If color true - color is black
+        if (color) {
+            move = 1;
+        }
+        if (!color) {  // if color false - color is white
+            move = -1;
+        }
         Cell[] steps = new Cell[0];
-        if (source.y == dest.y + 1 && source.x == dest.x) {
+        if (source.y == dest.y + move && source.x == dest.x) {
             steps = new Cell[] {dest };
             valid = true;
         }
@@ -145,6 +158,21 @@ public abstract class Figure {
         }
         return steps;
     }
+
+    public Cell[] moveQueen(Cell source, Cell dest) throws ImpossibleMoveException {
+        Cell[] steps;
+        int moveX = Math.abs(source.x - dest.x);
+        int moveY = Math.abs(source.y - dest.y);
+        if (moveX == moveY) {
+            steps = moveDiagonal(source, dest);
+        } else if (moveX == 0 || moveY == 0) {
+            steps = moveForward(source, dest);
+        } else {
+            throw new ImpossibleMoveException();
+        }
+        return steps;
+    }
+
 
     public abstract Figure copy(Cell dest);
 

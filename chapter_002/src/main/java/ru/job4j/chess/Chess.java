@@ -17,6 +17,12 @@ import ru.job4j.chess.firuges.Figure;
 import ru.job4j.chess.firuges.black.*;
 import ru.job4j.chess.firuges.white.*;
 
+/**
+ * Chess game.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
+ * @since 0.1
+ * @version 0.1
+ */
 public class Chess extends Application {
     private static final String JOB4J = "Шахматы на www.job4j.ru";
     private final int size = 8;

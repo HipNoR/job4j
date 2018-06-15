@@ -5,10 +5,10 @@ import ru.job4j.chess.firuges.Cell;
 import ru.job4j.chess.firuges.Figure;
 
 /**
- *
- * @author Petr Arsentev (parsentev@yandex.ru)
- * @version $Id$
+ * Class of Pawn figure black color.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
+ * @version 0.1
  */
 public class PawnBlack extends Figure {
 
@@ -19,7 +19,7 @@ public class PawnBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        return movePawn(source, dest);
+        return movePawn(source, dest, true);
     }
 
     @Override
