@@ -20,13 +20,31 @@ public class RookBlack extends Figure {
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         boolean valid = false;
         Cell[] steps = new Cell[0];
-        int moveX = source.x - dest.x;
-        int moveY = source.y - dest.y;
-        if ((source.y == dest.y + moveY && source.x == dest.x)
-                || (source.y == dest.y - moveY && source.x == dest.x)
-                || (source.y == dest.y && source.x == dest.x + moveX)
-                || (source.y == dest.y && source.x == dest.x - moveX)) {
-            steps = new Cell[] {dest };
+        int moveX = Math.abs(source.x - dest.x);
+        int moveY = Math.abs(source.y - dest.y);
+        if (source.y == dest.y + moveY && source.x == dest.x) {
+            steps = new Cell[moveY];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x, source.y - index - 1);
+            }
+            valid = true;
+        } else if (source.y == dest.y - moveY && source.x == dest.x) {
+            steps = new Cell[moveY];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x, source.y + index + 1);
+            }
+            valid = true;
+        } else if (source.y == dest.y && source.x == dest.x + moveX) {
+            steps = new Cell[moveX];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x - index - 1, source.y);
+            }
+            valid = true;
+        } else if (source.y == dest.y && source.x == dest.x - moveX) {
+            steps = new Cell[moveX];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x + index + 1, source.y);
+            }
             valid = true;
         }
         if (!valid) {

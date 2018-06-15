@@ -26,21 +26,30 @@ public class Logic {
         boolean rst = false;
         int index = this.findBy(source);
         int target = this.findBy(dest);
-        if (index != -1 && target == -1) {
-            try {
-                Cell[] steps = this.figures[index].way(source, dest);
-                if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-                    rst = true;
-                    this.figures[index] = this.figures[index].copy(dest);
-                }
-            } catch (FigureNotFoundException fnfe) {
-                System.out.println("Empty field!");
-            } catch (ImpossibleMoveException ime) {
-                System.out.println("Impossible move!");
-            } catch (OccupiedWayException owe) {
-                System.out.println("The cell is busy!");
+        // boolean free = freeWay(source, dest);
+        try {
+            if (index == -1) {                   // реализация не работает - только если схватить белую. вообще неясно назначение этого исключения
+                throw new FigureNotFoundException();
             }
+            Cell[] steps = this.figures[index].way(source, dest);
+            for (int step = 0; step < steps.length; step++) {
+                int empty = findBy(steps[step]);
+                if (empty != -1 || target != -1) {
+                    throw new OccupiedWayException();
+                }
+            }
+            if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
+                rst = true;
+                this.figures[index] = this.figures[index].copy(dest);
+            }
+        } catch (FigureNotFoundException fnfe) {
+            System.out.println("Empty cell!");
+        } catch (ImpossibleMoveException ime) {
+            System.out.println("Impossible move!");
+        } catch (OccupiedWayException owe) {
+            System.out.println("The way is busy!");
         }
+
         return rst;
     }
 
@@ -61,4 +70,11 @@ public class Logic {
         }
         return rst;
     }
+    /*
+    private boolean freeWay(Cell position, Cell dest) {
+        boolean free = true;
+
+        return  free;
+    }
+    */
 }

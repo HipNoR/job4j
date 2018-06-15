@@ -20,12 +20,30 @@ public class BishopBlack extends Figure {
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         boolean valid = false;
         Cell[] steps = new Cell[0];
-        int move = source.x - dest.x;
-        if ((source.y == dest.y + move && source.x == dest.x + move)
-                || (source.y == dest.y + move && source.x == dest.x - move)
-                || (source.y == dest.y - move && source.x == dest.x + move)
-                || (source.y == dest.y - move && source.x == dest.x - move)) {
-            steps = new Cell[] {dest };
+        int move = Math.abs(source.x - dest.x);
+        if (source.y == dest.y + move && source.x == dest.x + move) {
+            steps = new Cell[move];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x - index - 1, source.y - index - 1);
+            }
+            valid = true;
+        } else if (source.y == dest.y + move && source.x == dest.x - move) {
+            steps = new Cell[move];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x + index + 1, source.y - index - 1);
+            }
+            valid = true;
+        } else if (source.y == dest.y - move && source.x == dest.x + move) {
+            steps = new Cell[move];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x - index - 1, source.y + index + 1);
+            }
+            valid = true;
+        } else if (source.y == dest.y - move && source.x == dest.x - move) {
+            steps = new Cell[move];
+            for (int index = 0; index < steps.length; index++) {
+                steps[index] = Cell.findCell(source.x + index + 1, source.y + index + 1);
+            }
             valid = true;
         }
         if (!valid) {

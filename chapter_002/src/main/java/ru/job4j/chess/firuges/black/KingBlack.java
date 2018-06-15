@@ -28,7 +28,7 @@ public class KingBlack extends Figure {
                 || (source.y == dest.y - 1 && source.x == dest.x)
                 || (source.y == dest.y && source.x == dest.x + 1)
                 || (source.y == dest.y && source.x == dest.x - 1)) {
-            steps = new Cell[] {dest };
+            steps = new Cell[] {dest};
             valid = true;
         }
         if (!valid) {
