@@ -99,7 +99,7 @@ public abstract class Figure {
         return steps;
     }
 
-    public Cell[] movePawn(Cell source, Cell dest, Boolean color) throws ImpossibleMoveException {
+    public Cell[] moveOnlyForwardOneStep(Cell source, Cell dest, Boolean color) throws ImpossibleMoveException {
         boolean valid = false;
         int move = 0;  //If color true - color is black
         if (color) {
@@ -119,7 +119,7 @@ public abstract class Figure {
         return steps;
     }
 
-    public Cell[] moveKnight(Cell source, Cell dest) throws ImpossibleMoveException {
+    public Cell[] moveZigZag(Cell source, Cell dest) throws ImpossibleMoveException {
         boolean valid = false;
         Cell[] steps = new Cell[0];
         if ((source.y == dest.y + 2 && source.x == dest.x + 1)
@@ -139,7 +139,7 @@ public abstract class Figure {
         return steps;
     }
 
-    public Cell[] moveKing(Cell source, Cell dest) throws ImpossibleMoveException {
+    public Cell[] moveAllWayOneStep(Cell source, Cell dest) throws ImpossibleMoveException {
         boolean valid = false;
         Cell[] steps = new Cell[0];
         if ((source.y == dest.y + 1 && source.x == dest.x + 1)
@@ -159,7 +159,7 @@ public abstract class Figure {
         return steps;
     }
 
-    public Cell[] moveQueen(Cell source, Cell dest) throws ImpossibleMoveException {
+    public Cell[] godLikeMove(Cell source, Cell dest) throws ImpossibleMoveException {
         Cell[] steps;
         int moveX = Math.abs(source.x - dest.x);
         int moveY = Math.abs(source.y - dest.y);

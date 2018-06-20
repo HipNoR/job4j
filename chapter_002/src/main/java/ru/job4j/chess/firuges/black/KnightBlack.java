@@ -18,7 +18,7 @@ public class KnightBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-       return moveKnight(source, dest);
+       return moveZigZag(source, dest);
     }
 
     @Override

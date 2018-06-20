@@ -19,7 +19,7 @@ public class PawnBlack extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        return movePawn(source, dest, true);
+        return moveOnlyForwardOneStep(source, dest, true);
     }
 
     @Override

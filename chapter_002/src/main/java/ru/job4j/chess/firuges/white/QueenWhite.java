@@ -18,7 +18,7 @@ public class QueenWhite extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        return moveQueen(source, dest);
+        return godLikeMove(source, dest);
     }
 
     @Override
