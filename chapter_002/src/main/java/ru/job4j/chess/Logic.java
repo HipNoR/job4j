@@ -5,6 +5,7 @@ import ru.job4j.chess.firuges.Figure;
 import ru.job4j.chess.exceptions.*;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * Logic for chess game.
@@ -23,23 +24,22 @@ public class Logic {
     public boolean move(Cell source, Cell dest) throws ImpossibleMoveException, OccupiedWayException,
             FigureNotFoundException {
         boolean rst = false;
-        int index = this.findBy(source);
-        int target = this.findBy(dest);
-        if (index == -1) {                   // это работает в тестах
+        Optional<Integer> index = findBy(source);
+        Optional<Integer> target = findBy(dest);
+        if (!index.isPresent()) {                   // это работает в тестах
             throw new FigureNotFoundException();
         }
-        Cell[] steps = this.figures[index].way(source, dest);
+        Cell[] steps = this.figures[index.get()].way(source, dest);
         for (int step = 0; step < steps.length; step++) {
-            int empty = findBy(steps[step]);
-            if (empty != -1 || target != -1) {
+            Optional<Integer> empty = findBy(steps[step]);
+            if (empty.isPresent() || target.isPresent()) {
                 throw new OccupiedWayException();
             }
         }
         if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
             rst = true;
-            this.figures[index] = this.figures[index].copy(dest);
+            this.figures[index.get()] = this.figures[index.get()].copy(dest);
         }
-
         return rst;
     }
 
@@ -50,14 +50,12 @@ public class Logic {
         this.index = 0;
     }
 
-    private int findBy(Cell cell) {
-        int rst = -1;
+    private Optional<Integer> findBy(Cell cell) {
         for (int index = 0; index != this.figures.length; index++) {
             if (this.figures[index] != null && this.figures[index].position().equals(cell)) {
-                rst = index;
-                break;
+                return Optional.of(index);
             }
         }
-        return rst;
+        return Optional.empty();
     }
 }
