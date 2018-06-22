@@ -3,7 +3,9 @@ package ru.job4j.list;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -50,5 +52,19 @@ public class ConvertList2ArrayTest {
                 {5, 6, 7, 0}
         };
         assertThat(result, is(expect));
+    }
+
+    @Test
+    public void whenListOfTwoArraysThenConvertToOneList() {
+        ConvertList2Array list = new ConvertList2Array();
+        List<int[]> input = new ArrayList<>();
+        input.add(new int[]{1, 2, 3});
+        input.add(new int[]{4, 5, 6, 7});
+        List<Integer> result = list.convert(input);
+        List<Integer> expected = new ArrayList<>();
+        for (int index = 1; index < 8; index++) {
+            expected.add(index);
+        }
+        assertThat(result, is(expected));
     }
 }
