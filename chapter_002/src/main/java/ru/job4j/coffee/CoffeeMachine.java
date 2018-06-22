@@ -1,48 +1,33 @@
 package ru.job4j.coffee;
 
+/**
+ * Coffee machine class.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
+ * @since 0.1
+ * @version 0.1
+ */
 public class CoffeeMachine {
-    private int index = 0;
-    private int one = 0;
-    private int two = 0;
-    private int five = 0;
-    private int ten = 0;
 
+    /**
+     * Make money, choose coffee - take coffee and change.
+     * @param value amount of money deposited.
+     * @param price coffee price.
+     * @return change in coins.
+     */
     public int[] changes(int value, int price) {
-        int change = value - price;
-        while (change >= 10) {
-            change = change - 10;
-            ten++;
+        int change = (value > price ? value - price : 0);
+        int count = 0;
+        int[] result = new int[change];
+        int[] values = {10, 5, 2, 1};
+        for (int index = 0; index < values.length; index++) {
+            while (change >= values[index]) {
+                change -= values[index];
+                result[count++] = values[index];
+            }
         }
-        while (change >= 5) {
-            change = change - 5;
-            five++;
-        }
-        while (change >= 2) {
-            change = change - 2;
-            two++;
-        }
-        while (change >= 1) {
-            change = change - 1;
-            one++;
-        }
-        int[] changed = new int[one + two + five + ten];
-        for (int index = 0; index < ten; index++) {
-            changed[this.index] = 10;
-            this.index++;
-        }
-        for (int index = 0; index < five; index++) {
-            changed[this.index] = 5;
-            this.index++;
-        }
-        for (int index = 0; index < two; index++) {
-            changed[this.index] = 2;
-            this.index++;
-        }
-        for (int index = 0; index < one; index++) {
-            changed[this.index] = 1;
-            this.index++;
-        }
-        return changed;
+        int[] coins = new int[count];
+        System.arraycopy(result, 0, coins, 0, count);
+        return coins;
     }
 
 }
