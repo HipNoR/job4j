@@ -19,7 +19,7 @@ public class StartUITest {
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     // Метод возвращает Итем по порядковому индексу
     private final Item getItemByIndex(int index) {
-        return this.tracker.findAll()[index];
+        return this.tracker.findAll().get(index);
     }
     // Строка Меню для проверки вывода в консоль
     private final StringBuilder menu = new StringBuilder()

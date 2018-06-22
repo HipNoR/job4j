@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * A class that implements the editing of an task by id.
  */
@@ -35,7 +37,7 @@ class DeleteItem extends BaseAction {
         if (deleted) {
             System.out.println("------------ Item was deleted --------------");
         } else {
-            System.out.println("There is no tusks with id " + id);
+            System.out.println(String.format("There is no tusks with id %s", id));
         }
     }
 }
@@ -54,8 +56,8 @@ class FindItemById extends BaseAction {
         String id = input.ask("Enter the task ID that you want to find :");
         Item found = tracker.findById(id);
         if (found != null) {
-            System.out.println("Id: " + found.getId() + " Name: "
-                    + found.getName() + " Description: " + found.getDesc());
+            System.out.println(String.format("Id: %s Name: %s Description: %s",
+                    found.getId(), found.getName(), found.getDesc()));
         } else {
             System.out.println("There is no task with this id.");
         }
@@ -75,14 +77,14 @@ class FindItemByName extends BaseAction {
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------ Find task by Name --------------");
         String name = input.ask("Enter the tasks name that you want to find :");
-        Item[] items = tracker.findByName(name);
-        if (items.length > 0) {
+        List<Item> items = tracker.findByName(name);
+        if (items.size() > 0) {
             for (Item item : items) {
-                System.out.println("Id: " + item.getId() + " Name: "
-                        + item.getName() + " Description: " + item.getDesc());
+                System.out.println(String.format("Id: %s Name: %s Description: %s",
+                        item.getId(), item.getName(), item.getDesc()));
             }
         } else {
-            System.out.println("There is no tasks with name " + name + ".");
+            System.out.println(String.format("There is no tasks with name %s.", name));
         }
         System.out.println("------------ End of search --------------");
     }
@@ -179,8 +181,8 @@ public class MenuTracker {
             System.out.println("------------ List of all tasks --------------");
             for (Item items : tracker.findAll()) {
                 System.out.println(
-                        String.format("%s: %s %s: %s %s: %s", "Id", items.getId(),
-                                "Name", items.getName(), "Description", items.getDesc()));
+                        String.format("Id: %s Name: %s Description: %s",
+                                items.getId(), items.getName(), items.getDesc()));
             }
             System.out.println("------------ End of list --------------");
         }

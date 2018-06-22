@@ -2,6 +2,9 @@ package ru.job4j.tracker;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -11,7 +14,7 @@ public class TrackerTest {
         Tracker tracker = new Tracker();
         Item item = new Item("test1", "testDescription", 123L);
         tracker.add(item);
-        assertThat(tracker.findAll()[0], is(item));
+        assertThat(tracker.findAll().get(0), is(item));
     }
 
     @Test
@@ -43,9 +46,9 @@ public class TrackerTest {
         // Удаляем второй объект Item по его id.
         tracker.delete(second.getId());
         // Создаем ожидаемый массив класса Item.
-        Item[] expected = new Item[2];
-        expected[0] = first;
-        expected[1] = third;
+        List<Item> expected = new ArrayList<>();
+        expected.add(first);
+        expected.add(third);
         // Проверяем, что итоговый и ожидаемый массив равны.
         assertThat(tracker.findAll(), is(expected));
 
@@ -66,9 +69,9 @@ public class TrackerTest {
         tracker.delete(third.getId());
         tracker.delete(third.getId());
         // Создаем ожидаемый массив класса Item.
-        Item[] expected = new Item[2];
-        expected[0] = first;
-        expected[1] = second;
+        List<Item> expected = new ArrayList<>();
+        expected.add(first);
+        expected.add(second);
         // Проверяем, что итоговый и ожидаемый массив равны.
         assertThat(tracker.findAll(), is(expected));
 
@@ -85,10 +88,10 @@ public class TrackerTest {
         Item third = new Item("test3", "testDescription3", 456L);
         tracker.add(third);
         // Создаем ожидаемый массив класса Item.
-        Item[] expected = new Item[3];
-        expected[0] = first;
-        expected[1] = second;
-        expected[2] = third;
+        List<Item> expected = new ArrayList<>();
+        expected.add(first);
+        expected.add(second);
+        expected.add(third);
         // Проверяем, что массив, передаваемый через метод findAll и ожидаемый массив равны.
         assertThat(tracker.findAll(), is(expected));
     }
@@ -104,9 +107,9 @@ public class TrackerTest {
         Item third = new Item("test2", "testDescription3", 456L);
         tracker.add(third);
         // Создаем ожидаемый массив класса Item из двух элементов с одинаковым именем.
-        Item[] expected = new Item[2];
-        expected[0] = second;
-        expected[1] = third;
+        List<Item> expected = new ArrayList<>();
+        expected.add(second);
+        expected.add(third);
         // Проверяем, что массив, передаваемый через метод findAll и ожидаемый массив равны.
         assertThat(tracker.findByName("test2"), is(expected));
     }
