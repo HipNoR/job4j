@@ -1,4 +1,4 @@
-package ru.job4j.sort;
+package ru.job4j.comparator;
 
 import org.junit.Test;
 
@@ -14,7 +14,6 @@ public class SortUserTest {
     private final PrintStream stdout = System.out;
     // Поле - буфер для хранения данных вывода
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    // Метод реализует замену стандартного вывода в консоль на вывод в память.
 
     @Test
     public void whenAddFourThenSortedMap() {
