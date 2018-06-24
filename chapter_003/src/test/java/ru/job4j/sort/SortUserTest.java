@@ -1,7 +1,5 @@
 package ru.job4j.sort;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -17,18 +15,10 @@ public class SortUserTest {
     // Поле - буфер для хранения данных вывода
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     // Метод реализует замену стандартного вывода в консоль на вывод в память.
-    @Before
-    public void loadOutput() {
-        System.setOut(new PrintStream(this.out));
-    }
-    //Метод реализует обратный выход в консоль
-    @After
-    public void backOutput() {
-        System.setOut(this.stdout);
-    }
 
     @Test
     public void whenAddFourThenSortedMap() {
+        System.setOut(new PrintStream(this.out));
         SortUser sort = new SortUser();
         List<User> users = new ArrayList<>();
         users.addAll(
@@ -50,5 +40,54 @@ public class SortUserTest {
                         .toString()
                 )
         );
+        System.setOut(this.stdout);
+    }
+
+    @Test
+    public void whenAddFourAndSortByNameLength() {
+        SortUser sort = new SortUser();
+        List<User> users = new ArrayList<>();
+        users.addAll(
+                Arrays.asList(
+                        new User("Roman", 33),
+                        new User("Ivan", 18),
+                        new User("Sergey", 55),
+                        new User("Olga", 30)
+                )
+        );
+        sort.sortNameLength(users);
+        assertThat(users.get(3).getName(), is("Sergey"));
+    }
+
+    @Test
+    public void whenAddFourAndSortByNameLengthAndAge() {
+        SortUser sort = new SortUser();
+        List<User> users = new ArrayList<>();
+        users.addAll(
+                Arrays.asList(
+                        new User("Roman", 33),
+                        new User("Sergey", 55),
+                        new User("Sergey", 30),
+                        new User("Roman", 18)
+                )
+        );
+        sort.sortByAllFields(users);
+        assertThat(users.get(3).getAge(), is(55));
+    }
+
+    @Test
+    public void whenAddFourAndSortByNameLengthAndAgeByShort() {
+        SortUser sort = new SortUser();
+        List<User> users = new ArrayList<>();
+        users.addAll(
+                Arrays.asList(
+                        new User("Roman", 33),
+                        new User("Sergey", 55),
+                        new User("Sergey", 30),
+                        new User("Roman", 18)
+                )
+        );
+        sort.sortByAllFieldsShort(users);
+        assertThat(users.get(3).getAge(), is(55));
     }
 }
