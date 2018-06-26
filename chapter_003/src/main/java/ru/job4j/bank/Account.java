@@ -10,9 +10,6 @@ public class Account {
     private double value;
     private String requisites;
 
-    public Account() {
-    }
-
     public Account(double value, String requisites) {
         this.value = value;
         this.requisites = requisites;
@@ -26,7 +23,14 @@ public class Account {
         return requisites;
     }
 
-    public boolean transfer(Account first, Account second, double amount) {
+    /**
+     * Method the transfer amount from one account to the other.
+     * @param first source account.
+     * @param second destination account.
+     * @param amount will be transferred.
+     * @return true or false.
+     */
+    public static boolean transfer(Account first, Account second, double amount) {
         boolean valid = false;
         if (first != null && second != null) {
             if (first.value != 0 && first.value > amount) {

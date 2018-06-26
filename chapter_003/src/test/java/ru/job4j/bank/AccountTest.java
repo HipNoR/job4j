@@ -17,7 +17,7 @@ public class AccountTest {
     public void whenFirstSendToSecond() {
         Account first = new Account(140, "123456");
         Account second = new Account(100, "654321");
-        first.transfer(first, second, 40.0);
+        Account.transfer(first, second, 40.0);
         assertThat(second.getValue(), is(140.0));
     }
 
@@ -25,6 +25,6 @@ public class AccountTest {
     public void whenFirstSendToSecondMoreThenHaveThenFalse() {
         Account first = new Account(140, "123456");
         Account second = new Account(100, "654321");
-        assertThat(first.transfer(first, second, 200.0), is(false));
+        assertThat(Account.transfer(first, second, 200.0), is(false));
     }
 }
