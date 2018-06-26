@@ -120,8 +120,17 @@ public class Bank {
      */
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String destRequisite, double amount) {
-        return Account.transfer(getOneUserAccount(srcPassport, srcRequisite),
-                getOneUserAccount(destPassport, destRequisite), amount);
+        boolean valid = false;
+        Account src = getOneUserAccount(srcPassport, srcRequisite);
+        Account dst = getOneUserAccount(destPassport, destRequisite);
+        if (src != null && dst != null) {
+            if (src.getValue() != 0 && src.getValue() > amount) {
+                src.setValue(src.getValue() - amount);
+                dst.setValue(dst.getValue() + amount);
+                valid = true;
+            }
+        }
+        return valid;
     }
 
     @Override
