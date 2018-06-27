@@ -166,12 +166,19 @@ public class BankTest {
     @Test
     public void whenTransferFromOneUserToAnotherButNotEnoughThenFalse() {
         Bank bank = new Bank();
+        boolean result = false;
+        boolean thrown = false;
         bank.addUser(new User("Roman", "12345"));
         bank.addUser(new User("Ivan", "54321"));
         bank.addAccountToUser("12345", new Account(10, "123"));
         bank.addAccountToUser("54321", new Account(50, "321"));
-        boolean result = bank.transferMoney("12345", "123", "54321", "321", 20.0);
-        assertThat(result, is(false));
+        try {
+            result = bank.transferMoney("12345", "123", "54321", "321", 20.0);
+        } catch (NotEnoughMoneyException exc) {
+            thrown = true;
+        }
+        assertFalse(result);
+        assertTrue(thrown);
     }
 
     @Test

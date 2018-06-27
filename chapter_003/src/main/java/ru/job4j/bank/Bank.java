@@ -124,11 +124,9 @@ public class Bank {
         Account src = getOneUserAccount(srcPassport, srcRequisite);
         Account dst = getOneUserAccount(destPassport, destRequisite);
         if (src != null && dst != null) {
-            if (src.getValue() != 0 && src.getValue() > amount) {
-                src.setValue(src.getValue() - amount);
-                dst.setValue(dst.getValue() + amount);
+                src.subAmount(amount);
+                dst.addAmount(amount);
                 valid = true;
-            }
         }
         return valid;
     }

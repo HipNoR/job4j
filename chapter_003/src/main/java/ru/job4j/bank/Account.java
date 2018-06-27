@@ -1,5 +1,7 @@
 package ru.job4j.bank;
 
+import ru.job4j.bank.exceptions.NotEnoughMoneyException;
+
 /**
  * Class for accounts in bank.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
@@ -23,8 +25,24 @@ public class Account {
         return requisites;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    /**
+     * Subtracts money from the account.
+     * @param amount will be subtracted.
+     * @throws NotEnoughMoneyException if not enough money.
+     */
+    public void  subAmount(double amount) throws NotEnoughMoneyException {
+        if (value < amount) {
+            throw new NotEnoughMoneyException("Not enough money!");
+        }
+        this.value -= amount;
+    }
+
+    /**
+     * Add money to account.
+     * @param amount will be added.
+     */
+    public void addAmount(double amount) {
+        this.value += amount;
     }
 
     @Override
