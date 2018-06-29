@@ -28,33 +28,26 @@ public class Parser {
             if (chars[index] == '{' || chars[index] == '[' || chars[index] == '(') {
                 brackets.push(new Bracket(chars[index], index));
                 stack++;
-            } else if (chars[index] == '}') {
-                if (index == 0 || brackets.get(stack - 1).getName() != '{') {
+            } else if (chars[index] == '}' || chars[index] == ')' || chars[index] == ']') {
+                if (index == 0) {
                     valid = false;
                     break;
-                } else {
+                }
+                if (chars[index] == '}' && brackets.get(stack - 1).getName() == '{') {
                     pairs.add(new BracketPair("{}", brackets.pop().getOpen(), index));
                     stack--;
-                }
-            } else if (chars[index] == ')') {
-                if (index == 0 || brackets.get(stack - 1).getName() != '(') {
-                    valid = false;
-                    break;
-                } else {
+                } else if (chars[index] == ')' && brackets.get(stack - 1).getName() == '(') {
                     pairs.add(new BracketPair("()", brackets.pop().getOpen(), index));
                     stack--;
-                }
-            } else if (chars[index] == ']') {
-                if (index == 0 || brackets.get(stack - 1).getName() != '[') {
-                    valid = false;
-                    break;
-                } else {
+                } else if (chars[index] == ']' && brackets.get(stack - 1).getName() == '[') {
                     pairs.add(new BracketPair("[]", brackets.pop().getOpen(), index));
                     stack--;
+                } else {
+                    valid = false;
+                    break;
                 }
             }
         }
-
         if (!valid) {
             System.out.println("String is invalid!");
         } else {
@@ -62,10 +55,6 @@ public class Parser {
                 System.out.println("Pair: " + pair.getName() + ". Opens at position: " + pair.getOpen()
                         + ". Closes at position: " + pair.getClose() + ".");
             }
-
         }
     }
-
-
-
 }
