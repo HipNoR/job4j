@@ -14,14 +14,23 @@ public class MatrixCheck {
      */
     public boolean mono(boolean[][] data) {
         boolean result = false;
-        for (int index = 1; index != data.length; index++) {
-            if (data[0] [0] == data[index] [index]
-                    || data[data.length - 1][0] == data[data.length - index - 1][index]) {
-                result = true;
-            } else {
+        if (fillBy(data, 1,  0)
+                || fillBy(data, -1, data.length - 1)) {
+            result = true;
+        }
+        return result;
+    }
+
+    private boolean fillBy(boolean[][] data, int deltaX, int startX) {
+        boolean result = true;
+        int startY = 0;
+        int nextX = startX + deltaX;
+        for (int index = 1; index < data.length; index++) {
+            if (data[startX][startY] != data[nextX][index]) {
                 result = false;
                 break;
             }
+            nextX += deltaX;
         }
         return result;
     }
