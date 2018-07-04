@@ -15,6 +15,7 @@ public class DeptSorter {
     /**
      * Method sorts the list in lexicographical order.
      * Before sorts call private method checker.
+     *
      * @param list to sorts.
      */
     public void sortNatural(ArrayList<String> list) {
@@ -33,6 +34,7 @@ public class DeptSorter {
      * Method sorts the list in lexicographical order.
      * But a department with a smaller size of name is upper one.
      * Before sorts call private method checker.
+     *
      * @param list to sort.
      */
     public void sortReverse(ArrayList<String> list) {
@@ -69,28 +71,15 @@ public class DeptSorter {
      * @param list to check.
      */
     private void checker(ArrayList<String> list) {
-        Pattern first = Pattern.compile("^([K]\\d+)[\\\\]([S][K]\\d+)");
-        Pattern second = Pattern.compile("^([K]\\d+)[\\\\]([S][K]\\d+)[\\\\]([S][S][K]\\d+)$");
-        char one;
-        char two;
-        String lvlOne;
-        String lvlTwo;
-        for (int index = 0; index < list.size(); index++) {
-            one = list.get(index).charAt(1);
-            lvlOne = String.format("K%s", one);
-            if (second.matcher(list.get(index)).matches()) {
-                two = list.get(index).charAt(5);
-                lvlTwo = String.format("K%s\\SK%s", one, two);
-                if (!list.contains(lvlOne)) {
-                    list.add(lvlOne);
-                }
-                if (!list.contains(lvlTwo)) {
-                    list.add(lvlTwo);
-                }
-            }
-            if (first.matcher(list.get(index)).matches()) {
-                if (!list.contains(lvlOne)) {
-                    list.add(lvlOne);
+        for (int out = 0; out < list.size(); out++) {
+            String[] separated = list.get(out).split("\\\\");
+            if (separated.length > 1) {
+                String temp = separated[0];
+                for (int in = 1; in < separated.length; in++) {
+                    if (!list.contains(temp)) {
+                        list.add(temp);
+                    }
+                    temp += "\\" + separated[in];
                 }
             }
         }
