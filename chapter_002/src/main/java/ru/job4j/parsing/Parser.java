@@ -1,6 +1,7 @@
 package ru.job4j.parsing;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -13,35 +14,33 @@ import java.util.Stack;
  * @version 0.1
  */
 public class Parser {
-    private int stack = 0;
-    private Stack<Bracket> brackets = new Stack<>();
-    private ArrayList<BracketPair> pairs = new ArrayList<>();
 
     /**
      * Method searches for pairs of brackets and print their positions.
      * @param string input String to start searching.
+     * @return list of bracket pairs.
+     * @throws NotValidException if String not valid.
      */
-    public void parseString(String string) {
+    public List<BracketPair> parseString(String string) throws NotValidException {
+        List<Bracket> temp = getBrackets(string);
+        List<BracketPair> pairs = new ArrayList<>();
+        Stack<Bracket> bracketStack = new Stack<>();
         boolean valid = true;
-        char[] chars = string.toCharArray();
-        for (int index = 0; index < chars.length; index++) {
-            if (chars[index] == '{' || chars[index] == '[' || chars[index] == '(') {
-                brackets.push(new Bracket(chars[index], index));
-                stack++;
-            } else if (chars[index] == '}' || chars[index] == ')' || chars[index] == ']') {
+        for (int index = 0; index < temp.size(); index++) {
+            char tempo = temp.get(index).getName();
+            if (tempo == '{' || tempo == '[' || tempo == '(') {
+                bracketStack.push(temp.get(index));
+            } else if (tempo == '}' || tempo == ')' || tempo == ']') {
                 if (index == 0) {
                     valid = false;
                     break;
                 }
-                if (chars[index] == '}' && brackets.get(stack - 1).getName() == '{') {
-                    pairs.add(new BracketPair("{}", brackets.pop().getOpen(), index));
-                    stack--;
-                } else if (chars[index] == ')' && brackets.get(stack - 1).getName() == '(') {
-                    pairs.add(new BracketPair("()", brackets.pop().getOpen(), index));
-                    stack--;
-                } else if (chars[index] == ']' && brackets.get(stack - 1).getName() == '[') {
-                    pairs.add(new BracketPair("[]", brackets.pop().getOpen(), index));
-                    stack--;
+                if (tempo == '}' && bracketStack.peek().getName() == '{') {
+                    pairs.add(new BracketPair("{}", bracketStack.pop().getOpen(), temp.get(index).getClose()));
+                } else if (tempo == ')' && bracketStack.peek().getName() == '(') {
+                    pairs.add(new BracketPair("()", bracketStack.pop().getOpen(), temp.get(index).getClose()));
+                } else if (tempo == ']' && bracketStack.peek().getName() == '[') {
+                    pairs.add(new BracketPair("[]", bracketStack.pop().getOpen(), temp.get(index).getClose()));
                 } else {
                     valid = false;
                     break;
@@ -49,12 +48,22 @@ public class Parser {
             }
         }
         if (!valid) {
-            System.out.println("String is invalid!");
-        } else {
-            for (BracketPair pair : pairs) {
-                System.out.println("Pair: " + pair.getName() + ". Opens at position: " + pair.getOpen()
-                        + ". Closes at position: " + pair.getClose() + ".");
+           throw new NotValidException();
+        }
+        return pairs;
+    }
+
+    private List<Bracket> getBrackets(String string) {
+        List<Bracket> list = new ArrayList<>();
+        char[] chars = string.toCharArray();
+        for (int index = 0; index < chars.length; index++) {
+            if (chars[index] == '{' || chars[index] == '[' || chars[index] == '(') {
+                list.add(new Bracket(chars[index], index, 0));
+            }
+            if (chars[index] == '}' || chars[index] == ']' || chars[index] == ')') {
+                list.add(new Bracket(chars[index], 0, index));
             }
         }
+        return list;
     }
 }

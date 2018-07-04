@@ -9,10 +9,12 @@ package ru.job4j.parsing;
 class Bracket {
     private char name;
     private int open;
+    private int close;
 
-    Bracket(char name, int open) {
+    Bracket(char name, int open, int close) {
         this.name = name;
         this.open = open;
+        this.close = close;
     }
 
     public char getName() {
@@ -21,5 +23,9 @@ class Bracket {
 
     public int getOpen() {
         return open;
+    }
+
+    public int getClose() {
+        return close;
     }
 }

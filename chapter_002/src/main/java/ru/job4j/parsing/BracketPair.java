@@ -28,4 +28,30 @@ class BracketPair {
     public int getClose() {
         return close;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Pair: %s. Opens at position: %s. Closes at position: %s.",
+                this.name, this.open, this.close);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean valid = false;
+        if (obj == this) {
+            valid = true;
+        }
+        if (!valid && obj != null && obj.getClass() == getClass()) {
+            BracketPair o = (BracketPair) obj;
+            if (name.equals(o.name) && open == o.open && close == o.close) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
