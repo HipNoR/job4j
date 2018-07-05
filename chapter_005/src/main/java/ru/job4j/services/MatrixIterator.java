@@ -23,16 +23,15 @@ public class MatrixIterator implements Iterator {
 
     @Override
     public Object next() {
-        int result = 0;
-        if (out < array.length) {
-            if (in < array[out].length - 1) {
-                result = this.array[out][in++];
-            } else if (in == array[out].length - 1) {
-                result = this.array[out++][in];
-                in = 0;
-            }
-        } else {
+        if (!hasNext()) {
             throw new NoSuchElementException();
+        }
+        int result = 0;
+        if (in < array[out].length - 1) {
+            result = this.array[out][in++];
+        } else if (in == array[out].length - 1) {
+            result = this.array[out++][in];
+            in = 0;
         }
         return result;
     }
