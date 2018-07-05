@@ -3,6 +3,13 @@ package ru.job4j.services;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+
+/**
+ * Class Iterator for 2D array.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
+ * @since 0.1
+ * @version 0.1
+ */
 public class MatrixIterator implements Iterator {
     private final int[][] array;
     private int out = 0;
