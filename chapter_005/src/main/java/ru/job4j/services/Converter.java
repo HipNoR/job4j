@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
  * @version 0.1
  */
 public class Converter {
-    private Iterator<Integer> temp;
 
     /**
      *
@@ -18,20 +17,21 @@ public class Converter {
      * @return Iterator of all elements.
      */
     Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
-        if (it.hasNext()) {
-            temp = it.next();
-            while (!temp.hasNext() && it.hasNext()) {
-                temp = it.next();
-            }
-        }
         return new Iterator<Integer>() {
+            Iterator<Integer> temp;
+            Iterator<Iterator<Integer>> iterator = it;
             @Override
             public boolean hasNext() {
                 boolean valid = false;
-                if (temp.hasNext()) {
-                    valid = true;
-                }
-                if (!temp.hasNext() && it.hasNext()) {
+                if (temp == null || !temp.hasNext()) {
+                    while (iterator.hasNext()) {
+                        temp = iterator.next();
+                        if (temp.hasNext()) {
+                            valid = true;
+                            break;
+                        }
+                    }
+                } else if (temp.hasNext()) {
                     valid = true;
                 }
                 return valid;
@@ -41,8 +41,8 @@ public class Converter {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (!temp.hasNext() && it.hasNext()) {
-                    temp = it.next();
+                if (!temp.hasNext() && iterator.hasNext()) {
+                    temp = iterator.next();
                 }
                 return temp.next();
             }
