@@ -1,4 +1,4 @@
-package ru.job4j.services;
+package ru.job4j.generic;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -7,6 +7,9 @@ import java.util.NoSuchElementException;
  * Class wrapper for the array.
  * The array has a fixed size.
  * @param <T> generic.
+ * @author Roman Bednyashov (hipnorosva@gmail.com).
+ * @since 0.1
+ * @version 0.1
  */
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] objects;

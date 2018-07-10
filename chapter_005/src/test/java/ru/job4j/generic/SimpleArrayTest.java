@@ -1,7 +1,8 @@
-package ru.job4j.services;
+package ru.job4j.generic;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.job4j.generic.SimpleArray;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
