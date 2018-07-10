@@ -60,9 +60,6 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     public void delete(int index) throws NoSuchElementException {
         outOfArray(index);
-        if (this.objects[index] == null) {
-            throw new NoSuchElementException();
-        }
         if (index == size - 1) {
             objects[index] = null;
         } else {
@@ -96,14 +93,14 @@ public class SimpleArray<T> implements Iterable<T> {
         /**
          * Index of element to be returned by subsequent call to next.
          */
-        int cursor = 0;
+        private int cursor = 0;
 
         /**
          * Index of element returned by most recent call to next or
          * previous.  Reset to -1 if this element is deleted by a call
          * to remove.
          */
-        int lastRet = -1;
+        private int lastRet = -1;
 
         @Override
         public boolean hasNext() {
