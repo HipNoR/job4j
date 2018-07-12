@@ -38,6 +38,14 @@ public class SimpleLinkedList<T> {
     }
 
     /**
+     * Method return number of elements in list.
+     * @return number of elements in list.
+     */
+    public int size() {
+        return this.size;
+    }
+
+    /**
      * Add item at the last position.
      * @param item to be added.
      */
@@ -62,6 +70,60 @@ public class SimpleLinkedList<T> {
      */
     public T get(int index) {
         outBounds(index);
+        return getNode(index).item;
+    }
+
+    /**
+     * Method gets the last element in list.
+     * @return last element.
+     */
+    public T getLast() {
+        return last.item;
+    }
+
+    /**
+     * Method gets the first element in list.
+     * @return first element.
+     */
+    public T getFirst() {
+        return first.item;
+    }
+
+    /**
+     * Delete the element in the list by the index.
+     * @param index do be deleted.
+     * @return value of deleted element.
+     */
+    public T remove(int index) {
+        outBounds(index);
+        T result = get(index);
+        Node<T> temp = getNode(index);
+        Node<T> prev = temp.prev;
+        Node<T> next = temp.next;
+        if (temp == first) {
+            first = next;
+        }
+        if (temp == last) {
+            last = prev;
+        }
+        if (prev != null) {
+            prev.next = next;
+        }
+        if (next != null) {
+            next.prev = prev;
+        }
+        temp = null;
+        size--;
+        modCount++;
+        return result;
+    }
+
+    /**
+     * The method gets the node by the index.
+     * @param index to search.
+     * @return Node at index.
+     */
+    public Node<T> getNode(int index) {
         Node<T> result = null;
         Node<T> temp = first;
         for (int pos = 0; pos < size; pos++) {
@@ -71,7 +133,7 @@ public class SimpleLinkedList<T> {
             }
             temp = temp.next;
         }
-        return result.item;
+        return result;
     }
 
     /**
@@ -150,6 +212,11 @@ public class SimpleLinkedList<T> {
             this.item = item;
             this.next = next;
             this.prev = prev;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Value is %s.", item);
         }
     }
 }
