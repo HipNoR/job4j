@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -43,8 +42,8 @@ public class SimpleArrayListTest {
         result.get(11);
     }
 
-    @Test (expected = NoSuchElementException.class)
-    public void whenGetNullThanException() {
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void whenGetByIndexGreaterThanSizeThanException() {
         result.get(4);
     }
 
@@ -71,7 +70,7 @@ public class SimpleArrayListTest {
         assertThat(itr.hasNext(), is(false));
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test (expected = IndexOutOfBoundsException.class)
     public void whenRemoveThenRemoved() {
         Iterator<Integer> itr = result.iterator();
         result.add(4);
@@ -83,7 +82,7 @@ public class SimpleArrayListTest {
     }
 
 
-    @Test (expected = NoSuchElementException.class)
+    @Test (expected = IndexOutOfBoundsException.class)
     public void whenUseNextOutOFBoundsThenException() {
         Iterator<Integer> itr = result.iterator();
         itr.next();
@@ -107,7 +106,8 @@ public class SimpleArrayListTest {
         result.add(1);
         result.add(2);
         result.add(3);
-        assertThat(result.size(), is(4));
+        assertThat(result.capacity(), is(4));
+        assertThat(result.size(), is(3));
     }
 
     @Test (expected = ConcurrentModificationException.class)

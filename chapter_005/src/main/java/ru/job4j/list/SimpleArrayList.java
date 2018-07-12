@@ -3,7 +3,6 @@ package ru.job4j.list;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Array list class.
@@ -20,7 +19,7 @@ public class SimpleArrayList<T> {
     private Object[] container;
 
     /**
-     * Index on which item will be added.
+     * The number of elements in the container.
      */
     private int position = 0;
 
@@ -44,13 +43,25 @@ public class SimpleArrayList<T> {
         this.size = capacity;
     }
 
+    /**
+     * Method returns the number of items in the list.
+     * @return number of elements in the list.
+     */
     public int size() {
+        return this.position;
+    }
+
+    /**
+     * Method returns the current size of the container.
+     * @return size of the container.
+     */
+    public int capacity() {
         return this.size;
     }
 
     /**
      * Method add element to array.
-     * If array is full - throws exception.
+     * Method @ensureCapacity@ increments the modCount.
      * @param model object to be added.
      */
     public void add(T model) {
@@ -65,7 +76,6 @@ public class SimpleArrayList<T> {
     private void ensureCapacity() {
         if (size == position) {
             int newCapacity = size * 2;
-           // Object[] newArray = Arrays.copyOf(container, newCapacity);
             container = Arrays.copyOf(container, newCapacity);
             this.size = newCapacity;
             modCount++;
@@ -74,12 +84,12 @@ public class SimpleArrayList<T> {
 
     /**
      * Replace element in array by another.
-     * Throws an exception if the index is greater than the size.
      * @param index element to be replaced.
      * @param model the element that replaces.
+     * @throws IndexOutOfBoundsException if index greater than list size.
      */
     public void set(int index, T model) {
-        outOfArray(index);
+        outOfNumberOfElements(index);
         this.container[index] = model;
         modCount++;
     }
@@ -89,44 +99,42 @@ public class SimpleArrayList<T> {
      * Throws an exception if the index is greater than the size.
      * @param index position of the element.
      * @return element in the index position.
+     * @throws IndexOutOfBoundsException if index greater than number of elements in list.
      */
-    public T get(int index) throws NoSuchElementException {
-        outOfArray(index);
-        if (this.container[index] == null) {
-            throw new NoSuchElementException();
-        }
+    public T get(int index) {
+        outOfNumberOfElements(index);
         return (T) this.container[index];
     }
 
     /**
      * Removes an element at index.
-     * Throws an exception if the index is greater than the size.
      * @param index of element to be deleted.
+     * @throws IndexOutOfBoundsException if index greater than number of elements.
      */
-    public void delete(int index) throws NoSuchElementException {
-        outOfArray(index);
+    public void delete(int index)  {
+        outOfNumberOfElements(index);
         if (index == size - 1) {
             container[index] = null;
+            position--;
             modCount++;
         } else {
             System.arraycopy(container, index + 1, container, index, size - index - 1);
             container[size - 1] = null;
+            position--;
             modCount++;
         }
-
     }
 
     /**
-     * Checks the index outside the array.
+     * Checks the index greater than number of the elements.
      * @param index to check.
-     * @throws IndexOutOfBoundsException if index greater than arrays size.
+     * @throws IndexOutOfBoundsException if index greater than number of elements.
      */
-    private void outOfArray(int index) throws IndexOutOfBoundsException {
-        if (index >= this.size) {
+    private void outOfNumberOfElements(int index) throws IndexOutOfBoundsException {
+        if (index >= position) {
             throw new IndexOutOfBoundsException();
         }
     }
-
 
     /**
      * Returns an iterator over the elements in this list in proper sequence.
@@ -158,42 +166,38 @@ public class SimpleArrayList<T> {
         public boolean hasNext() {
             checkForModifications();
             boolean valid = false;
-            if (cursor != size && container[cursor] != null) {
+            if (cursor < position) {
                 valid = true;
             }
             return valid;
         }
 
         @Override
-        public T next() {
+        public T next() throws IndexOutOfBoundsException {
             checkForModifications();
-            try {
-                if (!hasNext()) {
-                    throw new IndexOutOfBoundsException();
-                }
-                int i = cursor;
-                T next = get(i);
-                lastRet = i;
-                cursor = i + 1;
-                return next;
-            } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException();
+            if (!hasNext()) {
+                throw new IndexOutOfBoundsException();
             }
+            int i = cursor;
+            T next = get(i);
+            lastRet = i;
+            cursor = i + 1;
+            return next;
         }
 
         @Override
-        public void remove() {
+        public void remove() throws IllegalStateException, IndexOutOfBoundsException {
             checkForModifications();
             if (lastRet < 0) {
                 throw new IllegalStateException();
             }
             try {
                 delete(lastRet);
-                    cursor = lastRet;
+                cursor = lastRet;
                 expectedModCount = modCount;
                 lastRet = -1;
             } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException();
+                throw new IndexOutOfBoundsException();
             }
         }
 
