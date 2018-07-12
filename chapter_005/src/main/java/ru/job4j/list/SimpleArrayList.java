@@ -158,7 +158,7 @@ public class SimpleArrayList<T> {
         int lastRet = -1;
 
         /**
-         *
+         * Counter changes in the container.
          */
         int expectedModCount = modCount;
 
