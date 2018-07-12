@@ -5,13 +5,13 @@ import org.junit.Before;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleLinkedListTest {
+public class SimpleOneWayLinkedListTest {
 
-    private SimpleLinkedList<Integer> list;
+    private SimpleOneWayLinkedList<Integer> list;
 
     @Before
     public void beforeTest() {
-        list = new SimpleLinkedList<>();
+        list = new SimpleOneWayLinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);

@@ -7,7 +7,7 @@ package ru.job4j.list;
  * @since 0.1
  * 11.07.2018
  */
-public class SimpleLinkedList<E> {
+public class SimpleOneWayLinkedList<E> {
 
     private int size;
     private Node<E> first;
