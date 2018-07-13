@@ -1,114 +1,58 @@
 package ru.job4j.set;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
+import ru.job4j.list.SimpleArrayList;
+
 import java.util.Iterator;
 
 /**
- * Set class
+ * Set class based on SimpleArrayList class.
+ * All items are unique.
+ * @see SimpleArrayList
  * @author Roman Bednyashov (hipnorosva@gmail.com)
  * @version 0.1$
  * @since 0.1
  * 13.07.2018
  */
-public class SimpleSet<T> implements Iterable<T>{
+public class SimpleSet<T> implements Iterable<T> {
 
-    private Object[] container;
-    private int size;
-    private int position = 0;
-    private int modCount = 0;
+    private SimpleArrayList<T> container;
 
     public SimpleSet() {
-        this.size = 10;
-        container = new Object[size];
+        this.container = new SimpleArrayList();
     }
 
     public SimpleSet(int size) {
-        this.size = size;
-        container = new Object[size];
+        this.container = new SimpleArrayList(size);
     }
 
+    /**
+     * Method returns the number of elements in the set.
+     * @return the number of elements in the set.
+     */
     public int size() {
-        return this.position;
+        return this.container.size();
     }
 
-    public void add(T t) {
-        ensureCapacity();
+    /**
+     * Method add elements in set.
+     * If set already contains an equal element, the new element will not be added.
+     * @param item to be added.
+     */
+    public void add(T item) {
         boolean repeat = false;
-        for (int index = 0; index < position; index++) {
-            if (t.equals(container[index])) {
+        for (int index = 0; index < size(); index++) {
+            if (item.equals(this.container.get(index))) {
                 repeat = true;
                 break;
             }
         }
         if (!repeat) {
-            container[position++] = t;
-        }
-    }
-
-    private void ensureCapacity() {
-        if (size == position) {
-            int newCapacity = size * 2;
-            container = Arrays.copyOf(container, newCapacity);
-            this.size = newCapacity;
-            modCount++;
+            this.container.add(item);
         }
     }
 
     @Override
     public Iterator<T> iterator() {
-        return new SimpleSet.Itr();
-    }
-
-    private class Itr implements Iterator<T> {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        int cursor = 0;
-
-        /**
-         * Index of element returned by most recent call to next or
-         * previous.  Reset to -1 if this element is deleted by a call
-         * to remove.
-         */
-        int lastRet = -1;
-
-        /**
-         * Counter changes in the container.
-         */
-        int expectedModCount = modCount;
-
-        @Override
-        public boolean hasNext() {
-            checkForModifications();
-            boolean valid = false;
-            if (cursor < position) {
-                valid = true;
-            }
-            return valid;
-        }
-
-        @Override
-        public T next() throws IndexOutOfBoundsException {
-            checkForModifications();
-            if (!hasNext()) {
-                throw new IndexOutOfBoundsException();
-            }
-            int i = cursor;
-            T next = (T) container[i];
-            lastRet = i;
-            cursor = i + 1;
-            return next;
-        }
-
-        /**
-         * Checks the container for changes after Iterator initialization.
-         * @throws ConcurrentModificationException if modified.
-         */
-        private void checkForModifications() throws ConcurrentModificationException {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-        }
+        return this.container.iterator();
     }
 }
