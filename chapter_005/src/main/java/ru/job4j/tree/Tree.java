@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Simple tree realisation.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 19.07.2018
  */
@@ -104,10 +104,6 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
 
 
     private class Itr implements Iterator<E> {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        private int cursor = 0;
 
         /**
          * Counter changes in the container.
@@ -117,40 +113,31 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         /**
          * Container for all elements in the tree.
          */
-        private  List<Node<E>> itr = new ArrayList<>();
-
-        /**
-         * Number of items in the container.
-         */
-        private int size;
-
+        private  Queue<Node<E>> data = new LinkedList<>();
 
         private Itr() {
-            Queue<Node<E>> data = new LinkedList<>();
             data.offer(root);
-            while (!data.isEmpty()) {
-                Node<E> el = data.poll();
-                itr.add(el);
-                for (Node<E> child : el.leaves()) {
-                    data.offer(child);
-                }
-            }
-            size = itr.size();
         }
 
         @Override
         public boolean hasNext() {
             checkForModifications();
-            return cursor < size;
+            return !data.isEmpty();
         }
 
         @Override
         public E next() {
             checkForModifications();
+            Node<E> el;
             if (!hasNext()) {
                 throw new IndexOutOfBoundsException();
+            } else {
+                el = data.poll();
+                for (Node<E> child : el.leaves()) {
+                    data.offer(child);
+                }
             }
-            return itr.get(cursor++).getValue();
+            return el.getValue();
         }
 
         /**
@@ -163,6 +150,4 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
             }
         }
     }
-
-
 }

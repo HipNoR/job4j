@@ -66,6 +66,14 @@ public class TreeTest {
         itr.hasNext();
     }
 
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void whenIterateAndOutOfBoundsThenException() {
+        Iterator itr = tree.iterator();
+        itr.next();
+        itr.next();
+        itr.next();
+    }
+
     @Test
     public void ifBinaryThenTrue() {
         tree.add(1, 3);
