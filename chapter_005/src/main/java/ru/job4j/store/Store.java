@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * The class looks for changes in the two lists.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 24.07.2018
  */
@@ -21,45 +21,27 @@ public class Store {
     public static String diff(List<User> previous, List<User> current) {
         int added = 0;
         int changed = 0;
-        int deleted = 0;
-        if (!previous.containsAll(current)) {
-            Iterator<User> itr = current.iterator();
-            while (itr.hasNext()) {
-                User temp = itr.next();
-                if (!previous.contains(temp)) {
-                    boolean change = false;
-                    for (User user : previous) {
-                        if (temp.equalsId(user)) {
-                            changed++;
-                            change = true;
-                            break;
-                        }
-                    }
-                    if (!change) {
-                        added++;
-                    }
-                }
-            }
+        Iterator<User> itr = current.iterator();
+        while (itr.hasNext()) {
+            User temp = itr.next();
+            boolean add = true;
+            for (User user : previous) {
+                if (temp.equals(user)) {
+                    add = false;
+                    break;
 
-        }
-        if (!current.containsAll(previous)) {
-            Iterator<User> itr = previous.iterator();
-            while (itr.hasNext()) {
-                User temp = itr.next();
-                if (!current.contains(temp)) {
-                    boolean delete = true;
-                    for (User user : current) {
-                        if (temp.equalsId(user)) {
-                            delete = false;
-                            break;
-                        }
-                    }
-                    if (delete) {
-                        deleted++;
-                    }
+                }
+                if (temp.equalsId(user)) {
+                    changed++;
+                    add = false;
+                    break;
                 }
             }
+            if (add) {
+                added++;
+            }
         }
+        int deleted = previous.size() + added - current.size();
         return String.format("Added: %s. Changed: %s. Deleted: %s.", added, changed, deleted);
     }
 
