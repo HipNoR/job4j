@@ -22,7 +22,7 @@ public class RectangleMove implements Runnable {
         int moveY = 1;
         double posX;
         double posY;
-        while (true) {
+        while (!Thread.interrupted()) {
             posX = this.rect.getX();
             posY = this.rect.getY();
             if (posX == 300) {
@@ -44,6 +44,7 @@ public class RectangleMove implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 }
