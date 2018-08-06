@@ -16,7 +16,7 @@ import java.util.List;
 @ThreadSafe
 public class UserStorage {
     @GuardedBy("this")
-    private List<User> storage = new ArrayList<>();
+    private final List<User> storage = new ArrayList<>();
 
 
     public synchronized boolean add(User user) {
