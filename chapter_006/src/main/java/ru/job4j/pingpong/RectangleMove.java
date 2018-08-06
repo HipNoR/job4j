@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 /**
  * Movement logic class.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 30.07.2018
  */
@@ -18,27 +18,21 @@ public class RectangleMove implements Runnable {
 
     @Override
     public void run() {
-        int moveX = 1;
-        int moveY = 1;
+        int deltaX = 1;
+        int deltaY = 1;
         double posX;
         double posY;
         while (!Thread.interrupted()) {
             posX = this.rect.getX();
             posY = this.rect.getY();
-            if (posX == 300) {
-                moveX = -1;
+            if (posX < 1 || posX > 299) {
+                deltaX *= -1;
             }
-            if (posX == 0) {
-                moveX = 1;
+            if (posY < 1 || posY > 299) {
+                deltaY *= -1;
             }
-            if (posY == 300) {
-                moveY = -1;
-            }
-            if (posY == 0) {
-                moveY = 1;
-            }
-            this.rect.setX(posX + moveX);
-            this.rect.setY(posY + moveY);
+            this.rect.setX(posX + deltaX);
+            this.rect.setY(posY + deltaY);
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
