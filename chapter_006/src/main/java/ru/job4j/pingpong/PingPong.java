@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 /**
  * PingPong simulator.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 30.07.2018
  */
@@ -32,7 +32,6 @@ public class PingPong extends Application {
         stage.setOnCloseRequest(
                 event -> {
                     t.interrupt();
-                    System.exit(0);
                 }
         );
 
