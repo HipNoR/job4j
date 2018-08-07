@@ -1,12 +1,14 @@
 package ru.job4j.store;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The class looks for changes in the two lists.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 24.07.2018
  */
@@ -19,25 +21,25 @@ public class Store {
      * @return string of changes.
      */
     public static String diff(List<User> previous, List<User> current) {
+        Map<Integer, String> map = new HashMap<>();
+
         int added = 0;
         int changed = 0;
-        Iterator<User> itr = current.iterator();
-        while (itr.hasNext()) {
-            User temp = itr.next();
-            boolean add = true;
-            for (User user : previous) {
-                if (temp.equals(user)) {
-                    add = false;
-                    break;
 
-                }
-                if (temp.equalsId(user)) {
+        Iterator<User> prevItr = previous.iterator();
+        while (prevItr.hasNext()) {
+            User temp = prevItr.next();
+            map.put(temp.id, temp.name);
+        }
+        Iterator<User> curntItr = current.iterator();
+        while (curntItr.hasNext()) {
+            User temp = curntItr.next();
+            int tempID = temp.id;
+            if (map.containsKey(tempID)) {
+                if (!map.get(tempID).equals(temp.name)) {
                     changed++;
-                    add = false;
-                    break;
                 }
-            }
-            if (add) {
+            } else {
                 added++;
             }
         }
@@ -47,11 +49,23 @@ public class Store {
 
 
     static class User {
-        int id;
-        String name;
+        private final int id;
+        private String name;
 
-        public User(int id, String name) {
+        public User(final int id, String name) {
             this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
             this.name = name;
         }
 
