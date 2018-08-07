@@ -14,6 +14,7 @@ import static org.junit.Assert.assertThat;
 public class StoreTest {
     List<Store.User> first;
     List<Store.User> second;
+    Store store = new Store();
 
     @Before
     public void prepareForTests() {
@@ -30,24 +31,27 @@ public class StoreTest {
 
     @Test
     public void whenDeleteOneThen() {
-      second.remove(1);
-      String result = Store.diff(first, second);
-      assertThat(result, is("Added: 0. Changed: 0. Deleted: 1."));
+        second.remove(1);
+        Store.Info result = store.diff(first, second);
+        Store.Info expected = new Store.Info(0, 1, 0);
+        assertThat(result, is(expected));
     }
 
     @Test
     public void whenAddTwoThen() {
         second.add(new Store.User(6, "six"));
         second.add(new Store.User(7, "seven"));
-        String result = Store.diff(first, second);
-        assertThat(result, is("Added: 2. Changed: 0. Deleted: 0."));
+        Store.Info result = store.diff(first, second);
+        Store.Info expected = new Store.Info(2, 0, 0);
+        assertThat(result, is(expected));
     }
 
     @Test
     public void whenChangeOneThen() {
         second.set(2, new Store.User(2, "moddedTwo"));
-        String result = Store.diff(first, second);
-        assertThat(result, is("Added: 0. Changed: 1. Deleted: 0."));
+        Store.Info result = store.diff(first, second);
+        Store.Info expected = new Store.Info(0, 0, 1);
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -56,8 +60,9 @@ public class StoreTest {
         second.add(new Store.User(6, "six"));
         second.remove(1);
         second.set(3, new Store.User(4, "moddedFour"));
-        String result = Store.diff(first, second);
-        assertThat(result, is("Added: 1. Changed: 2. Deleted: 1."));
+        Store.Info result = store.diff(first, second);
+        Store.Info expected = new Store.Info(1, 1, 2);
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -75,7 +80,8 @@ public class StoreTest {
         linkSecond.add(new Store.User(6, "six"));
         linkSecond.remove(1);
         linkSecond.set(3, new Store.User(4, "moddedFour"));
-        String result = Store.diff(linkFirst, linkSecond);
-        assertThat(result, is("Added: 1. Changed: 2. Deleted: 1."));
+        Store.Info result = store.diff(linkFirst, linkSecond);
+        Store.Info expected = new Store.Info(1, 1, 2);
+        assertThat(result, is(expected));
     }
 }

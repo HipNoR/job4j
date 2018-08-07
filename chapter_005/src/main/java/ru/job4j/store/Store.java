@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * The class looks for changes in the two lists.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.3$
+ * @version 0.4$
  * @since 0.1
  * 24.07.2018
  */
@@ -20,7 +20,7 @@ public class Store {
      * @param current current version of list.
      * @return string of changes.
      */
-    public static String diff(List<User> previous, List<User> current) {
+    public Info diff(List<User> previous, List<User> current) {
         Map<Integer, String> map = new HashMap<>();
 
         int added = 0;
@@ -44,7 +44,7 @@ public class Store {
             }
         }
         int deleted = previous.size() + added - current.size();
-        return String.format("Added: %s. Changed: %s. Deleted: %s.", added, changed, deleted);
+        return new Info(added, deleted, changed);
     }
 
 
@@ -101,6 +101,47 @@ public class Store {
         @Override
         public String toString() {
             return String.format("User: id = %s, name = %s.", id, name);
+        }
+    }
+
+    static class Info {
+        private int added;
+        private int deleted;
+        private int changed;
+
+        public Info(int added, int deleted, int changed) {
+            this.added = added;
+            this.deleted = deleted;
+            this.changed = changed;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            Info info = (Info) o;
+
+            if (added != info.added) {
+                return false;
+            }
+            if (deleted != info.deleted) {
+                return false;
+            }
+            return changed == info.changed;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            result = 31 * result + added;
+            result = 31 * result + deleted;
+            result = 31 * result + changed;
+            return result;
         }
     }
 }
