@@ -20,8 +20,8 @@ public class RectangleMove implements Runnable {
     public void run() {
         int deltaX = 1;
         int deltaY = 1;
-        double posX;
-        double posY;
+        double posX = 0;
+        double posY = 0;
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 posX = this.rect.getX();
