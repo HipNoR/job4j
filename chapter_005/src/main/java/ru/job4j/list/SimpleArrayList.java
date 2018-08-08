@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -12,10 +15,12 @@ import java.util.Iterator;
  * @since 0.1
  * 11.07.2018
  */
+@ThreadSafe
 public class SimpleArrayList<T> {
     /**
      * Container for objects.
      */
+    @GuardedBy("this")
     private Object[] container;
 
     /**
@@ -64,7 +69,7 @@ public class SimpleArrayList<T> {
      * Method @ensureCapacity@ increments the modCount.
      * @param model object to be added.
      */
-    public void add(T model) {
+    public synchronized void add(T model) {
         ensureCapacity();
         this.container[position++] = model;
     }
@@ -88,7 +93,7 @@ public class SimpleArrayList<T> {
      * @param model the element that replaces.
      * @throws IndexOutOfBoundsException if index greater than list size.
      */
-    public void set(int index, T model) {
+    public synchronized void set(int index, T model) {
         outOfNumberOfElements(index);
         this.container[index] = model;
         modCount++;
@@ -111,7 +116,7 @@ public class SimpleArrayList<T> {
      * @param index of element to be deleted.
      * @throws IndexOutOfBoundsException if index greater than number of elements.
      */
-    public void delete(int index)  {
+    public synchronized void delete(int index)  {
         outOfNumberOfElements(index);
         if (index == size - 1) {
             container[index] = null;

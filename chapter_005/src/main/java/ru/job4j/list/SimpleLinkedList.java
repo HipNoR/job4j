@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
@@ -11,6 +14,7 @@ import java.util.Iterator;
  * @since 0.1
  * 12.07.2018
  */
+@ThreadSafe
 public class SimpleLinkedList<T> {
 
     /**
@@ -26,11 +30,13 @@ public class SimpleLinkedList<T> {
     /**
      * First element of the list.
      */
+    @GuardedBy("this")
     private Node<T> first;
 
     /**
      * Last element of the list.
      */
+    @GuardedBy("this")
     private Node<T> last;
 
 
@@ -49,7 +55,7 @@ public class SimpleLinkedList<T> {
      * Add item at the last position.
      * @param item to be added.
      */
-    public void add(T item) {
+    public synchronized void add(T item) {
         Node<T> prev = last;
         Node<T> newNode = new Node<>(prev, item, null);
         last = newNode;
@@ -94,7 +100,7 @@ public class SimpleLinkedList<T> {
      * @param index do be deleted.
      * @return value of deleted element.
      */
-    public T remove(int index) {
+    public synchronized T remove(int index) {
         outBounds(index);
         T result = get(index);
         Node<T> temp = getNode(index);
@@ -112,7 +118,6 @@ public class SimpleLinkedList<T> {
         if (next != null) {
             next.prev = prev;
         }
-        temp = null;
         size--;
         modCount++;
         return result;
