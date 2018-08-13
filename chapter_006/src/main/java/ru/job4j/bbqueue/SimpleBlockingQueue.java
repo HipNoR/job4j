@@ -1,4 +1,4 @@
-package ru.job4j.bBQueue;
+package ru.job4j.bbqueue;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -20,13 +20,9 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
-    public int size() {
-        return this.queue.size();
-    }
-
-    public synchronized void offer(T value) throws InterruptedException {
+    public void offer(T value) throws InterruptedException {
         synchronized (this.queue) {
-            while (size() == 5) {
+            while (this.queue.size() == 5) {
                 System.out.println(String.format("Waiting while queue is full, thread id: %s", Thread.currentThread().getId()));
                 this.queue.wait();
             }
@@ -36,9 +32,9 @@ public class SimpleBlockingQueue<T> {
         }
     }
 
-    public synchronized T poll() throws InterruptedException {
+    public T poll() throws InterruptedException {
         synchronized (this.queue) {
-            while (size() == 0) {
+            while (this.queue.size() == 0) {
                 System.out.println(String.format("Waiting while queue is empty, thread id: %s", Thread.currentThread().getId()));
                 this.queue.wait();
             }

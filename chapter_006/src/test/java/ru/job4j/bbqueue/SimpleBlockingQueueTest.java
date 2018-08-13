@@ -1,4 +1,4 @@
-package ru.job4j.bBQueue;
+package ru.job4j.bbqueue;
 
 import org.junit.Test;
 
@@ -6,7 +6,7 @@ public class SimpleBlockingQueueTest {
     final SimpleBlockingQueue<Integer> cont = new SimpleBlockingQueue<>();
 
     @Test
-    public void whenFirstTest() throws InterruptedException {
+    public void whenTwoThreadsThen() throws InterruptedException {
         Thread producer = new Thread() {
             @Override
             public void run() {
@@ -33,8 +33,6 @@ public class SimpleBlockingQueueTest {
                     cont.poll();
                     cont.poll();
                     cont.poll();
-
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -45,6 +43,5 @@ public class SimpleBlockingQueueTest {
         consumer.start();
         producer.join();
         consumer.join();
-
     }
 }
