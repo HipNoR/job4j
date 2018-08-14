@@ -10,7 +10,7 @@ import java.util.Iterator;
  * Class of linked list.
  * Each element contains a value and a reference to the previous and next elements.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 12.07.2018
  */
@@ -74,7 +74,7 @@ public class SimpleLinkedList<T> {
      * @return item value.
      * @throws IndexOutOfBoundsException if index greater than number of elements.
      */
-    public T get(int index) {
+    public synchronized T get(int index) {
         outBounds(index);
         return getNode(index).item;
     }
@@ -83,7 +83,7 @@ public class SimpleLinkedList<T> {
      * Method gets the last element in list.
      * @return last element.
      */
-    public T getLast() {
+    public synchronized T getLast() {
         return last.item;
     }
 
@@ -91,7 +91,7 @@ public class SimpleLinkedList<T> {
      * Method gets the first element in list.
      * @return first element.
      */
-    public T getFirst() {
+    public synchronized T getFirst() {
         return first.item;
     }
 
@@ -128,7 +128,7 @@ public class SimpleLinkedList<T> {
      * @param index to search.
      * @return Node at index.
      */
-    public Node<T> getNode(int index) {
+    public synchronized Node<T> getNode(int index) {
         Node<T> result = null;
         Node<T> temp = first;
         for (int pos = 0; pos < size; pos++) {

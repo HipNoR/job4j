@@ -11,7 +11,7 @@ import java.util.Iterator;
  * Array list class.
  * Dynamically expandable storage container for objects.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 11.07.2018
  */
@@ -78,10 +78,10 @@ public class SimpleArrayList<T> {
      * Method for ensuring the container size.
      * When you add the last element to the current size, it doubles it.
      */
-    private void ensureCapacity() {
+    private synchronized void ensureCapacity() {
         if (size == position) {
             int newCapacity = size * 2;
-            container = Arrays.copyOf(container, newCapacity);
+            this.container = Arrays.copyOf(this.container, newCapacity);
             this.size = newCapacity;
             modCount++;
         }
@@ -106,7 +106,7 @@ public class SimpleArrayList<T> {
      * @return element in the index position.
      * @throws IndexOutOfBoundsException if index greater than number of elements in list.
      */
-    public T get(int index) {
+    public synchronized T get(int index) {
         outOfNumberOfElements(index);
         return (T) this.container[index];
     }
