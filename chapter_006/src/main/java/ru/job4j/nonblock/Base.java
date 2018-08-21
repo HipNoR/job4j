@@ -29,6 +29,10 @@ public class Base {
         return version;
     }
 
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public String getName() {
         return name;
     }

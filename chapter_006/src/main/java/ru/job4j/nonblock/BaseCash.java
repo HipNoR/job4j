@@ -1,6 +1,7 @@
 package ru.job4j.nonblock;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -28,15 +29,18 @@ public class BaseCash {
     public void update(Base model) throws OptimisticException {
         int id = model.getId();
         Base target = cont.get(id);
-        int oldVersion = target.getVersion();
         String name = model.getName();
-        if (cont.get(id).getVersion() != oldVersion) {
-            throw new OptimisticException("Wrong version");
-        } else {
-            target.setName(name);
-            System.out.println(String.format("Thread %s update %s", Thread.currentThread().getId(), target));
-        }
-
+        int ver = target.getVersion();
+        cont.computeIfPresent(id, new BiFunction<Integer, Base, Base>() {
+            @Override
+            public Base apply(Integer integer, Base base) {
+                if (integer != cont.get(id).getVersion()) {
+                    throw new OptimisticException("wrong version");
+                }
+                target.setName(name);
+                return target;
+            }
+        });
     }
 
     public void delete(Base model) {
