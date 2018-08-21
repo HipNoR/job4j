@@ -26,19 +26,17 @@ public class BaseCash {
         System.out.println(String.format("Thread %s add %s", Thread.currentThread().getId(), model));
     }
 
-    public void update(Base model) throws OptimisticException {
-        int id = model.getId();
-        Base target = cont.get(id);
-        String name = model.getName();
-        int ver = target.getVersion();
-        cont.computeIfPresent(id, new BiFunction<Integer, Base, Base>() {
+    public void update(final Base model) throws OptimisticException {
+        cont.computeIfPresent(model.getId(), new BiFunction<Integer, Base, Base>() {
             @Override
-            public Base apply(Integer integer, Base base) {
-                if (integer != cont.get(id).getVersion()) {
+            public Base apply(Integer id, Base base) {
+                System.out.println(String.format("Model version: %s, Base version %s", model.getVersion(), base.getVersion()));
+                if (base.getVersion() != model.getVersion()) {
                     throw new OptimisticException("wrong version");
                 }
-                target.setName(name);
-                return target;
+                System.out.println(String.format("Thread %s modify %s", Thread.currentThread().getId(), model));
+                model.versionUpdate();
+                return model;
             }
         });
     }

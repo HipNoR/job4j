@@ -39,7 +39,7 @@ public class Base {
 
     public void setName(String name) {
         this.name = name;
-        version++;
+        System.out.println("Name updated to " + name);
     }
 
     @Override
