@@ -1,7 +1,7 @@
 package ru.job4j.nonblock;
 
 /**
- *
+ * Simple data class.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
  * @version 0.1$
  * @since 0.1
@@ -52,7 +52,6 @@ public class Base {
         }
 
         Base base = (Base) o;
-
         if (id != base.id) {
             return false;
         }
