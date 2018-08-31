@@ -15,50 +15,51 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ThreadPool {
     private final List<Thread> threads = new LinkedList<>();
     private final Queue<Runnable> tasks = new LinkedBlockingQueue<>();
-    private final int size;
-    private volatile boolean isRunning = true;
+    private final int cores;
+    private volatile boolean isAlive = true;
 
     public ThreadPool() throws InterruptedException {
-        size = Runtime.getRuntime().availableProcessors();
-        System.out.println("ThreadPool size is: " + size);
-        for (int i = 0; i < size; i++) {
-            threads.add(new PoolWorker());
-            threads.get(i).start();
+        cores = Runtime.getRuntime().availableProcessors();
+        for (int index = 0; index < cores; index++) {
+            threads.add(new PoolWorker(tasks, index));
         }
     }
 
     public void work(Runnable job) {
         synchronized (tasks) {
-            if (isRunning) {
-                tasks.offer(job);
-                tasks.notifyAll();
-            }
+            tasks.offer(job);
+            tasks.notifyAll();
         }
     }
 
-    public void shutdown() {
+    public synchronized void shutdown() {
+        isAlive = false;
         System.out.println("shutdown");
-        isRunning = false;
     }
 
-    private final class PoolWorker extends Thread {
+    private class PoolWorker extends Thread {
+        Queue<Runnable> t;
+
+        public PoolWorker(Queue<Runnable> tasks, int index) {
+            this.t = tasks;
+            new Thread(this, "Thread #" + index).start();
+            System.out.println(String.format("Thread %s is started", index));
+        }
 
         @Override
         public void run() {
-            System.out.println(String.format("Thread %s is started", Thread.currentThread().getId()));
-            while (isRunning) {
-                Runnable task;
-                synchronized (tasks) {
-                    while (tasks.isEmpty()) {
+            Runnable task;
+            while (isAlive) {
+                synchronized (t) {
+                    while (t.isEmpty()) {
                         try {
-                            System.out.println(String.format("Waiting mode in thread %s", Thread.currentThread().getId()));
-                            tasks.wait();
+                            System.out.println(String.format("Thread %s is waiting for JOB", Thread.currentThread().getName()));
+                            t.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    System.out.println(String.format("Thread %s getting the JOB", Thread.currentThread().getId()));
-                    task = tasks.poll();
+                    task = t.poll();
                 }
                 task.run();
             }

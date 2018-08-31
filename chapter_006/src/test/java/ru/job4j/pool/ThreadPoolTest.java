@@ -12,7 +12,8 @@ public class ThreadPoolTest {
         }
         @Override
         public void run() {
-            System.out.println(String.format("Thread %s doing JOB #%s", Thread.currentThread().getId(), number));
+            System.out.println(String.format("Thread %s doing JOB #%s", Thread.currentThread().getName(), number));
+
         }
     }
 
@@ -20,10 +21,20 @@ public class ThreadPoolTest {
     public void firstTest() throws InterruptedException {
         ThreadPool pool = new ThreadPool();
 
-        for (int index = 0; index < 30; index++) {
+        for (int index = 0; index < 10; index++) {
             System.out.println(String.format("Adding job #%s", index));
             pool.work(new Job(index));
+           Thread.sleep(10);
+        }
+
+       pool.shutdown();
+
+        for (int index = 0; index < 10; index++) {
+            System.out.println(String.format("Adding job #%s", index));
+            pool.work(new Job(index));
+            Thread.sleep(100);
         }
 
     }
+
 }
