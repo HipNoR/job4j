@@ -10,24 +10,29 @@ import java.util.Queue;
  * Blocking queue for producer consumer.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 08.08.2018
  */
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
+    private int queueSize = 5;
+
+    public SimpleBlockingQueue(int queueSize) {
+        this.queueSize = queueSize;
+    }
 
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
     public void offer(T value) throws InterruptedException {
         synchronized (this.queue) {
-            while (this.queue.size() == 5) {
-                System.out.println(String.format("Waiting while queue is full, thread id: %s", Thread.currentThread().getId()));
+            while (this.queue.size() == queueSize) {
+                System.out.println(String.format("%s waiting while queue is full", Thread.currentThread().getName()));
                 this.queue.wait();
             }
             this.queue.add(value);
-            System.out.println(String.format("T %s, set value %s", Thread.currentThread().getId(), value));
+            System.out.println(String.format("%s, set value %s", Thread.currentThread().getName(), value));
             this.queue.notifyAll();
         }
     }
@@ -35,11 +40,11 @@ public class SimpleBlockingQueue<T> {
     public T poll() throws InterruptedException {
         synchronized (this.queue) {
             while (this.queue.size() == 0) {
-                System.out.println(String.format("Waiting while queue is empty, thread id: %s", Thread.currentThread().getId()));
+                System.out.println(String.format("Waiting while queue is empty, thread id: %s", Thread.currentThread().getName()));
                 this.queue.wait();
             }
             T result = this.queue.poll();
-            System.out.println(String.format("T %s, value get %s", Thread.currentThread().getId(), result));
+            System.out.println(String.format("%s, get value %s", Thread.currentThread().getName(), result));
             this.queue.notifyAll();
             return result;
         }

@@ -3,7 +3,7 @@ package ru.job4j.bbqueue;
 import org.junit.Test;
 
 public class SimpleBlockingQueueTest {
-    final SimpleBlockingQueue<Integer> cont = new SimpleBlockingQueue<>();
+    final SimpleBlockingQueue<Integer> cont = new SimpleBlockingQueue<>(5);
 
     @Test
     public void whenTwoThreadsThen() throws InterruptedException {

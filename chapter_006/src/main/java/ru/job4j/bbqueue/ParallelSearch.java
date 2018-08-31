@@ -12,7 +12,7 @@ package ru.job4j.bbqueue;
 public class ParallelSearch {
 
     public static void main(String[] args) {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>();
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>(5);
 
         final Thread consumer = new Thread(
                 () -> {
