@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 /**
  * Class for email notifications by using ThreadPool.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 03.09.2018
  */
@@ -40,5 +40,12 @@ public class EmailNotification {
 
     public void close() {
         pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
