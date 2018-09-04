@@ -22,15 +22,30 @@ public class ThreadPoolTest {
     }
 
     @Test
-    public void firstTest() throws InterruptedException {
+    public void whenAddTenJobsThenWork() throws InterruptedException {
         ThreadPool pool = new ThreadPool();
 
-        for (int index = 0; index < 1000; index++) {
+        for (int index = 0; index < 20; index++) {
             System.out.println(String.format("Adding job #%s", index));
             pool.work(new Job(index));
         }
-
        pool.shutdown();
+    }
+
+    @Test (expected = InterruptedException.class)
+    public void whenPoolIsStoppedThenException() throws InterruptedException {
+        ThreadPool pool = new ThreadPool();
+
+        for (int index = 0; index < 10; index++) {
+            System.out.println(String.format("Adding job #%s", index));
+            pool.work(new Job(index));
+        }
+        pool.shutdown();
+
+        for (int index = 0; index < 5; index++) {
+            System.out.println(String.format("Adding job #%s", index));
+            pool.work(new Job(index));
+        }
     }
 
 }
