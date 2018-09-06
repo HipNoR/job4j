@@ -1,5 +1,6 @@
 package ru.job4j.bomberman;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -13,27 +14,27 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BomberManGame {
     private final ReentrantLock[][] board;
     private final BomberMan bomber;
-    private final BomberMove mover;
-    private int timeCount;
-    private boolean isStopped = false;
+    private final Move[] moves;
+    private int moveCount = 0;
+    private int border;
+    private boolean isRunning = true;
 
     /**
      * Constructor.
      * By default the Bomber starts the game from (0, 0) cell.
      * @param size of the field.
      *             The field is square (size*size).
-     * @param timeCount the number of moves, when it reaches zero, the game will stop. (for tests)
      */
-    public BomberManGame(int size, int timeCount) {
-        board = new ReentrantLock[size][size];
+    public BomberManGame(int size, Move[] moves) {
+        this.board = new ReentrantLock[size][size];
+        this.moves = moves;
+        this.border = size - 1;
         for (int out = 0; out < size; out++) {
             for (int in = 0; in < size; in++) {
                 board[out][in] = new ReentrantLock();
             }
         }
-        mover = new BomberMove(board, size);
         this.bomber = new BomberMan(0, 0);
-        this.timeCount = timeCount;
         System.out.println(bomber);
     }
 
@@ -41,13 +42,45 @@ public class BomberManGame {
      * The Method moves the Bomber from point to point.
      * @param source the point from which Bomber will move.
      * @param dest the point at which Bomber will move.
+     * @return true or false of this turn.
+     * @throws InterruptedException if tryLock is was interrupted.
      */
-    public void move(Cell source, Cell dest) {
-        bomber.setPosition(dest);
-        System.out.println(String.format("Moved from %s to %s", source, dest));
-        if (--timeCount == 0) {
-            stopGame();
+    public synchronized boolean move(Cell source, Cell dest) throws InterruptedException {
+        int curX = source.getPosX();
+        int curY = source.getPosY();
+        int destX = dest.getPosX();
+        int destY = dest.getPosY();
+        System.out.println(String.format("Trying to move from %s to %s", source, dest));
+        boolean moved = false;
+        if (!(destX < 0 || destX > border || destY < 0 || destY > border)) {
+            if (board[destX][destY].tryLock(500, TimeUnit.MILLISECONDS)) {
+                moved = true;
+                board[curX][curY].unlock();
+                bomber.setPosition(dest);
+                System.out.println(String.format("Success! Moved from %s to %s", source, dest));
+            } else {
+                System.out.println("Hindrance, next move.");
+            }
+        } else {
+            System.out.println("Wrong way!");
         }
+        if (moveCount == moves.length) {
+            isRunning = false;
+            System.out.println("No more steps.");
+        }
+        return moved;
+    }
+
+    /**
+     * Finds the destination point.
+     * @param source the point from which Bomber will move.
+     * @return
+     */
+    private Cell nextStep(Cell source) {
+        Move next = moves[moveCount++];
+        System.out.println(String.format("%s step out of %s", moveCount, moves.length));
+        Cell dest = new Cell(source.getPosX() + next.x, source.getPosY() + next.y);
+        return dest;
     }
 
     /**
@@ -61,28 +94,18 @@ public class BomberManGame {
             @Override
             public void run() {
                 board[bomber.getPosition().getPosX()][bomber.getPosition().getPosY()].lock();
-                while (!isStopped) {
+                while (isRunning) {
                     try {
-                        move(bomber.getPosition(), mover.move(bomber.getPosition()));
+                        move(bomber.getPosition(), nextStep(bomber.getPosition()));
                         sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("THE END!");
             }
-
         };
         move.start();
         move.join();
-    }
-
-    /**
-     * Stops the game.
-     */
-    public void stopGame() {
-        System.out.println(String.format("%s stops the bomber", Thread.currentThread().getName()));
-        Thread.currentThread().interrupt();
-        isStopped = true;
-
     }
 }
