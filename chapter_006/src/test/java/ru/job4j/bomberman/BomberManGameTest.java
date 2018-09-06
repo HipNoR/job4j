@@ -5,7 +5,7 @@ import org.junit.Test;
 public class BomberManGameTest {
     @Test
     public void whenMovesAndRestedInBorderThenNextMove()  {
-        Move[] moves = new Move[]{new Move(0, 1), new Move(0, 1), new Move(1, 0), new Move(0, 1), new Move(0, -1)};
+        String[] moves = {"R", "R", "R", "D", "L"};
         BomberManGame game = new BomberManGame(3, moves);
         try {
             game.startGame();

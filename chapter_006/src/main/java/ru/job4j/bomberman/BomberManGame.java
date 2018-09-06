@@ -7,14 +7,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * BomberMan game.
  * The Bomber passes through the field and turns clockwise, if there is any obstacle.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.3$
  * @since 0.1
  * 03.09.2018
  */
 public class BomberManGame {
     private final ReentrantLock[][] board;
     private final BomberMan bomber;
-    private final Move[] moves;
+    private final String[] moves;
     private int moveCount = 0;
     private int border;
     private boolean isRunning = true;
@@ -25,7 +25,7 @@ public class BomberManGame {
      * @param size of the field.
      *             The field is square (size*size).
      */
-    public BomberManGame(int size, Move[] moves) {
+    public BomberManGame(int size, String[] moves) {
         this.board = new ReentrantLock[size][size];
         this.moves = moves;
         this.border = size - 1;
@@ -74,12 +74,23 @@ public class BomberManGame {
     /**
      * Finds the destination point.
      * @param source the point from which Bomber will move.
-     * @return
+     * @return dest the point at which Bomber will move.
      */
     private Cell nextStep(Cell source) {
-        Move next = moves[moveCount++];
+        String nextMove = moves[moveCount++];
+        int deltaX = 0;
+        int deltaY = 0;
+        if (nextMove.equals("R")) {
+            deltaY = 1;
+        } else if (nextMove.equals("L")) {
+            deltaY = -1;
+        } else if (nextMove.equals("D")) {
+            deltaX = 1;
+        } else if (nextMove.equals("U")) {
+            deltaX = -1;
+        }
         System.out.println(String.format("%s step out of %s", moveCount, moves.length));
-        Cell dest = new Cell(source.getPosX() + next.x, source.getPosY() + next.y);
+        Cell dest = new Cell(source.getPosX() + deltaX, source.getPosY() + deltaY);
         return dest;
     }
 
