@@ -1,90 +1,70 @@
 package ru.job4j.pool;
 
+import ru.job4j.bbqueue.SimpleBlockingQueue;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Thread pool class.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.5$
+ * @version 0.6$
  * @since 0.1
  * 22.08.2018
  */
 public class ThreadPool {
     private final List<PoolWorker> threads = new LinkedList<>();
-    private final Queue<Runnable> tasks = new LinkedBlockingQueue<>(10);
-    private boolean isStopped = false;
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(20);
 
-    public ThreadPool() throws InterruptedException {
+    public ThreadPool() {
         int cores = Runtime.getRuntime().availableProcessors();
         for (int index = 0; index < cores; index++) {
             threads.add(new PoolWorker(tasks, index));
         }
-        // Стоит ли применять такую конструкцию? или достаточно в конструкторе воркера this.join?
-//        for (PoolWorker worker : threads) {
-//            try {
-//                worker.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
-    public void work(Runnable job) throws InterruptedException {
-        synchronized (tasks) {
-            if (isStopped) {
-                throw new InterruptedException("Pool is stopped");
-            }
+    public void work(Runnable job) {
+        try {
             tasks.offer(job);
-            tasks.notifyAll();
-            Thread.sleep(10); // притормозить main и позволить выполниться потокам исполнителям
+        } catch (InterruptedException e) {
+            System.out.println("Unable to add task to queue.");
         }
     }
 
-    public synchronized void shutdown() {
-        System.out.println("shutdown");
-        isStopped = true;
+    public void shutdown() {
+        System.out.println("Shutdown");
         for (PoolWorker worker : threads) {
             worker.interrupt();
-            System.out.println(String.format("%s is stopped.", worker.getName()));
+            System.out.println(String.format("%s is stops.", worker.getName()));
         }
         try {
-            Thread.sleep(10); //Останавливаем main, что бы другие потоки завершили работу.
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     private class PoolWorker extends Thread {
-        private final Queue<Runnable> t;
+        private final SimpleBlockingQueue<Runnable> t;
 
-        public PoolWorker(Queue<Runnable> tasks, int index) throws InterruptedException {
+        public PoolWorker(SimpleBlockingQueue<Runnable> tasks, int index) {
             this.t = tasks;
-            Thread worker = new Thread(this, "Thread #" + index);
-            worker.start();
+            this.start();
             System.out.println(String.format("Thread %s is started", index));
-            this.join();
         }
 
         @Override
         public void run() {
-            synchronized (t) {
-                while (!Thread.currentThread().isInterrupted()) {
-                    Runnable task = t.poll();
-                    if (task == null) {
-                        try {
-                            t.wait();
-                            t.notifyAll();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        task.run();
-                    }
+            Runnable task;
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    task = t.poll();
+                    task.run();
+                } catch (InterruptedException e) {
+                    System.out.println(String.format("%s is interrupted.", Thread.currentThread().getName()));
                 }
             }
         }
     }
 }
+

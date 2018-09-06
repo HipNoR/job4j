@@ -18,6 +18,10 @@ import java.util.Queue;
 public class SimpleBlockingQueue<T> {
     private int queueSize = 5;
 
+    public SimpleBlockingQueue() {
+
+    }
+
     public SimpleBlockingQueue(int queueSize) {
         this.queueSize = queueSize;
     }
@@ -32,7 +36,7 @@ public class SimpleBlockingQueue<T> {
                 this.queue.wait();
             }
             this.queue.add(value);
-            System.out.println(String.format("%s, set value %s", Thread.currentThread().getName(), value));
+            System.out.println(String.format("%s, set %s", Thread.currentThread().getName(), value));
             this.queue.notifyAll();
         }
     }
@@ -44,7 +48,7 @@ public class SimpleBlockingQueue<T> {
                 this.queue.wait();
             }
             T result = this.queue.poll();
-            System.out.println(String.format("%s, get value %s", Thread.currentThread().getName(), result));
+            System.out.println(String.format("%s, get %s", Thread.currentThread().getName(), result));
             this.queue.notifyAll();
             return result;
         }
