@@ -45,7 +45,7 @@ public class BomberManGame {
      * @return true or false of this turn.
      * @throws InterruptedException if tryLock is was interrupted.
      */
-    public synchronized boolean move(Cell source, Cell dest) throws InterruptedException {
+    public boolean move(Cell source, Cell dest) throws InterruptedException {
         int curX = source.getPosX();
         int curY = source.getPosY();
         int destX = dest.getPosX();
@@ -57,7 +57,7 @@ public class BomberManGame {
                 moved = true;
                 board[curX][curY].unlock();
                 bomber.setPosition(dest);
-                System.out.println(String.format("Success! Moved from %s to %s", source, dest));
+                System.out.println("Success!");
             } else {
                 System.out.println("Hindrance, next move.");
             }
@@ -90,14 +90,13 @@ public class BomberManGame {
             deltaX = -1;
         }
         System.out.println(String.format("%s step out of %s", moveCount, moves.length));
-        Cell dest = new Cell(source.getPosX() + deltaX, source.getPosY() + deltaY);
-        return dest;
+        return new Cell(source.getPosX() + deltaX, source.getPosY() + deltaY);
     }
 
     /**
      * Starts the game.
      * Starts the Thread - BomberMove.
-     * @throws InterruptedException
+     * @throws InterruptedException if thread was interrupted.
      */
     public void startGame() throws InterruptedException {
         Thread move = new Thread("BomberMove") {
