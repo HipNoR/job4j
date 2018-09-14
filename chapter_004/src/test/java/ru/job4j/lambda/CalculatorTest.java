@@ -21,4 +21,15 @@ public class CalculatorTest {
                 );
         assertThat(buffer, is(Arrays.asList(1D, 2D, 3D)));
     }
+
+    @Test
+    public void whenAdd1Until3ViaReference() {
+        Calculator calc = new Calculator();
+        List<Double> buffer = new ArrayList<>();
+        calc.multiply(0, 3, 1,
+                MathUtil::add,
+                buffer::add
+        );
+        assertThat(buffer, is(Arrays.asList(1D, 2D, 3D)));
+    }
 }
