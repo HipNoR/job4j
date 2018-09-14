@@ -13,9 +13,9 @@ import java.util.concurrent.CountDownLatch;
 public class InfinityDeadLock {
 
     public InfinityDeadLock() {
-        CountDownLatch count = new CountDownLatch(3);
+        CountDownLatch count = new CountDownLatch(5);
 
-        new Thread(new MyTask()).start();
+        new Thread(new MyTask(count)).start();
 
         try {
             count.await();
@@ -28,10 +28,16 @@ public class InfinityDeadLock {
 
 
     private class MyTask implements Runnable {
+        CountDownLatch lock;
+
+        public MyTask(CountDownLatch lock) {
+            this.lock = lock;
+        }
         @Override
         public void run() {
             for (int index = 5; index != 0; index--) {
                 System.out.println(index);
+                lock.countDown();
             }
         }
     }
