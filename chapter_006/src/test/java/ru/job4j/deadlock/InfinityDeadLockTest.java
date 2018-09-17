@@ -5,8 +5,8 @@ import org.junit.Test;
 
 public class InfinityDeadLockTest {
 
-    @Test
-    public void welcomeToDeadLock() {
-        InfinityDeadLock test = new InfinityDeadLock();
-    }
+//    @Test
+//    public void welcomeToDeadLock() {
+//        InfinityDeadLock test = new InfinityDeadLock();
+//    }
 }
