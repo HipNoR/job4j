@@ -21,4 +21,22 @@ public class UserConverterTest {
             expected.add(new UserConverter.User("Roman"));
             assertThat(data, is(expected));
     }
+
+    @Test (expected = NullPointerException.class)
+    public void whenExceptionThrows() throws Exception {
+        List<String> names = Arrays.asList("Petr", "Nick", "Ban");
+        UserConverter.Wrapper<Exception> ex = null;
+        names.forEach(
+                n ->  {
+                    try {
+                        UserConverter.badMethod();
+                    } catch (Exception e) {
+                        ex.set(e);
+                    }
+                }
+        );
+        if (!ex.isEmpty()) {
+            throw ex.get();
+        }
+    }
 }

@@ -51,4 +51,13 @@ public class UserConverter {
         );
         return users;
     }
+
+    public static void badMethod() throws Exception {
+    }
+
+    public static interface Wrapper<T> {
+        T get();
+        void set(T value);
+        boolean isEmpty();
+    }
 }
