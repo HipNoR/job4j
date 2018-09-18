@@ -5,8 +5,7 @@ import org.junit.Test;
 public class BomberManGameTest {
     @Test
     public void whenMovesAndRestedInBorderThenNextMove()  {
-        String[] moves = {"R", "R", "R", "D", "L"};
-        BomberManGame game = new BomberManGame(3, moves);
+        BomberManGame game = new BomberManGame(5, 10, 2, 10);
         try {
             game.startGame();
         } catch (InterruptedException e) {
