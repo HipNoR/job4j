@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.sql.Timestamp;
+
 /**
  * Class Item contains variables of items.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
@@ -11,7 +13,7 @@ public class Item {
     private String id;
     private String name;
     private String desc;
-    private long created;
+    private Timestamp created;
     private String[] comments;
 
     public String getId() {
@@ -38,11 +40,11 @@ public class Item {
         this.desc = desc;
     }
 
-    public long getCreated() {
+    public Timestamp getCreated() {
         return this.created;
     }
 
-    public void setCreated() {
+    public void setCreated(Timestamp created) {
         this.created = created;
     }
 
@@ -54,12 +56,16 @@ public class Item {
         this.comments = comments;
     }
 
+
+
     public  Item(String name, String desc) {
         this.name = name;
         this.desc = desc;
+        this.created = new Timestamp(System.currentTimeMillis());
     }
 
-    public  Item(String name, String desc, long created) {
+    public Item(String id, String name, String desc, Timestamp created) {
+        this.id = id;
         this.name = name;
         this.desc = desc;
         this.created = created;

@@ -38,11 +38,12 @@ public class StartUI {
             menu.show();
             menu.select(input.ask("Select number of menu:", menu.getRange()));
         } while (!"y".equals(this.input.ask("Exit? (y): ")));
+        tracker.close();
     }
 
     /**
      * Program start.
-     * @param args
+     * @param args .
      */
     public static void main(String[] args) {
         new StartUI(new ValidateInput(new ConsoleInput()), new Tracker()).init();
