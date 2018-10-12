@@ -11,7 +11,7 @@ import java.util.*;
  * Class Tracker repository of requests.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
- * @version 0.2
+ * @version 0.3
  */
 public class Tracker implements AutoCloseable {
 
@@ -28,11 +28,9 @@ public class Tracker implements AutoCloseable {
      * @param item input object of class item.
      */
     public Item add(Item item) {
-        try {
-            Statement st = connection.createStatement();
+        try (Statement st = connection.createStatement()) {
             st.executeUpdate("INSERT INTO tasks (name, description, create_date)"
                     + "VALUES ('" + item.getName() + "', '" + item.getDesc() + "', CURRENT_TIMESTAMP)");
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,11 +43,9 @@ public class Tracker implements AutoCloseable {
      * @param item input Item.
      */
     public void replace(String id, Item item) {
-        try {
-            Statement st = connection.createStatement();
+        try (Statement st = connection.createStatement()) {
             st.executeUpdate("UPDATE tasks SET name = '" + item.getName() + "', description = '" + item.getDesc()
                     + "', create_date = CURRENT_TIMESTAMP WHERE id = " + Integer.parseInt(id));
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,14 +57,24 @@ public class Tracker implements AutoCloseable {
      */
     public boolean delete(String id) {
         int deleted = 0;
-        try {
-            Statement st = connection.createStatement();
+        try (Statement st = connection.createStatement()) {
             deleted = st.executeUpdate("DELETE FROM tasks WHERE id = " + Integer.parseInt(id));
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return deleted > 0;
+    }
+
+    /**
+     * Method deletes all rows in tables.
+     * Danger! Only for tests method.
+     */
+    public void deleteAll() {
+        try (Statement st = connection.createStatement()) {
+            st.executeUpdate("TRUNCATE tasks CASCADE");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -77,15 +83,12 @@ public class Tracker implements AutoCloseable {
      */
     public List<Item> findAll() {
         List<Item> listOfNames = new ArrayList<>();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM tasks");
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM tasks")) {
             while (rs.next()) {
                 listOfNames.add(new Item(rs.getString("id"), rs.getString("name"),
                         rs.getString("description"), rs.getTimestamp("create_date")));
             }
-            rs.close();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,15 +102,12 @@ public class Tracker implements AutoCloseable {
      */
     public List<Item> findByName(String key) {
         List<Item> listOfNames = new ArrayList<>();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE name = '" + key + "'");
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE name = '" + key + "'")) {
             while (rs.next()) {
                 listOfNames.add(new Item(rs.getString("id"), rs.getString("name"),
                         rs.getString("description"), rs.getTimestamp("create_date")));
             }
-            rs.close();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,15 +121,12 @@ public class Tracker implements AutoCloseable {
      */
     public Item findById(String id) {
         Item result = null;
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE id = " + Integer.parseInt(id));
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE id = " + Integer.parseInt(id))) {
             while (rs.next()) {
                 result = new Item(rs.getString("id"), rs.getString("name"),
                         rs.getString("description"), rs.getTimestamp("create_date"));
             }
-            rs.close();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -175,20 +172,14 @@ public class Tracker implements AutoCloseable {
     }
 
     private void importSQL(Connection connection, FileInputStream is) throws SQLException {
-        Scanner s = new Scanner(is);
-        s.useDelimiter(";");
-        Statement st = null;
-        try {
-            st = connection.createStatement();
+        try (Scanner s = new Scanner(is);
+             Statement st = connection.createStatement()) {
+            s.useDelimiter(";");
             while (s.hasNext()) {
                 String line = s.next();
                 if (line.trim().length() > 0) {
                     st.execute(line);
                 }
-            }
-        } finally {
-            if (st != null) {
-                st.close();
             }
         }
     }

@@ -4,7 +4,7 @@ package ru.job4j.tracker;
  * Class StartUI program start and menu.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
- * @version 0.1
+ * @version 0.3
  */
 public class StartUI {
 
@@ -38,7 +38,6 @@ public class StartUI {
             menu.show();
             menu.select(input.ask("Select number of menu:", menu.getRange()));
         } while (!"y".equals(this.input.ask("Exit? (y): ")));
-        tracker.close();
     }
 
     /**
@@ -46,6 +45,8 @@ public class StartUI {
      * @param args .
      */
     public static void main(String[] args) {
-        new StartUI(new ValidateInput(new ConsoleInput()), new Tracker()).init();
+        try (Tracker tr = new Tracker()) {
+            new StartUI(new ValidateInput(new ConsoleInput()), tr).init();
+        }
     }
 }
