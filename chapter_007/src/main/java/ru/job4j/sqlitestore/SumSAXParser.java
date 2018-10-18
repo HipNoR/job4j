@@ -24,10 +24,10 @@ public class SumSAXParser {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         XMLReader xmlReader = sp.getXMLReader();
-        MyHandler handler = new MyHandler();
-        xmlReader.setContentHandler(handler);
+        FieldCounter counter = new FieldCounter();
+        xmlReader.setContentHandler(counter);
         xmlReader.parse(file.getAbsolutePath());
-        sum = handler.getSum();
+        sum = counter.getSum();
         System.out.println(String.format("Sum of all field's is %s", sum));
     }
 

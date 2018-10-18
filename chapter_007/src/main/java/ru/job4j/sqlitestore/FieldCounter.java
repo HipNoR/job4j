@@ -4,7 +4,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 /**
  * The class that processes events when parsing the CML file.
  * Sum all field "field" values.
@@ -13,7 +12,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @since 0.1
  * 11.10.2018
  */
-public class MyHandler extends DefaultHandler {
+public class FieldCounter extends DefaultHandler {
     private long sum = 0;
 
     public long getSum() {
@@ -32,11 +31,8 @@ public class MyHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        String currentElement = qName;
-
-        if (currentElement.equals("entry")) {
+        if (qName.equals("entry")) {
             sum += Integer.valueOf(attributes.getValue("field"));
         }
     }
-
 }
