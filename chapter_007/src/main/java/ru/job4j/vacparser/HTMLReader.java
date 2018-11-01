@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * The class scans the forum skl.ru, finds jobs java developer.
  * When you first start it finds all jobs from the beginning of the year.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 19.10.2018
  */
@@ -67,7 +67,7 @@ public class HTMLReader {
         try {
             pages = getPages(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         log.info(String.format("Total pages to parse: %s", pages));
         for (int page = 1; page <= pages; page++) {
@@ -138,7 +138,7 @@ public class HTMLReader {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         return doc;
     }
@@ -163,7 +163,7 @@ public class HTMLReader {
             try {
                 date = format.parse(splitted);
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.error("ERROR", e);
             }
         }
         return date;

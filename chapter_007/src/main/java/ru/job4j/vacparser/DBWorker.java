@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 
 /**
@@ -15,7 +15,7 @@ import java.util.*;
  * Accepts a list of vacancies and stores them in a database.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 18.10.2018
  */
@@ -36,11 +36,6 @@ public class DBWorker implements AutoCloseable {
     private Properties properties;
 
     /**
-     * Date formatting pattern.
-     */
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-    /**
      * HashSet to protection the database from duplicates.
      */
     private HashSet<String> twinsChecker;
@@ -51,7 +46,7 @@ public class DBWorker implements AutoCloseable {
             setConnection();
             createStructure();
         } catch (SQLException e) {
-           e.printStackTrace();
+            log.error("ERROR", e);
         }
         hashPrepare();
     }
@@ -66,15 +61,20 @@ public class DBWorker implements AutoCloseable {
         Boolean valid = false;
         String url = vacancy.getUrl();
         if (!twinsChecker.contains(url)) {
-            String date = format.format(vacancy.getPosted());
+            Date date = new Date(vacancy.getPosted().getTime());
             String title = vacancy.getTitle();
             String desc = vacancy.getDescription();
-            String query = String.format("INSERT INTO vacancy (date, title, url, descript) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", date, title, url, desc);
-            try (Statement st = connection.createStatement()) {
-                st.executeUpdate(query);
+            try (PreparedStatement st = connection.prepareStatement(
+                    "INSERT INTO vacancy (date, title, url, descript) VALUES (?, ?, ?,?)"
+            )) {
+                st.setDate(1, date);
+                st.setString(2, title);
+                st.setString(3, url);
+                st.setString(4, desc);
+                st.executeUpdate();
                 valid = true;
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("ERROR", e);
             }
         }
         return valid;
@@ -102,7 +102,7 @@ public class DBWorker implements AutoCloseable {
         try (Statement st = connection.createStatement()) {
             st.executeUpdate("UPDATE last_start_date SET date = CURRENT_DATE WHERE id = 1");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
     }
 
@@ -118,7 +118,7 @@ public class DBWorker implements AutoCloseable {
                 lastDate = rs.getDate("date");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         return lastDate;
     }
@@ -138,7 +138,7 @@ public class DBWorker implements AutoCloseable {
                         rs.getString("title"), rs.getString("url"), rs.getString("descript")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         return result;
     }
@@ -148,7 +148,7 @@ public class DBWorker implements AutoCloseable {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
     }
 
@@ -164,7 +164,7 @@ public class DBWorker implements AutoCloseable {
                 twinsChecker.add(rs.getString("url"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
     }
 

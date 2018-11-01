@@ -1,5 +1,8 @@
 package ru.job4j.vacparser;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,11 +13,16 @@ import java.util.Properties;
  * The class allows you to get properties.
  * Gets from resources or path.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 19.10.2018
  */
 public class Configurator {
+    /**
+     * Logger for info output.
+     */
+    private final Logger log = LogManager.getLogger(DBWorker.class);
+
     private Properties properties = new Properties();
 
     /**
@@ -26,7 +34,7 @@ public class Configurator {
         try (FileInputStream fis = new FileInputStream(new File(path))) {
             properties.load(fis);
         }  catch (IOException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         return properties;
     }
@@ -40,7 +48,7 @@ public class Configurator {
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream(name)) {
         properties.load(fis);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("ERROR", e);
         }
         return properties;
     }

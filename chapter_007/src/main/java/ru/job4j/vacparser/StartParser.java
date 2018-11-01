@@ -1,5 +1,7 @@
 package ru.job4j.vacparser;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import java.util.Properties;
@@ -12,12 +14,15 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * Main class of the parser application.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 24.10.2018
  */
 public class StartParser {
-
+    /**
+     * Logger for info output.
+     */
+    private final static Logger LOGGER = LogManager.getLogger(DBWorker.class);
 
 
     public void task(String prop) throws SchedulerException {
@@ -40,9 +45,9 @@ public class StartParser {
     public static void main(String[] args) {
         StartParser parser = new StartParser();
         try {
-            parser.task(args[0]);
+            parser.task("app.properties");
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            LOGGER.error("ERROR", e);
         }
     }
 }
