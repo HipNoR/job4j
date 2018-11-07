@@ -55,7 +55,7 @@ public class ValidateService {
         return user -> {
             String result = "User already exists";
             if (store.add(user)) {
-                result = String.format("User with id: %s was added.", user.getId());
+                result = String.format("User with id %s was added.", user.getId());
             }
             return result;
         };
@@ -69,7 +69,7 @@ public class ValidateService {
         return user -> {
             String result = "No such user!";
             if (store.update(user)) {
-                result = "User was updated";
+                result = String.format("User with %s was updated", user.getId());
             }
             return result;
         };
@@ -83,7 +83,7 @@ public class ValidateService {
         return user -> {
             String result = "No such user!";
             if (store.delete(user.getId())) {
-                result = "User was deleted";
+                result = String.format("User with %s was deleted", user.getId());
             }
             return result;
         };

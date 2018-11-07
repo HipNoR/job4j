@@ -43,17 +43,18 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
         String action = req.getParameter("action");
         String sid = req.getParameter("id");
         Long id;
-        if (sid == null) {
+        if (sid == null || sid.equals("")) {
             id = System.currentTimeMillis() + rn.nextInt();
         } else {
             id = Long.parseLong(sid);
         }
         String name = req.getParameter("name");
         String login = req.getParameter("login");
-        String email = req.getParameter("login");
+        String email = req.getParameter("email");
         User user = new User(id, name, login, email);
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         String result = validate.init().doAction(action, user);
