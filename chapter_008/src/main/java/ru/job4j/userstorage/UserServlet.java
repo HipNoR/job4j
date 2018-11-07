@@ -14,7 +14,7 @@ import java.util.Random;
  * Presentation layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 31.10.2018
  */
@@ -45,6 +45,7 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         String action = req.getParameter("action");
+        Action.Type act = Action.Type.valueOf(action.toUpperCase());
         String sid = req.getParameter("id");
         Long id;
         if (sid == null || sid.equals("")) {
@@ -57,7 +58,7 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         User user = new User(id, name, login, email);
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        String result = validate.init().doAction(action, user);
+        String result = validate.init().doAction(act, user);
         writer.append(result);
         writer.flush();
     }

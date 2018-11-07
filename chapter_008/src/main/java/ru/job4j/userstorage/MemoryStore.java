@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Persistent layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 01.11.2018
  */
@@ -52,11 +52,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean add(User user) {
-        Boolean valid = true;
-     if (store.put(user.getId(), user) != null) {
-         valid = false;
-     }
-     return  valid;
+        return store.put(user.getId(), user) != null;
     }
 
     /**
@@ -66,7 +62,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean update(User user) {
-       return store.replace(user.getId(), user) != null;
+        return store.replace(user.getId(), user) != null;
     }
 
     /**
@@ -76,7 +72,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean delete(long id) {
-       return store.remove(id) != null;
+        return store.remove(id) != null;
     }
 
     /**
@@ -97,7 +93,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public User findById(long id) {
-       return store.get(id);
+        return store.get(id);
     }
 
     /**

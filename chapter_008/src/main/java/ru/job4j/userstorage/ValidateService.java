@@ -12,7 +12,7 @@ import java.util.function.Function;
  * Based on Singleton pattern and Dispatch patter by Petr Arsentev (parsentev@uandex.ru).
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 31.10.2018
  */
@@ -31,7 +31,7 @@ public class ValidateService {
     /**
      * Actions storage.
      */
-    private final Map<String, Function<User, String>> dispatch = new HashMap<>();
+    private final Map<Action.Type, Function<User, String>> dispatch = new HashMap<>();
 
     private ValidateService() {
     }
@@ -94,28 +94,28 @@ public class ValidateService {
      * @return current object.
      */
     public ValidateService init() {
-        this.load("add", this.add());
-        this.load("update", this.update());
-        this.load("delete", this.delete());
+        this.load(Action.Type.ADD, this.add());
+        this.load(Action.Type.UPDATE, this.update());
+        this.load(Action.Type.DELETE, this.delete());
         return this;
     }
 
     /**
      * Load handlers for actions.
-     * @param action action key.
+     * @param type action key.
      * @param handle Handler.
      */
-    public void load(String action, Function<User, String> handle) {
-        this.dispatch.put(action, handle);
+    public void load(Action.Type type, Function<User, String> handle) {
+        this.dispatch.put(type, handle);
     }
 
     /**
      *
      * @param action to do with user.
-     * @param user for action.
+//     * @param user for action.
      * @return report on the work done.
      */
-    public String doAction(final String action, final User user) {
+    public String doAction(final Action.Type action, final User user) {
         return this.dispatch.get(action).apply(user);
     }
 
