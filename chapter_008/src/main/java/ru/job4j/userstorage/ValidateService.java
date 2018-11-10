@@ -69,7 +69,7 @@ public class ValidateService {
         return user -> {
             String result = "No such user!";
             if (store.update(user)) {
-                result = String.format("User with %s was updated", user.getId());
+                result = String.format("User with id %s was updated", user.getId());
             }
             return result;
         };
@@ -83,7 +83,7 @@ public class ValidateService {
         return user -> {
             String result = "No such user!";
             if (store.delete(user.getId())) {
-                result = String.format("User with %s was deleted", user.getId());
+                result = String.format("User with id %s was deleted", user.getId());
             }
             return result;
         };

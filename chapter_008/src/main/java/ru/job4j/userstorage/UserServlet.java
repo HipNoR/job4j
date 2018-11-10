@@ -57,9 +57,9 @@ public class UserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String email = req.getParameter("email");
         User user = new User(id, name, login, email);
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
         String result = validate.init().doAction(act, user);
-        writer.append(result);
-        writer.flush();
+        req.setAttribute("result", result);
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 }

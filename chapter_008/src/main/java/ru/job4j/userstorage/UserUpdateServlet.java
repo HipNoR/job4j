@@ -35,7 +35,7 @@ public class UserUpdateServlet extends HttpServlet {
                         + "<title>User update</title>\n"
                         + "</head>\n"
                         + "<body><table>\n"
-                        + "<form method=\"POST\" action=\"edit\">\n"
+                        + "<form method=\"post\" action=\"edit\">\n"
                         + "<input type=\"hidden\" name=\"action\" value=\"update\">\n"
                         + "<input type=\"hidden\" name=\"id\" value=\"" +  id + "\">\n"
                         + "<tr><td>ID</td><td>" + id + "</td></tr>\n"
@@ -51,6 +51,5 @@ public class UserUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        new UserServlet().doPost(req, resp);
-       new UsersServlet().doGet(req, resp);
     }
 }

@@ -52,7 +52,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean add(User user) {
-        return store.put(user.getId(), user) != null;
+        return store.put(user.getId(), user) == null;
     }
 
     /**
