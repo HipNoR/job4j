@@ -26,7 +26,7 @@ public class ValidateService {
     /**
      * Instance of storage class.
      */
-    private final Store store = MemoryStore.getInstance();
+    private final Store store = DbStore.getInstance();
 
     /**
      * Actions storage.

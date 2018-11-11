@@ -25,6 +25,14 @@ public class User {
         createDate = new Date();
     }
 
+    public User(long id, String name, String login, String email, Date createDate) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.email = email;
+        this.createDate = createDate;
+    }
+
     public long getId() {
         return id;
     }

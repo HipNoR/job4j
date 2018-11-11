@@ -11,6 +11,11 @@
     <%  String result = (String) request.getAttribute("result");
         List<User> users = ValidateService.getInstance().findAll();
         if (users.size() == 0) {%>
+    <% if (result != null) {%>
+    <tr>
+        <td colspan="6" align="center"><%= result%></td>
+    </tr>
+    <%}%>
     <tr>
         <td>Storage is empty</td>
     </tr>
