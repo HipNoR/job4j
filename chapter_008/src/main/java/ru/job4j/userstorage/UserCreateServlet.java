@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  * Servlet to create new users.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 07.11.2018
  */
@@ -43,6 +43,6 @@ public class UserCreateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new UserServlet().doPost(req, resp);
+       req.getRequestDispatcher("ustore").forward(req, resp);
     }
 }

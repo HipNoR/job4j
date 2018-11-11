@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +13,7 @@ import java.util.Random;
  * Presentation layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 31.10.2018
  */
@@ -27,19 +26,6 @@ public class UserServlet extends HttpServlet {
      * To generate a random id.
      */
     private final Random rn = new Random();
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        List<User> users = validate.findAll();
-        if (users.size() == 0) {
-            writer.append("Storage is empty.");
-        } else {
-            users.forEach(user -> writer.append(user.toString()));
-        }
-        writer.flush();
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -59,7 +45,9 @@ public class UserServlet extends HttpServlet {
         User user = new User(id, name, login, email);
         String result = validate.init().doAction(act, user);
         req.setAttribute("result", result);
-        req.getRequestDispatcher("index.jsp").forward(req, resp);
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        List<User> users = validate.findAll();
+        req.setAttribute("size", users.size());
+        req.setAttribute("users", users);
+        req.getRequestDispatcher("/WEB-INF/view/UsersView.jsp").forward(req, resp);
     }
 }
