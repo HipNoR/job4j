@@ -18,7 +18,7 @@ import java.util.List;
  *
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 11.11.2018
  */
@@ -26,7 +26,7 @@ public class DbStore implements Store {
     private final Logger logger = LoggerFactory.getLogger(DbStore.class);
 
     private static final BasicDataSource SOURCE = new BasicDataSource();
-    private static DbStore instance = new DbStore();
+    private static final DbStore INSTANCE = new DbStore();
 
     private DbStore() {
         SOURCE.setDriverClassName("org.postgresql.Driver");
@@ -41,11 +41,11 @@ public class DbStore implements Store {
     }
 
     /**
-     * Returns instance.
-     * @return instance of the class.
+     * Returns INSTANCE.
+     * @return INSTANCE of the class.
      */
     public static DbStore getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
