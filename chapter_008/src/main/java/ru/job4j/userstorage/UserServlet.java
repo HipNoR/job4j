@@ -13,7 +13,7 @@ import java.util.Random;
  * Presentation layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.3$
+ * @version 0.4$
  * @since 0.1
  * 31.10.2018
  */
@@ -21,7 +21,7 @@ public class UserServlet extends HttpServlet {
     /**
      * Validate class instance.
      */
-    private final ValidateService validate = ValidateService.getInstance();
+    private final ValidateService validate = ValidateService.getInstance().init();
     /**
      * To generate a random id.
      */
@@ -43,7 +43,7 @@ public class UserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String email = req.getParameter("email");
         User user = new User(id, name, login, email);
-        String result = validate.init().doAction(act, user);
+        String result = validate.doAction(act, user);
         req.setAttribute("result", result);
         List<User> users = validate.findAll();
         req.setAttribute("size", users.size());
