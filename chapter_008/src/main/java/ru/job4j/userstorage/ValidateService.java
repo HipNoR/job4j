@@ -12,7 +12,7 @@ import java.util.function.Function;
  * Based on Singleton pattern and Dispatch patter by Petr Arsentev (parsentev@uandex.ru).
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 31.10.2018
  */
@@ -112,7 +112,7 @@ public class ValidateService {
     /**
      *
      * @param action to do with user.
-//     * @param user for action.
+     * @param user for action.
      * @return report on the work done.
      */
     public String doAction(final Action.Type action, final User user) {
@@ -134,6 +134,23 @@ public class ValidateService {
      */
     public User findById(long id) {
         return store.findById(id);
+    }
+
+    /**
+     * The method checks if the user exists in the store.
+     * @param login to search.
+     * @param password to search.
+     * @return id if exists else -1;
+     */
+    public long isRegistered(String login, String password) {
+        long id = -1;
+            for (User user : store.findAll()) {
+                if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
+                    id = user.getId();
+                    break;
+                }
+            }
+        return id;
     }
 }
 

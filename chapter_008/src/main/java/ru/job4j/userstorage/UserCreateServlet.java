@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  * Servlet to create new users.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 07.11.2018
  */
@@ -34,7 +34,12 @@ public class UserCreateServlet extends HttpServlet {
                         + "<tr><td>ID</td><td><input type=\"text\" name=\"id\"></td></tr>\n"
                         + "<tr><td>Name</td><td><input type=\"text\" name=\"name\"></td></tr>\n"
                         + "<tr><td>Login</td><td><input type=\"text\" name=\"login\"></td></tr>\n"
+                        + "<tr><td>Password</td><td><input type=\"text\" name=\"password\"></td></tr>\n"
                         + "<tr><td>Email</td><td><input type=\"text\" name=\"email\"></td></tr>\n"
+                        + "<tr><td>Role</td><td><select name=\"role\">\n"
+                        + "<option value=\"admin\">admin</option>\n"
+                        + "<option selected value=\"user\">user</option>\n"
+                        + "</select></td></tr>\n"
                         + "<tr align=\"right\"><td colspan=\"2\"><input type=\"submit\" value=\"CREATE\"></td></tr>\n"
                         + "</form></table></body></html>"
         );

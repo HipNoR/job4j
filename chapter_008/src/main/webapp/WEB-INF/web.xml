@@ -4,6 +4,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
+    <filter>
+        <filter-name>Auth Filter</filter-name>
+        <filter-class>ru.job4j.userstorage.AuthFilter</filter-class>
+    </filter>
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.EchoServlet</servlet-class>
@@ -28,7 +32,21 @@
         <servlet-class>ru.job4j.userstorage.UserUpdateServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>Signin Controller</servlet-name>
+        <servlet-class>ru.job4j.userstorage.SignInController</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Signout Controller</servlet-name>
+        <servlet-class>ru.job4j.userstorage.SignOutController</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
 
+    <filter-mapping>
+        <filter-name>Auth Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
         <url-pattern>/echo</url-pattern>
@@ -48,6 +66,14 @@
     <servlet-mapping>
         <servlet-name>UserUpdate</servlet-name>
         <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Signin Controller</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Signout Controller</servlet-name>
+        <url-pattern>/signout</url-pattern>
     </servlet-mapping>
 </web-app>
 

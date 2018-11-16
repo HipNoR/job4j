@@ -18,7 +18,7 @@ import java.util.List;
  *
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 11.11.2018
  */
@@ -57,12 +57,14 @@ public class DbStore implements Store {
     public boolean add(User user) {
         Boolean result = true;
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement("INSERT INTO users VALUES (?,?,?,?,?)")) {
+             PreparedStatement st = connection.prepareStatement("INSERT INTO users VALUES (?,?,?,?,?,?,?)")) {
             st.setLong(1, user.getId());
             st.setString(2, user.getName());
             st.setString(3, user.getLogin());
-            st.setString(4, user.getEmail());
-            st.setDate(5, new Date(user.getCreateDate().getTime()));
+            st.setString(4, user.getPassword());
+            st.setString(5, user.getRole());
+            st.setString(6, user.getEmail());
+            st.setDate(7, new Date(user.getCreateDate().getTime()));
             st.executeUpdate();
         } catch (SQLException e) {
             result = false;
@@ -80,11 +82,15 @@ public class DbStore implements Store {
     public boolean update(User user) {
         Boolean result = true;
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
+             PreparedStatement st = connection.prepareStatement(
+                     "UPDATE users SET name=?, login=?, password=?, role=?, email=? WHERE id=?"
+             )) {
             st.setString(1, user.getName());
             st.setString(2, user.getLogin());
-            st.setString(3, user.getEmail());
-            st.setLong(4, user.getId());
+            st.setString(3, user.getPassword());
+            st.setString(4, user.getRole());
+            st.setString(5, user.getEmail());
+            st.setLong(6, user.getId());
             st.executeUpdate();
         } catch (SQLException e) {
             result = false;
@@ -102,7 +108,7 @@ public class DbStore implements Store {
     public boolean delete(long id) {
         Boolean result = true;
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement("DELETE FROM users WHERE id=?")) {
+             PreparedStatement st = connection.prepareStatement("DELETE FROM users WHERE id=?")) {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
@@ -120,15 +126,17 @@ public class DbStore implements Store {
     public List<User> findAll() {
         List<User> result = new ArrayList<>();
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM users")) {
+             PreparedStatement st = connection.prepareStatement("SELECT * FROM users")) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 long id = rs.getLong("id");
                 String name = rs.getString("name");
                 String login = rs.getString("login");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
                 String email = rs.getString("email");
                 Date date = rs.getDate("created");
-                User user = new User(id, name, login, email, date);
+                User user = new User(id, name, login, password, role, email, date);
                 result.add(user);
             }
         } catch (SQLException e) {
@@ -146,15 +154,17 @@ public class DbStore implements Store {
     public User findById(long id) {
         User user = null;
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM users WHERE id =?")) {
+             PreparedStatement st = connection.prepareStatement("SELECT * FROM users WHERE id =?")) {
             st.setLong(1, id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("name");
                 String login = rs.getString("login");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
                 String email = rs.getString("email");
                 Date date = rs.getDate("created");
-                user = new User(id, name, login, email, date);
+                user = new User(id, name, login, password, role, email, date);
             }
         } catch (SQLException e) {
             logger.error("User find by id ERROR!", e);
@@ -168,16 +178,19 @@ public class DbStore implements Store {
      */
     private void prepareStructure() {
         try (Connection connection = SOURCE.getConnection();
-            PreparedStatement st = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS users ("
-                            + "id BIGINT UNIQUE,"
-                            + "name VARCHAR(50),"
-                            + "login VARCHAR(50),"
-                            + "email VARCHAR(50),"
-                            + "created DATE\n"
-                            + ");")
+             PreparedStatement st = connection.prepareStatement(
+                     "CREATE TABLE IF NOT EXISTS users ("
+                             + "id BIGINT UNIQUE,"
+                             + "name VARCHAR(50),"
+                             + "login VARCHAR(50) UNIQUE NOT NULL ,"
+                             + "password VARCHAR(50) NOT NULL ,"
+                             + "role VARCHAR(10),"
+                             + "email VARCHAR(50),"
+                             + "created DATE"
+                             + ");"
+                             + "INSERT INTO users(ID, name,  login, password, role, created)"
+                             + " VALUES (0, 'admin', 'root', 'root', 'admin', current_date);")
         ) {
-
             st.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error creating structure", e);

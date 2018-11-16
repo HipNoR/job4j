@@ -6,12 +6,6 @@
 </head>
 <body>
 <table border="1" cellpadding="1" cellspacing="1">
-    <c:if test="${size == 0}">
-        <tr>
-            <td>Storage is empty</td>
-        </tr>
-    </c:if>
-    <c:if test="${size != 0}">
         <tr>
             <td colspan="6" align="center"><c:out value="${result}" default="List of all users"/></td>
         </tr>
@@ -31,21 +25,34 @@
                 <td><c:out value="${user.email}"/></td>
                 <td><c:out value="${user.createDate}"/></td>
                 <td>
-                    <form action="${pageContext.servletContext.contextPath}/ustore" method="post">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
-                        <input type="submit" value="Delete user"></form>
-                    <form action="${pageContext.servletContext.contextPath}/edit" method="get" >
-                        <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
-                        <input type="submit" value="Update user"></form>
+                    <c:if test="${role eq 'admin'}">
+                        <form action="${pageContext.servletContext.contextPath}/ustore" method="post" style="margin: 2px">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
+                            <input type="submit" value="Delete user"></form>
+                        <form action="${pageContext.servletContext.contextPath}/edit" method="get" style="margin: 2px">
+                            <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
+                            <input type="submit" value="Update user"></form>
+                    </c:if>
+                    <c:if test="${role ne 'admin'}">
+                        <c:if test="${uid eq user.id}">
+                            <form action="${pageContext.servletContext.contextPath}/edit" method="get" style="margin: 2px">
+                                <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
+                                <input type="submit" value="Update user"></form>
+                        </c:if>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>
-    </c:if>
     <tr>
         <td colspan="6" align="center">
-            <form action="${pageContext.servletContext.contextPath}/create" method="get" style="margin-bottom: 0">
-                <input type="submit" value="Create new user">
+            <c:if test="${role eq 'admin'}">
+                <form action="${pageContext.servletContext.contextPath}/create" method="get" style="margin: 2px; display: inline-block">
+                    <input type="submit" value="Create new user">
+                </form>
+            </c:if>
+            <form action="${pageContext.servletContext.contextPath}/signout" method="get" style="margin: 2px; display: inline-block">
+                <input type="submit" value="Sign out">
             </form>
         </td>
     </tr>

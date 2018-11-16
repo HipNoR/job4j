@@ -13,7 +13,7 @@ import java.util.Random;
  * Presentation layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.4$
+ * @version 0.5$
  * @since 0.1
  * 31.10.2018
  */
@@ -41,8 +41,10 @@ public class UserServlet extends HttpServlet {
         }
         String name = req.getParameter("name");
         String login = req.getParameter("login");
+        String password = req.getParameter("password");
+        String role = req.getParameter("role");
         String email = req.getParameter("email");
-        User user = new User(id, name, login, email);
+        User user = new User(id, name, login, password, role, email);
         String result = validate.doAction(act, user);
         req.setAttribute("result", result);
         List<User> users = validate.findAll();
