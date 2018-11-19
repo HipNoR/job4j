@@ -17,7 +17,7 @@ import java.util.function.Function;
  * 31.10.2018
  */
 
-public class ValidateService {
+public class ValidateService implements Validate {
     /**
      * Single instance of the class with eager initialization.
      */
@@ -36,11 +36,11 @@ public class ValidateService {
     private ValidateService() {
     }
 
-    public static ValidateService getInstance() {
+    public static Validate getInstance() {
         if (instance == null) {
             synchronized (ValidateService.class) {
                 if (instance == null) {
-                    instance = new ValidateService();
+                    instance = new ValidateService().init();
                 }
             }
         }
@@ -51,7 +51,7 @@ public class ValidateService {
      * Add new User to storage.
      * @return message to presentation layout.
      */
-    public Function<User, String> add() {
+    private Function<User, String> add() {
         return user -> {
             String result = "User already exists";
             if (store.add(user)) {
@@ -65,7 +65,7 @@ public class ValidateService {
      * Changes user if it exists.
      * @return message to presentation layout.
      */
-    public Function<User, String> update() {
+    private Function<User, String> update() {
         return user -> {
             String result = "No such user!";
             if (store.update(user)) {
@@ -79,7 +79,7 @@ public class ValidateService {
      * Removes user by id.
      * @return message to presentation layout.
      */
-    public Function<User, String> delete() {
+    private Function<User, String> delete() {
         return user -> {
             String result = "No such user!";
             if (store.delete(user.getId())) {
@@ -93,7 +93,7 @@ public class ValidateService {
      * Init dispatcher.
      * @return current object.
      */
-    public ValidateService init() {
+    private ValidateService init() {
         this.load(Action.Type.ADD, this.add());
         this.load(Action.Type.UPDATE, this.update());
         this.load(Action.Type.DELETE, this.delete());
@@ -105,7 +105,7 @@ public class ValidateService {
      * @param type action key.
      * @param handle Handler.
      */
-    public void load(Action.Type type, Function<User, String> handle) {
+    private void load(Action.Type type, Function<User, String> handle) {
         this.dispatch.put(type, handle);
     }
 

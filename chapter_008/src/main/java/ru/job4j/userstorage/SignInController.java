@@ -16,7 +16,7 @@ import java.io.IOException;
  * 14.11.2018
  */
 public class SignInController extends HttpServlet {
-    private final ValidateService validate = ValidateService.getInstance();
+    private final Validate validate = ValidateService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

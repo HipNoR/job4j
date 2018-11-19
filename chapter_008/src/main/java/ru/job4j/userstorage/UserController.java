@@ -17,11 +17,11 @@ import java.util.Random;
  * @since 0.1
  * 31.10.2018
  */
-public class UserServlet extends HttpServlet {
+public class UserController extends HttpServlet {
     /**
      * Validate class instance.
      */
-    private final ValidateService validate = ValidateService.getInstance().init();
+    private final Validate validate = ValidateService.getInstance();
     /**
      * To generate a random id.
      */

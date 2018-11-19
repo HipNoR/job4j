@@ -24,7 +24,7 @@ public class MemoryStore implements Store {
      * Users storage.
      * The user id is used as a key for the map.
      */
-    private final ConcurrentHashMap<Long, User> store = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, User> store = new ConcurrentHashMap<>();
 
 
     private MemoryStore() {
@@ -39,6 +39,7 @@ public class MemoryStore implements Store {
             synchronized (MemoryStore.class) {
                 if (instance == null) {
                     instance = new MemoryStore();
+                    instance.add(new User(0, "admin", "root", "root", "admin", "admin@mail"));
                 }
             }
         }
@@ -52,7 +53,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean add(User user) {
-        return store.put(user.getId(), user) == null;
+        return store.put(String.valueOf(user.getId()), user) == null;
     }
 
     /**
@@ -62,7 +63,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean update(User user) {
-        return store.replace(user.getId(), user) != null;
+        return store.replace(String.valueOf(user.getId()), user) != null;
     }
 
     /**
@@ -72,7 +73,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public boolean delete(long id) {
-        return store.remove(id) != null;
+        return store.remove(String.valueOf(id)) != null;
     }
 
     /**
@@ -93,7 +94,7 @@ public class MemoryStore implements Store {
      */
     @Override
     public User findById(long id) {
-        return store.get(id);
+        return store.get(String.valueOf(id));
     }
 
     /**
@@ -101,5 +102,6 @@ public class MemoryStore implements Store {
      */
     public void deleteAll() {
         store.clear();
+        instance.add(new User(0, "admin", "root", "root", "admin", "admin@mail"));
     }
 }

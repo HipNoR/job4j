@@ -19,7 +19,7 @@ public class UserUpdateServlet extends HttpServlet {
     /**
      * Validate class instance.
      */
-    private final ValidateService validate = ValidateService.getInstance();
+    private final Validate validate = ValidateService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
