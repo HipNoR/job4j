@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -11,31 +12,25 @@ import java.util.function.Function;
  * The class copies the ValidatesService class, replacing the data store.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 20.11.2018
  */
 public class ValidateStub implements Validate {
 
-    private static ValidateStub instance;
-
-    private final Map<String, User> store = new HashMap<>();
+    private final ConcurrentHashMap<String, User> store = new ConcurrentHashMap<>();
 
     private final Map<Action.Type, Function<User, String>> dispatch = new HashMap<>();
 
     private ValidateStub() {
     }
 
-    public static Validate getInstance() {
-        if (instance == null) {
-            synchronized (ValidateService.class) {
-                if (instance == null) {
-                    instance = new ValidateStub().init();
+    public static class ValidateStubHolder {
+        public static final ValidateStub HOLDER_INSTANCE = new ValidateStub().init();
+    }
 
-                }
-            }
-        }
-        return instance;
+    public static Validate getInstance() {
+       return ValidateStubHolder.HOLDER_INSTANCE;
     }
 
     private Function<User, String> add() {

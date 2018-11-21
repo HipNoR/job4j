@@ -10,15 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Persistent layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 01.11.2018
  */
 public class MemoryStore implements Store {
-    /**
-     * Single instance of the class with eager initialization.
-     */
-    private static MemoryStore instance;
 
     /**
      * Users storage.
@@ -31,19 +27,18 @@ public class MemoryStore implements Store {
     }
 
     /**
+     * On demand holder.
+     */
+    public static class MemoryStoreHolder {
+        public static final MemoryStore HOLDER_INSTANCE = new MemoryStore().init();
+    }
+
+    /**
      * Only one instance of this class will be created.
      * @return instance of class.
      */
     public static MemoryStore getInstance() {
-        if (instance == null) {
-            synchronized (MemoryStore.class) {
-                if (instance == null) {
-                    instance = new MemoryStore();
-                    instance.add(new User(0, "admin", "root", "root", "admin", "admin@mail"));
-                }
-            }
-        }
-        return instance;
+        return MemoryStoreHolder.HOLDER_INSTANCE;
     }
 
     /**
@@ -102,6 +97,14 @@ public class MemoryStore implements Store {
      */
     public void deleteAll() {
         store.clear();
-        instance.add(new User(0, "admin", "root", "root", "admin", "admin@mail"));
+        store.put("0", new User(0, "admin", "root", "root", "admin", "admin@mail"));
+    }
+
+    /**
+     * Adds an admin entry.
+     */
+    private MemoryStore init() {
+        store.put("0", new User(0, "admin", "root", "root", "admin", "admin@mail"));
+        return this;
     }
 }

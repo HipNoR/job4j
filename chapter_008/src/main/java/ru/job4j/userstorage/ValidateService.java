@@ -12,16 +12,12 @@ import java.util.function.Function;
  * Based on Singleton pattern and Dispatch patter by Petr Arsentev (parsentev@uandex.ru).
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.3$
+ * @version 0.4$
  * @since 0.1
  * 31.10.2018
  */
 
 public class ValidateService implements Validate {
-    /**
-     * Single instance of the class with eager initialization.
-     */
-    private static ValidateService instance;
 
     /**
      * Instance of storage class.
@@ -36,15 +32,19 @@ public class ValidateService implements Validate {
     private ValidateService() {
     }
 
+    /**
+     * On demand holder.
+     */
+    public static class ValidateStubHolder {
+        public static final ValidateService HOLDER_INSTANCE = new ValidateService().init();
+    }
+
+    /**
+     * This method returns a single instance of the class.
+     * @return instance of class.
+     */
     public static Validate getInstance() {
-        if (instance == null) {
-            synchronized (ValidateService.class) {
-                if (instance == null) {
-                    instance = new ValidateService().init();
-                }
-            }
-        }
-        return instance;
+        return ValidateStubHolder.HOLDER_INSTANCE;
     }
 
     /**
@@ -144,12 +144,12 @@ public class ValidateService implements Validate {
      */
     public long isRegistered(String login, String password) {
         long id = -1;
-            for (User user : store.findAll()) {
-                if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
-                    id = user.getId();
-                    break;
-                }
+        for (User user : store.findAll()) {
+            if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
+                id = user.getId();
+                break;
             }
+        }
         return id;
     }
 }

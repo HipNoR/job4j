@@ -61,6 +61,6 @@ public class SignInControllerTest {
         when(request.getParameter("password")).thenReturn("root");
         when(request.getSession()).thenReturn(session);
         new SignInController().doPost(request, response);
-        //как проверить редиррект?
+        verify(response).sendRedirect(String.format("%s/", request.getContextPath()));
     }
 }
