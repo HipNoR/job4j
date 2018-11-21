@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.persistent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.presentation;
 
 import org.junit.Test;
 
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

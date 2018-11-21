@@ -1,5 +1,7 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.logic;
 
+
+import ru.job4j.userstorage.persistent.User;
 
 import java.util.List;
 

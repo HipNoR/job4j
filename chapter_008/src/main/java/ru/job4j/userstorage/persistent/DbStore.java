@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.persistent;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.presentation;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

@@ -6,7 +6,7 @@
          version="2.4">
     <filter>
         <filter-name>Auth Filter</filter-name>
-        <filter-class>ru.job4j.userstorage.AuthFilter</filter-class>
+        <filter-class>ru.job4j.userstorage.presentation.AuthFilter</filter-class>
     </filter>
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
@@ -14,32 +14,32 @@
     </servlet>
     <servlet>
         <servlet-name>UserStore</servlet-name>
-        <servlet-class>ru.job4j.userstorage.UserController</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.UserController</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>UsersServlet</servlet-name>
-        <servlet-class>ru.job4j.userstorage.UsersServlet</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.UsersServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>UserCreate</servlet-name>
-        <servlet-class>ru.job4j.userstorage.UserCreateServlet</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.UserCreateServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>UserUpdate</servlet-name>
-        <servlet-class>ru.job4j.userstorage.UserUpdateServlet</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.UserUpdateServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>Signin Controller</servlet-name>
-        <servlet-class>ru.job4j.userstorage.SignInController</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.SignInController</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>Signout Controller</servlet-name>
-        <servlet-class>ru.job4j.userstorage.SignOutController</servlet-class>
+        <servlet-class>ru.job4j.userstorage.presentation.SignOutController</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
 

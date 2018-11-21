@@ -1,4 +1,8 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.logic;
+
+import ru.job4j.userstorage.persistent.DbStore;
+import ru.job4j.userstorage.persistent.Store;
+import ru.job4j.userstorage.persistent.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +53,7 @@ public class ValidateService implements Validate {
 
     /**
      * Add new User to storage.
-     * @return message to presentation layout.
+     * @return message to logic layout.
      */
     private Function<User, String> add() {
         return user -> {
@@ -63,7 +67,7 @@ public class ValidateService implements Validate {
 
     /**
      * Changes user if it exists.
-     * @return message to presentation layout.
+     * @return message to logic layout.
      */
     private Function<User, String> update() {
         return user -> {
@@ -77,7 +81,7 @@ public class ValidateService implements Validate {
 
     /**
      * Removes user by id.
-     * @return message to presentation layout.
+     * @return message to logic layout.
      */
     private Function<User, String> delete() {
         return user -> {

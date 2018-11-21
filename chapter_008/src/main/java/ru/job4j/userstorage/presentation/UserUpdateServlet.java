@@ -1,4 +1,8 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.presentation;
+
+import ru.job4j.userstorage.logic.Validate;
+import ru.job4j.userstorage.logic.ValidateService;
+import ru.job4j.userstorage.persistent.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

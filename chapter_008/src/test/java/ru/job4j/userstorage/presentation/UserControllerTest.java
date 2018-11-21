@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.presentation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,6 +6,11 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import ru.job4j.userstorage.logic.Action;
+import ru.job4j.userstorage.logic.Validate;
+import ru.job4j.userstorage.logic.ValidateService;
+import ru.job4j.userstorage.logic.ValidateStub;
+import ru.job4j.userstorage.persistent.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

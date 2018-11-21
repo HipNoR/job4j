@@ -1,4 +1,4 @@
-package ru.job4j.userstorage;
+package ru.job4j.userstorage.persistent;
 
 import org.junit.After;
 import org.junit.Test;
