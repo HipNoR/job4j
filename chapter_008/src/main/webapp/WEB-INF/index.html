@@ -7,13 +7,52 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            var result = true;
+            var fname = $('#fname').val();
+            var lname = $('#lname').val();
+            var desc = $('#desc').val();
+            var sex = document.querySelectorAll('[name="sradio"]');
+            var message = '';
+            if (fname == '') {
+                result = false;
+                message += $('#fname').attr('placeholder') + '\n';
+            }
+            if (lname == '') {
+                result = false;
+                message += $('#lname').attr('placeholder') + '\n';
+            }
+            if (desc == '') {
+                result = false;
+                message += $('#desc').attr('placeholder') + '\n';
+            }
+            var counter = 0;
+            for (var i = 0; i < sex.length; i++) {
+                if (sex[i].checked) {
+                    break;
+                } else {
+                    counter++;
+                }
+            }
+            if (counter == sex.length) {
+                result = false;
+                message += 'Choose your gender';
+            }
+            if (!result) {
+                alert(message);
+            }
+
+            return result;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
     <h2 style="margin-bottom: 30px" align="center">Enter person data</h2>
 </div>
 <div class="container">
-    <form class="form-horizontal" action="/action_page.php">
+    <form class="form-horizontal" onsubmit="return validate()">
         <div class="form-group">
             <label class="control-label col-sm-2" for="fname">First name:</label>
             <div class="col-sm-10">
@@ -34,9 +73,8 @@
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2">Sex:</label>
-            <label class="radio-inline" style="margin-left: 15px"><input type="radio" name="optradio">M</label>
-            <label class="radio-inline"><input type="radio" name="optradio">F</label>
-            </label>
+            <label class="radio-inline" style="margin-left: 15px"><input type="radio" name="sradio">M</label>
+            <label class="radio-inline"><input type="radio" name="sradio">F</label>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
