@@ -7,59 +7,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        function validate() {
-            var result = true;
-            var fname = $('#fname').val();
-            var lname = $('#lname').val();
-            var desc = $('#desc').val();
-            var sex = document.querySelectorAll('[name="sradio"]');
-            var message = '';
-            if (fname == '') {
-                result = false;
-                message += $('#fname').attr('placeholder') + '\n';
-            }
-            if (lname == '') {
-                result = false;
-                message += $('#lname').attr('placeholder') + '\n';
-            }
-            if (desc == '') {
-                result = false;
-                message += $('#desc').attr('placeholder') + '\n';
-            }
-            var counter = 0;
-            for (var i = 0; i < sex.length; i++) {
-                if (sex[i].checked) {
-                    break;
-                } else {
-                    counter++;
-                }
-            }
-            if (counter == sex.length) {
-                result = false;
-                message += 'Choose your gender';
-            }
-            if (!result) {
-                alert(message);
-            }
-
-            return result;
-        }
-
-        function addRow() {
-            var valid = validate();
-            if(valid) {
-                $('#table tr:last').after(
-                    '<tr><td>' + $('#fname').val() + '</td>'
-                    + '<td>' + $('#lname').val() + '</td>'
-                    + '<td>' + $('input[name="sradio"]:checked').val() + '</td>'
-                    + '<td style="word-break: break-word" >' + $('#desc').val() + '</td></tr>'
-                )
-            }
-        }
-    </script>
+    <script src="persons.js"></script>
 </head>
-<body>
+<body onload="getPersons()">
 <div class="container">
     <h2 style="margin-bottom: 30px" align="center">Enter person data</h2>
 </div>
@@ -90,16 +40,15 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="button" class="btn btn-default" onclick="addRow()">Submit</button>
+                <button type="button" class="btn btn-default" onclick="sendPerson()">Submit</button>
             </div>
         </div>
 
-
     </form>
 </div>
-<div class="container">
+<div class="container" >
     <h2 align="center">Persons</h2>
-    <table class="table table-striped" id="table">
+    <table class="table table-striped" >
         <thead>
         <tr>
             <th>First name</th>
@@ -108,8 +57,7 @@
             <th width="50%">Description</th>
         </tr>
         </thead>
-        <tbody >
-        <tr></tr>
+        <tbody id="personstable" >
         </tbody>
     </table>
 </div>
