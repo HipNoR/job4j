@@ -156,5 +156,13 @@ public class ValidateService implements Validate {
         }
         return id;
     }
+
+    public List<String> getCountries() {
+        return store.getCountries();
+    }
+
+    public List<String> getCities(String country) {
+        return store.getCities(country);
+    }
 }
 

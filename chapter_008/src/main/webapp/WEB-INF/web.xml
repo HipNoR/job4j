@@ -91,5 +91,13 @@
         <url-pattern>/json.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LocationController</servlet-name>
+        <servlet-class>ru.job4j.userstorage.presentation.LocationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LocationController</servlet-name>
+        <url-pattern>/loc</url-pattern>
+    </servlet-mapping>
 </web-app>
 

@@ -7,7 +7,7 @@ import java.util.List;
  * Persistent layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 31.10.2018
  */
@@ -22,4 +22,8 @@ public interface Store {
     List<User> findAll();
 
     User findById(long id);
+
+    List<String> getCountries();
+
+    List<String> getCities(String country);
 }

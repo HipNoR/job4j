@@ -1,5 +1,6 @@
 package ru.job4j.userstorage.logic;
 
+import ru.job4j.userstorage.persistent.PersonalData;
 import ru.job4j.userstorage.persistent.User;
 
 import java.util.ArrayList;
@@ -69,7 +70,8 @@ public class ValidateStub implements Validate {
         this.load(Action.Type.ADD, this.add());
         this.load(Action.Type.UPDATE, this.update());
         this.load(Action.Type.DELETE, this.delete());
-        doAction(Action.Type.ADD, new User(0, "admin", "root", "root", "admin", "admin@mail"));
+        PersonalData data = new PersonalData("admin", "admin@mail", "Russia", "Kaluga");
+        doAction(Action.Type.ADD, new User(0, "root", "root", "admin", data));
         return this;
     }
 
@@ -104,5 +106,15 @@ public class ValidateStub implements Validate {
             }
         }
         return id;
+    }
+
+    @Override
+    public List<String> getCountries() {
+        return null;
+    }
+
+    @Override
+    public List<String> getCities(String country) {
+        return null;
     }
 }

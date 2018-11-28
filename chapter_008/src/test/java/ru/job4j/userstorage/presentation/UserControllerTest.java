@@ -10,6 +10,7 @@ import ru.job4j.userstorage.logic.Action;
 import ru.job4j.userstorage.logic.Validate;
 import ru.job4j.userstorage.logic.ValidateService;
 import ru.job4j.userstorage.logic.ValidateStub;
+import ru.job4j.userstorage.persistent.PersonalData;
 import ru.job4j.userstorage.persistent.User;
 
 import javax.servlet.RequestDispatcher;
@@ -76,7 +77,9 @@ public class UserControllerTest {
 
     @Test
     public void whenDeleteExistedUserThanTrue() throws ServletException, IOException {
-        User first = new User(2, "second", "second", "2", "user", "second@mail");
+
+        User first = new User(2, "second", "2", "user",
+                new PersonalData("second", "", "", ""));
         validate.doAction(Action.Type.ADD, first);
         when(request.getParameter("action")).thenReturn("delete");
         when(request.getParameter("id")).thenReturn("2");

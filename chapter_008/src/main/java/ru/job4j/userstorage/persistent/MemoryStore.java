@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Persistent layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.3$
+ * @version 0.4$
  * @since 0.1
  * 01.11.2018
  */
@@ -22,6 +22,10 @@ public class MemoryStore implements Store {
      */
     private final ConcurrentHashMap<String, User> store = new ConcurrentHashMap<>();
 
+    /**
+     * Locations base.
+     */
+    private final AddressStorage locations = AddressStorage.getInstance();
 
     private MemoryStore() {
     }
@@ -92,19 +96,33 @@ public class MemoryStore implements Store {
         return store.get(String.valueOf(id));
     }
 
+    @Override
+    public List<String> getCountries() {
+        return locations.getCountries();
+    }
+
+    @Override
+    public List<String> getCities(String country) {
+        return locations.getCities(country);
+    }
+
     /**
      * only for test.
      */
     public void deleteAll() {
         store.clear();
-        store.put("0", new User(0, "admin", "root", "root", "admin", "admin@mail"));
+        store.put("0", new User(0, "root", "root", "admin",
+                new PersonalData("admin", "", "", "")));
     }
 
     /**
      * Adds an admin entry.
      */
     private MemoryStore init() {
-        store.put("0", new User(0, "admin", "root", "root", "admin", "admin@mail"));
+        store.put("0", new User(0, "root", "root", "admin",
+                new PersonalData("admin", "", "", "")));
         return this;
     }
+
+
 }

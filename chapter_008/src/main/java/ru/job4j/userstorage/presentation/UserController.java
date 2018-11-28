@@ -3,6 +3,7 @@ package ru.job4j.userstorage.presentation;
 import ru.job4j.userstorage.logic.Action;
 import ru.job4j.userstorage.logic.Validate;
 import ru.job4j.userstorage.logic.ValidateService;
+import ru.job4j.userstorage.persistent.PersonalData;
 import ru.job4j.userstorage.persistent.User;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.util.Random;
  * Presentation layout.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.5$
+ * @version 0.6$
  * @since 0.1
  * 31.10.2018
  */
@@ -49,7 +50,10 @@ public class UserController extends HttpServlet {
         String password = req.getParameter("password");
         String role = req.getParameter("role");
         String email = req.getParameter("email");
-        User user = new User(id, name, login, password, role, email);
+        String country = req.getParameter("country");
+        String city = req.getParameter("city");
+        PersonalData data = new PersonalData(name, email, country, city);
+        User user = new User(id, login, password, role, data);
         String result = validate.doAction(act, user);
         req.setAttribute("result", result);
         List<User> users = validate.findAll();

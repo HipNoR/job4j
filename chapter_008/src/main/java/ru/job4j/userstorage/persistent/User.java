@@ -6,36 +6,33 @@ import java.util.Date;
  * Simple model of data.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 31.10.2018
  */
 public class User {
     private long id;
-    private String name;
     private String login;
     private String password;
     private String role;
-    private String email;
     private Date createDate;
+    private PersonalData data;
 
-    public User(long id, String name, String login, String password, String role,  String email) {
+    public User(long id, String login, String password, String role, PersonalData data) {
         this.id = id;
-        this.name = name;
         this.login = login;
         this.password = password;
         this.role = role;
-        this.email = email;
+        this.data = data;
         createDate = new Date();
     }
 
-    public User(long id, String name, String login,  String password, String role, String email, Date createDate) {
+    public User(long id,  String login,  String password, String role, PersonalData data, Date createDate) {
         this.id = id;
-        this.name = name;
         this.login = login;
         this.password = password;
         this.role = role;
-        this.email = email;
+        this.data = data;
         this.createDate = createDate;
     }
 
@@ -44,7 +41,7 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return data.getName();
     }
 
     public String getLogin() {
@@ -60,7 +57,15 @@ public class User {
     }
 
     public String getEmail() {
-        return email;
+        return data.getEmail();
+    }
+
+    public String getCountry() {
+        return data.getCountry();
+    }
+
+    public String getCity() {
+        return data.getCity();
     }
 
     public Date getCreateDate() {
@@ -69,7 +74,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User id: %s, Name: %s, Login: %s, Email: %s, Create date: %s \n",
-                id, name, login, email, createDate);
+        return String.format("User id: %s, Name: %s, Login: %s, Email: %s, Country: %s, City: %s, Create date: %s",
+                id, data.getName(), login, data.getEmail(), data.getCountry(), data.getCity(), createDate);
     }
 }

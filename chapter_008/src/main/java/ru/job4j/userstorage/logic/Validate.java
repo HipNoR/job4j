@@ -22,4 +22,8 @@ public interface Validate {
     User findById(long id);
 
     long isRegistered(String login, String password);
+
+    List<String> getCountries();
+
+    List<String> getCities(String country);
 }
