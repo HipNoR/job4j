@@ -1,0 +1,59 @@
+.seat {
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid;
+}
+
+.seat-ex-fr {
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid;
+}
+
+.seat-ex-ch {
+    width: 40px;
+    height: 40px;
+    background-color: #00ff00;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid;
+}
+
+.seat-ex-rs {
+    width: 40px;
+    height: 40px;
+    background-color: #ff0000;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid;
+}
+
+.head {
+    text-align: center;
+    margin: 40px;
+}
+
+.screen {
+    text-align: center;
+    border: 2px solid;
+    background-color: #e0ffff;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]:checked + label > div {
+    background-color: #00ff00;
+}
+
+input[type="checkbox"]:disabled + label > div {
+    background-color: #ff0000;
+}
+

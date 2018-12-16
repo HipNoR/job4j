@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    <servlet>
+        <servlet-name>HallController</servlet-name>
+        <servlet-class>ru.job4j.cinema.controller.HallController</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HallController</servlet-name>
+        <url-pattern>/hall</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PaymentController</servlet-name>
+        <servlet-class>ru.job4j.cinema.controller.ReserveController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentController</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+
+</web-app>
