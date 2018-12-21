@@ -8,50 +8,31 @@ import ru.job4j.chess.firuges.black.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static ru.job4j.chess.firuges.Cell.*;
 
 public class LogicTest {
 
-    @Test
+    @Test (expected = OccupiedWayException.class)
     public void whenMoveRookThroughPawnWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new PawnBlack(H7));
         logic.add(new RookBlack(H8));
-        try {
-            logic.move(H8, H5);
-        } catch (OccupiedWayException owe) {
-            thrown = true;
-        }
-        assertTrue(thrown);
+        logic.move(H8, H5);
     }
 
-    @Test
+    @Test (expected = OccupiedWayException.class)
     public void whenMoveRookToPawnPlaceWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new PawnBlack(H7));
         logic.add(new RookBlack(H8));
-        try {
         logic.move(H8, H7);
-        } catch (OccupiedWayException owe) {
-            thrown = true;
-        }
-        assertTrue(thrown);
     }
 
-    @Test
+    @Test (expected = ImpossibleMoveException.class)
     public void whenMoveRookViaDiagonalWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new RookBlack(H8));
-        try {
         logic.move(H8, D4);
-        } catch (ImpossibleMoveException ime) {
-            thrown = true;
-        }
-        assertTrue(thrown);
     }
 
     @Test
@@ -62,18 +43,11 @@ public class LogicTest {
         assertThat(move, is(true));
     }
 
-    @Test
+    @Test (expected = FigureNotFoundException.class)
     public void whenMoveEmptyCellThenException() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new PawnBlack(H7));
-        try {
-            logic.move(H6, H4);
-        } catch (FigureNotFoundException fnfe) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
+        logic.move(H6, H4);
     }
 
     @Test
@@ -84,45 +58,27 @@ public class LogicTest {
         assertThat(move, is(true));
     }
 
-    @Test
+    @Test (expected = ImpossibleMoveException.class)
     public void whenMoveBishopForwardWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new BishopBlack(F8));
-        try {
-            logic.move(F8, F4);
-        } catch (ImpossibleMoveException ime) {
-            thrown = true;
-        }
-        assertTrue(thrown);
+        logic.move(F8, F4);
     }
 
-    @Test
+    @Test (expected = OccupiedWayException.class)
     public void whenMoveBishopToPawnPlaceWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new PawnBlack(G7));
         logic.add(new BishopBlack(F8));
-        try {
-            logic.move(F8, G7);
-        } catch (OccupiedWayException owe) {
-            thrown = true;
-        }
-        assertTrue(thrown);
+        logic.move(F8, G7);
     }
 
-    @Test
+    @Test (expected = OccupiedWayException.class)
     public void whenMoveBishopThroughPawnWhenError() {
         Logic logic = new Logic();
-        boolean thrown = false;
         logic.add(new PawnBlack(E7));
         logic.add(new BishopBlack(F8));
-        try {
-            logic.move(F8, C5);
-        } catch (OccupiedWayException owe) {
-            thrown = true;
-        }
-        assertTrue(thrown);
+        logic.move(F8, C5);
     }
 
     @Test

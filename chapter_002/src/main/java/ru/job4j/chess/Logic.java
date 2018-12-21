@@ -4,14 +4,16 @@ import ru.job4j.chess.firuges.Cell;
 import ru.job4j.chess.firuges.Figure;
 import ru.job4j.chess.exceptions.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 /**
  * Logic for chess game.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
- * @version 0.1
+ * @version 0.2
  */
 public class Logic {
     private final Figure[] figures = new Figure[32];
@@ -30,8 +32,8 @@ public class Logic {
             throw new FigureNotFoundException();
         }
         Cell[] steps = this.figures[index.get()].way(source, dest);
-        for (int step = 0; step < steps.length; step++) {
-            Optional<Integer> empty = findBy(steps[step]);
+        for (Cell step1 : steps) {
+            Optional<Integer> empty = findBy(step1);
             if (empty.isPresent() || target.isPresent()) {
                 throw new OccupiedWayException();
             }
@@ -51,11 +53,8 @@ public class Logic {
     }
 
     private Optional<Integer> findBy(Cell cell) {
-        for (int index = 0; index != this.figures.length; index++) {
-            if (this.figures[index] != null && this.figures[index].position().equals(cell)) {
-                return Optional.of(index);
-            }
-        }
-        return Optional.empty();
+        return IntStream.range(0, this.figures.length)
+                .filter(i -> this.figures[i] != null && this.figures[i].position().equals(cell)).boxed()
+                .findFirst();
     }
 }
