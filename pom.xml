@@ -1,30 +1,30 @@
 <project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>ru.job4j</groupId>
-    <artifactId>junior</artifactId>
-    <packaging>pom</packaging>
-    <version>2.0</version>
-     <name>junior</name>
-     <url>http://job4j.ru/</url>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ru.job4j</groupId>
+	<artifactId>junior</artifactId>
+	<packaging>pom</packaging>
+	<version>2.0</version>
+	<name>junior</name>
+	<url>http://job4j.ru/</url>
 
-    <properties>
-       <maven.compiler.source>1.8</maven.compiler.source>
-       <maven.compiler.target>1.8</maven.compiler.target>
-       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-     </properties>
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-    <modules>
-        <module>chapter_001</module>
-        <module>chapter_002</module>
+	<modules>
+		<module>chapter_001</module>
+		<module>chapter_002</module>
 		<module>chapter_003</module>
 		<module>chapter_004</module>
 		<module>chapter_005</module>
 		<module>chapter_006</module>
 		<module>chapter_007</module>
 		<module>chapter_008</module>
-        <module>chapter_0081</module>
-    </modules>
-	
+		<module>chapter_0081</module>
+	</modules>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -83,16 +83,66 @@
 			<artifactId>commons-dbcp2</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
+		</dependency>
+
 	</dependencies>
-	
+
 	<build>
-       <plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.0.1</version>
 			</plugin>
-        	<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
@@ -113,26 +163,26 @@
 					</execution>
 				</executions>
 			</plugin>
-		   <plugin>
-			   <groupId>org.jacoco</groupId>
-			   <artifactId>jacoco-maven-plugin</artifactId>
-			   <version>0.7.9</version>
-			   <executions>
-				   <execution>
-					   <goals>
-						   <goal>prepare-agent</goal>
-					   </goals>
-				   </execution>
-				   <execution>
-					   <id>report</id>
-					   <phase>test</phase>
-					   <goals>
-						   <goal>report</goal>
-					   </goals>
-				   </execution>
-			   </executions>
-		   </plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-    </build> 
-	 
+	</build>
+
 </project>
