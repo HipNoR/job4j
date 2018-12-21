@@ -40,20 +40,13 @@ public class Bank {
      * @throws NoSuchUserException if can't find this user.
      */
     public User getUser(String passport) throws NoSuchUserException {
-        User searched = new User();
-        boolean valid = false;
-        Set<User> keys = this.base.keySet();
-        for (User user : keys) {
-            if (user.getPassport().equals(passport)) {
-                searched = user;
-                valid = true;
-                break;
-            }
-        }
-        if (!valid) {
+        Optional<User> searched = this.base.keySet().stream()
+                .filter(user -> user.getPassport().equals(passport))
+                .findAny();
+        if (!searched.isPresent()) {
             throw new NoSuchUserException("No Such User!");
         }
-        return searched;
+        return searched.get();
     }
 
     /**
