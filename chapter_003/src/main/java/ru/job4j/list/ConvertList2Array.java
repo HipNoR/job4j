@@ -1,8 +1,10 @@
 package ru.job4j.list;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class converter List to 2D array.
@@ -41,13 +43,6 @@ public class ConvertList2Array {
      * @return List of Integers.
      */
     public List<Integer> convert(List<int[]> list) {
-        List<Integer> result = new ArrayList<>();
-        Iterator<int[]> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            for (int value : iterator.next()) {
-                result.add(value);
-            }
-        }
-        return result;
+        return list.stream().flatMapToInt(Arrays::stream).boxed().collect(Collectors.toList());
     }
 }

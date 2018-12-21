@@ -1,8 +1,8 @@
 package ru.job4j.list;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Class converts the list of users to map of users, where the key is equals to the user id.
@@ -17,13 +17,7 @@ public class UserConvert {
      * @param list input list of Users.
      * @return map of users.
      */
-    public HashMap<Integer, User> process(List<User> list) {
-        HashMap<Integer, User> map = new HashMap<>();
-        Iterator<User> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            User user = iterator.next();
-            map.put(user.getId(), user);
-        }
-        return map;
+    public Map<Integer, User> process(List<User> list) {
+        return list.stream().collect(Collectors.toMap(User::getId, user -> user));
     }
 }

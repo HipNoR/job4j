@@ -21,12 +21,7 @@ public class DeptSorter {
     public void sortNatural(ArrayList<String> list) {
         checker(list);
         list.sort(
-                new Comparator<String>() {
-                    @Override
-                    public int compare(String o1, String o2) {
-                        return o1.compareTo(o2);
-                    }
-                }
+                String::compareTo
         );
     }
 
@@ -40,26 +35,23 @@ public class DeptSorter {
     public void sortReverse(ArrayList<String> list) {
         checker(list);
         list.sort(
-                new Comparator<String>() {
-                    @Override
-                    public int compare(String o1, String o2) {
-                        int result;
-                        if (o1.length() == o2.length()) {
-                            result = o2.compareTo(o1);
+                (o1, o2) -> {
+                    int result;
+                    if (o1.length() == o2.length()) {
+                        result = o2.compareTo(o1);
+                    } else {
+                        int size = Math.min(o1.length(), o2.length());
+                        String first = o1.substring(0, size);
+                        String second = o2.substring(0, size);
+                        if (first.compareTo(second) == 0 && o1.length() > o2.length()) {
+                            result = 1;
+                        } else if (first.compareTo(second) == 0 && o1.length() < o2.length()) {
+                            result = -1;
                         } else {
-                            int size = Math.min(o1.length(), o2.length());
-                            String first = o1.substring(0, size);
-                            String second = o2.substring(0, size);
-                            if (first.compareTo(second) == 0 && o1.length() > o2.length()) {
-                                result = 1;
-                            } else if (first.compareTo(second) == 0 && o1.length() < o2.length()) {
-                                result = -1;
-                            } else {
-                                result = o2.compareTo(o1);
-                            }
+                            result = o2.compareTo(o1);
                         }
-                        return result;
                     }
+                    return result;
                 }
         );
     }
