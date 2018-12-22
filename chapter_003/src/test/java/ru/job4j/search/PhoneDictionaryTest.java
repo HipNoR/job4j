@@ -8,34 +8,34 @@ import static org.junit.Assert.assertThat;
 public class PhoneDictionaryTest {
     @Test
     public void whenFindByName() {
-        PhoneDictionary phones = new PhoneDictionary();
+        var phones = new PhoneDictionary();
         phones.add(
                 new Person("Petr", "Arsentev", "534872", "Bryansk")
         );
-        List<Person> persons = phones.find("Petr");
+        var persons = phones.find("Petr");
         assertThat(persons.iterator().next().getSurname(), is("Arsentev"));
     }
 
     @Test
     public void whenFindBySurname() {
-        PhoneDictionary phones = new PhoneDictionary();
+        var phones = new PhoneDictionary();
         phones.add(
                 new Person("Roman", "Bednyashov", "555784", "Rosva")
         );
-        List<Person> persons = phones.find("Bed");
+        var persons = phones.find("Bed");
         assertThat(persons.iterator().next().getName(), is("Roman"));
     }
 
     @Test
     public void whenFindByPhone() {
-        PhoneDictionary phones = new PhoneDictionary();
+        var phones = new PhoneDictionary();
         phones.add(
                 new Person("Roman", "Bednyashov", "555784", "Rosva")
         );
         phones.add(
                 new Person("Ivan", "Ivanov", "555784", "Rosva")
         );
-        List<Person> persons = phones.find("555");
+        var persons = phones.find("555");
         assertThat(persons.get(0).getName(), is("Roman"));
         assertThat(persons.get(1).getName(), is("Ivan"));
     }

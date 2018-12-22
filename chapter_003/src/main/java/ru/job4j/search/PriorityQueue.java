@@ -5,8 +5,7 @@ import java.util.LinkedList;
 /**
  * Queue of task with sorting by priority.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
- * @since 0.1
- * @version 0.1
+ * @version 0.2
  */
 public class PriorityQueue {
     private LinkedList<Task> tasks = new LinkedList<>();
@@ -18,8 +17,8 @@ public class PriorityQueue {
      * @param task input Task
      */
     public void put(Task task) {
-        int size = tasks.size();
-        for (int index = 0; index < tasks.size(); index++) {
+        var size = tasks.size();
+        for (var index = 0; index < tasks.size(); index++) {
             if (task.getPriority() < tasks.get(index).getPriority()) {
                 size = tasks.indexOf(tasks.get(index));
                 break;
@@ -37,7 +36,7 @@ public class PriorityQueue {
     }
 
     public Task takeLast() {
-        Task task = this.tasks.getLast();
+        var task = this.tasks.getLast();
         this.tasks.removeLast();
         return task;
     }
