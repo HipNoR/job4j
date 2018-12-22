@@ -76,9 +76,10 @@ public class BankTest {
         bank.addUser(new User("Roman", "12345"));
         bank.addAccountToUser("12345", new Account(50, "1"));
         bank.addAccountToUser("12345", new Account(60, "2"));
-        List<Account> expected = new ArrayList<>();
-        expected.add(new Account(50, "1"));
-        expected.add(new Account(60, "2"));
+        List<Account> expected = List.of(
+                new Account(50, "1"),
+                new Account(60, "2")
+        );
         assertThat(bank.getUserAccounts("12345"), is(expected));
     }
 
@@ -101,19 +102,13 @@ public class BankTest {
         assertThat(bank.getOneUserAccount("12345", "2"), is(expected));
     }
 
-    @Test
+    @Test (expected = NoSuchAccountException.class)
     public void whenGetOneOfUserAccountButCantFound() {
         Bank bank = new Bank();
-        boolean thrown = false;
         bank.addUser(new User("Roman", "12345"));
         bank.addAccountToUser("12345", new Account(50, "1"));
         bank.addAccountToUser("12345", new Account(50, "2"));
-        try {
             bank.getOneUserAccount("12345", "55");
-        } catch (NoSuchAccountException nsa) {
-            thrown = true;
-        }
-        assertTrue(thrown);
     }
 
     @Test
@@ -123,8 +118,7 @@ public class BankTest {
         bank.addUser(new User("Ivan", "54321"));
         bank.addAccountToUser("12345", new Account(50, "123"));
         bank.addAccountToUser("54321", new Account(50, "321"));
-        boolean result = bank.transferMoney("12345", "123", "54321", "321", 10.0);
-        assertThat(result, is(true));
+        assertTrue(bank.transferMoney("12345", "123", "54321", "321", 10.0));
     }
 
     @Test
@@ -134,8 +128,7 @@ public class BankTest {
         bank.addUser(new User("Ivan", "54321"));
         bank.addAccountToUser("12345", new Account(10, "123"));
         bank.addAccountToUser("54321", new Account(50, "321"));
-        boolean result = bank.transferMoney("12345", "123", "54321", "321", 20.0);
-        assertFalse(result);
+        assertFalse(bank.transferMoney("12345", "123", "54321", "321", 20.0));
     }
 
     @Test (expected = NoSuchAccountException.class)

@@ -3,7 +3,6 @@ package ru.job4j.list;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,14 +56,13 @@ public class ConvertList2ArrayTest {
     @Test
     public void whenListOfTwoArraysThenConvertToOneList() {
         ConvertList2Array list = new ConvertList2Array();
-        List<int[]> input = new ArrayList<>();
-        input.add(new int[]{1, 2, 3});
-        input.add(new int[]{4, 5, 6, 7});
-        List<Integer> result = list.convert(input);
-        List<Integer> expected = new ArrayList<>();
-        for (int index = 1; index < 8; index++) {
-            expected.add(index);
-        }
-        assertThat(result, is(expected));
+        List<int[]> input = List.of(
+                new int[]{1, 2, 3},
+                new int[]{4, 5, 6, 7}
+        );
+        List<Integer> expected = List.of(
+                1, 2, 3, 4, 5, 6, 7
+        );
+        assertThat(list.convert(input), is(expected));
     }
 }

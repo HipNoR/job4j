@@ -40,22 +40,8 @@ public class SortUser {
      * @return sorted list.
      */
     public List<User> sortByAllFields(List<User> list) {
-        list.sort((o1, o2) -> {
-            int name = o1.getName().compareTo(o2.getName());
-            return name == 0 ? o1.getAge().compareTo(o2.getAge()) : name;
-        });
+        list.sort(Comparator.comparing(User::getName).thenComparingInt(User::getAge));
         return list;
     }
 
-    /**
-     * Method sorts the list of users by the names and age.
-     * Shortest method.
-     * @param list input unsorted list.
-     * @return sorted list.
-     */
-    public List<User> sortByAllFieldsShort(List<User> list) {
-        list.sort(Comparator.comparing(User::getName).thenComparing(User::getAge)
-        );
-        return list;
-    }
 }

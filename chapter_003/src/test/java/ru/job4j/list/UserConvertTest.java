@@ -14,10 +14,11 @@ public class UserConvertTest {
     @Test
     public void whenConvertListOfUsersToMapThen() {
         UserConvert converter = new UserConvert();
-        List<User> users = new ArrayList<>();
-        users.add(new User(1, "Roman", "Kaluga"));
-        users.add(new User(2, "Ivan", "Moscow"));
-        users.add(new User(3, "Jack", "London"));
+        List<User> users = List.of(
+                new User(1, "Roman", "Kaluga"),
+                new User(2, "Ivan", "Moscow"),
+                new User(3, "Jack", "London")
+        );
         Map<Integer, User> result = converter.process(users);
         assertThat(result.get(2).getName(), is("Ivan"));
     }

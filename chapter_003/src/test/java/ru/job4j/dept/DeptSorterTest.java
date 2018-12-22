@@ -3,6 +3,7 @@ package ru.job4j.dept;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -20,19 +21,20 @@ public class DeptSorterTest {
         list.add("K1\\SK2");
         list.add("K2\\SK1\\SSK2");
         list.add("K1\\SK1\\SSK3\\SSSK1\\SSSSK1");
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("K1");
-        expected.add("K1\\SK1");
-        expected.add("K1\\SK1\\SSK1");
-        expected.add("K1\\SK1\\SSK2");
-        expected.add("K1\\SK1\\SSK3");
-        expected.add("K1\\SK1\\SSK3\\SSSK1");
-        expected.add("K1\\SK1\\SSK3\\SSSK1\\SSSSK1");
-        expected.add("K1\\SK2");
-        expected.add("K2");
-        expected.add("K2\\SK1");
-        expected.add("K2\\SK1\\SSK1");
-        expected.add("K2\\SK1\\SSK2");
+        List<String> expected = List.of(
+                "K1",
+                "K1\\SK1",
+                "K1\\SK1\\SSK1",
+                "K1\\SK1\\SSK2",
+                "K1\\SK1\\SSK3",
+                "K1\\SK1\\SSK3\\SSSK1",
+                "K1\\SK1\\SSK3\\SSSK1\\SSSSK1",
+                "K1\\SK2",
+                "K2",
+                "K2\\SK1",
+                "K2\\SK1\\SSK1",
+                "K2\\SK1\\SSK2"
+        );
         sorter.sortNatural(list);
         assertThat(list, is(expected));
     }
@@ -48,16 +50,16 @@ public class DeptSorterTest {
         list.add("K2\\SK1\\SSK1");
         list.add("K1\\SK2");
         list.add("K2\\SK1\\SSK2");
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("K2");
-        expected.add("K2\\SK1");
-        expected.add("K2\\SK1\\SSK2");
-        expected.add("K2\\SK1\\SSK1");
-        expected.add("K1");
-        expected.add("K1\\SK2");
-        expected.add("K1\\SK1");
-        expected.add("K1\\SK1\\SSK2");
-        expected.add("K1\\SK1\\SSK1");
+        List<String> expected = List.of(
+                "K2",
+                "K2\\SK1",
+                "K2\\SK1\\SSK2",
+                "K2\\SK1\\SSK1",
+                "K1",
+                "K1\\SK2",
+                "K1\\SK1",
+                "K1\\SK1\\SSK2",
+                "K1\\SK1\\SSK1");
         sorter.sortReverse(list);
         assertThat(list, is(expected));
     }
