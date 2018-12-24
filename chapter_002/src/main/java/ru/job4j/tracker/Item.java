@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * Class Item contains variables of items.
@@ -69,5 +70,25 @@ public class Item {
         this.name = name;
         this.desc = desc;
         this.created = created;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Item item = (Item) o;
+        return Objects.equals(id, item.id)
+                && name.equals(item.name)
+                && desc.equals(item.desc)
+                && created.equals(item.created);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, desc, created);
     }
 }

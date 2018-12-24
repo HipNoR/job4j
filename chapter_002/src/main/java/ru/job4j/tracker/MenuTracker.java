@@ -162,9 +162,8 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             String name = input.ask("Enter the name of the task :");
             String desc = input.ask("Enter the description of the task :");
-            Item item = new Item(name, desc);
-            tracker.add(item);
-           // System.out.println("------------  A new task with id: " + item.getId() + " -----------");
+            Item item = tracker.add(new Item(name, desc));
+            System.out.println("------------  Added new task with id: " + item.getId() + " -----------");
         }
     }
 

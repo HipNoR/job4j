@@ -13,6 +13,27 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>test</id>
+			<properties>
+				<db.url>jdbc:postgresql://127.0.0.1:5432</db.url>
+				<db.username>postgres</db.username>
+				<db.password>password</db.password>
+				<db.driver>org.postgresql.Driver</db.driver>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<db.url>jdbc:postgresql://127.0.0.1:5432</db.url>
+				<db.username>postgres</db.username>
+				<db.password>password</db.password>
+				<db.driver>org.postgresql.Driver</db.driver>
+			</properties>
+		</profile>
+	</profiles>
+
 	<modules>
 		<module>chapter_001</module>
 		<module>chapter_002</module>
@@ -43,10 +64,11 @@
 			<artifactId>jcip-annotations</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
-			<groupId>postgresql</groupId>
+			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.1-901-1.jdbc4</version>
+			<version>42.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>

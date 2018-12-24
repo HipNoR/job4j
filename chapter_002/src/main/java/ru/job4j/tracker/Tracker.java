@@ -1,11 +1,11 @@
 package ru.job4j.tracker;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Scanner;
 
 /**
  * Class Tracker repository of requests.
@@ -15,12 +15,20 @@ import java.util.*;
  */
 public class Tracker implements AutoCloseable {
 
+    private  Properties properties = new Properties();
+
     private Connection connection;
 
 
     public Tracker() {
+        getProperties("tracker.properties");
         getConnection();
         structureCheck();
+    }
+
+    public Tracker(Connection connection) {
+        getProperties("tracker.properties");
+        this.connection = connection;
     }
 
     /**
@@ -28,9 +36,19 @@ public class Tracker implements AutoCloseable {
      * @param item input object of class item.
      */
     public Item add(Item item) {
-        try (Statement st = connection.createStatement()) {
-            st.executeUpdate("INSERT INTO tasks (name, description, create_date)"
-                    + "VALUES ('" + item.getName() + "', '" + item.getDesc() + "', CURRENT_TIMESTAMP)");
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "INSERT INTO tasks (name, description, create_date) VALUES (?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+        )) {
+            st.setString(1, item.getName());
+            st.setString(2, item.getDesc());
+            st.setTimestamp(3, item.getCreated());
+            st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    item.setId(generatedKeys.getString(1));
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,9 +61,14 @@ public class Tracker implements AutoCloseable {
      * @param item input Item.
      */
     public void replace(String id, Item item) {
-        try (Statement st = connection.createStatement()) {
-            st.executeUpdate("UPDATE tasks SET name = '" + item.getName() + "', description = '" + item.getDesc()
-                    + "', create_date = CURRENT_TIMESTAMP WHERE id = " + Integer.parseInt(id));
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "UPDATE tasks SET name = ?, description = ?, create_date = ? WHERE id = ?;"
+        )) {
+            st.setString(1, item.getName());
+            st.setString(2, item.getDesc());
+            st.setTimestamp(3, item.getCreated());
+            st.setInt(4, Integer.valueOf(id));
+            st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,8 +80,11 @@ public class Tracker implements AutoCloseable {
      */
     public boolean delete(String id) {
         int deleted = 0;
-        try (Statement st = connection.createStatement()) {
-            deleted = st.executeUpdate("DELETE FROM tasks WHERE id = " + Integer.parseInt(id));
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "DELETE FROM tasks WHERE id = ?"
+        )) {
+            st.setInt(1, Integer.valueOf(id));
+            deleted = st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,8 +96,10 @@ public class Tracker implements AutoCloseable {
      * Danger! Only for tests method.
      */
     public void deleteAll() {
-        try (Statement st = connection.createStatement()) {
-            st.executeUpdate("TRUNCATE tasks CASCADE");
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "TRUNCATE tasks CASCADE"
+        )) {
+            st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,8 +111,8 @@ public class Tracker implements AutoCloseable {
      */
     public List<Item> findAll() {
         List<Item> listOfNames = new ArrayList<>();
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM tasks")) {
+        try (final PreparedStatement st = this.connection.prepareStatement("SELECT * FROM tasks");
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 listOfNames.add(new Item(rs.getString("id"), rs.getString("name"),
                         rs.getString("description"), rs.getTimestamp("create_date")));
@@ -97,22 +125,27 @@ public class Tracker implements AutoCloseable {
 
     /**
      * Searches for items by name and copies them to a list of names.
-     * @param key input name to search.
+     * @param name input name to search.
      * @return list of elements with searched name.
      */
-    public List<Item> findByName(String key) {
+    public List<Item> findByName(String name) {
         List<Item> listOfNames = new ArrayList<>();
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE name = '" + key + "'")) {
-            while (rs.next()) {
-                listOfNames.add(new Item(rs.getString("id"), rs.getString("name"),
-                        rs.getString("description"), rs.getTimestamp("create_date")));
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "SELECT * FROM tasks WHERE name = ?"
+        )) {
+            st.setString(1, name);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    listOfNames.add(new Item(rs.getString("id"), rs.getString("name"),
+                            rs.getString("description"), rs.getTimestamp("create_date")));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  listOfNames;
+        return listOfNames;
     }
+
 
     /**
      * Searches for items by id.
@@ -121,11 +154,15 @@ public class Tracker implements AutoCloseable {
      */
     public Item findById(String id) {
         Item result = null;
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM tasks WHERE id = " + Integer.parseInt(id))) {
-            while (rs.next()) {
-                result = new Item(rs.getString("id"), rs.getString("name"),
-                        rs.getString("description"), rs.getTimestamp("create_date"));
+        try (final PreparedStatement st = this.connection.prepareStatement(
+                "SELECT * FROM tasks WHERE id = ?"
+        )) {
+            st.setInt(1, Integer.valueOf(id));
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    result = new Item(rs.getString("id"), rs.getString("name"),
+                            rs.getString("description"), rs.getTimestamp("create_date"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,16 +181,25 @@ public class Tracker implements AutoCloseable {
         }
     }
 
-    public void getConnection() {
-        Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream(new File("D:\\Programming\\Projects\\job4j\\chapter_002\\src\\main\\resources\\connect.ini")));
+    /**
+     * The method load properties.
+     * @param name of properties file.
+     */
+    private void getProperties(String name) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(name)) {
+            this.properties.load(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String serverUrl = String.valueOf(properties.getProperty("SERVER_URL"));
-        String username = String.valueOf(properties.getProperty("USERNAME"));
-        String password = String.valueOf(properties.getProperty("PASSWORD"));
+    }
+
+    /**
+     * The method creates a connection using parameters from properties.
+     */
+    private void getConnection() {
+        String serverUrl = String.valueOf(this.properties.getProperty("url"));
+        String username = String.valueOf(this.properties.getProperty("username"));
+        String password = String.valueOf(this.properties.getProperty("password"));
         try {
             connection = DriverManager.getConnection(serverUrl, username, password);
         } catch (SQLException e) {
@@ -161,17 +207,24 @@ public class Tracker implements AutoCloseable {
         }
     }
 
-    public void structureCheck() {
-        try {
-            importSQL(connection, new FileInputStream(new File("D:\\Programming\\Projects\\job4j\\chapter_002\\src\\main\\resources\\trackerinit.sql")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+    /**
+     * Method checks the structure of database.
+     */
+    private void structureCheck() {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("trackerinit.sql")) {
+            importSQL(connection, is);
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void importSQL(Connection connection, FileInputStream is) throws SQLException {
+    /**
+     * The method imports sql.
+     * @param connection to db.
+     * @param is input stream.
+     * @throws SQLException if something goes wrong.
+     */
+    private void importSQL(Connection connection, InputStream is) throws SQLException {
         try (Scanner s = new Scanner(is);
              Statement st = connection.createStatement()) {
             s.useDelimiter(";");
