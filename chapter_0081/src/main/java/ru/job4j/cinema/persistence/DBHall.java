@@ -5,6 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,16 +27,18 @@ public class DBHall {
     private static final BasicDataSource SOURCE = new BasicDataSource();
     private static final DBHall INSTANCE = new DBHall();
 
+    private final Properties properties = new Properties();
+
     private DBHall() {
-        SOURCE.setDriverClassName("org.postgresql.Driver");
-        SOURCE.setUrl("jdbc:postgresql://localhost:5432/cinema");
-        SOURCE.setUsername("postgres");
-        SOURCE.setPassword("password");
+        getProperties("app.properties");
+        SOURCE.setDriverClassName(String.valueOf(this.properties.getProperty("db.driver")));
+        SOURCE.setUrl(String.valueOf(this.properties.getProperty("db.url")));
+        SOURCE.setUsername(String.valueOf(this.properties.getProperty("db.username")));
+        SOURCE.setPassword(String.valueOf(this.properties.getProperty("db.password")));
         SOURCE.setMinIdle(5);
         SOURCE.setMaxIdle(10);
         SOURCE.setMaxOpenPreparedStatements(100);
         SOURCE.setValidationQuery("SELECT 1");
-        prepareStructure();
     }
 
     /**
@@ -156,37 +160,6 @@ public class DBHall {
         }
     }
 
-
-    /**
-     * Prepares structure of the table at first start.
-     */
-    private void prepareStructure() {
-        try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement(
-                     "CREATE TABLE IF NOT EXISTS accounts ("
-                             + "phone INTEGER PRIMARY KEY,"
-                             + "name VARCHAR(50) NOT NULL"
-                             + ");"
-                             + "CREATE TABLE IF NOT EXISTS hall ("
-                             + "row INTEGER NOT NULL,"
-                             + "seat INTEGER NOT NULL,"
-                             + "reserved INTEGER REFERENCES accounts(phone),"
-                             + "PRIMARY KEY (row, seat)"
-                             + ");"
-                             + "INSERT INTO hall (row, seat) VALUES"
-                             + "(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10),"
-                             + "(2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9), (2, 10),"
-                             + "(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8), (3, 9), (3, 10),"
-                             + "(4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9), (4, 10),"
-                             + "(5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8), (5, 9), (5, 10);"
-             )
-        ) {
-            st.executeUpdate();
-        } catch (SQLException e) {
-            LOG.error("ERROR at prepareStructure() method", e);
-        }
-    }
-
     /**
      * Gets number of rows in cinema.
      * @return rows.
@@ -227,6 +200,18 @@ public class DBHall {
             LOG.error("ERROR at accountCheck() method", e);
         }
         return result;
+    }
+
+    /**
+     * The method load properties.
+     * @param name of properties file.
+     */
+    private void getProperties(String name) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(name)) {
+            this.properties.load(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

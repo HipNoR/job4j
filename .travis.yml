@@ -8,6 +8,7 @@ services:
 
 before_install:
   -  psql -c 'create database tracker;' -U postgres
+  -  psql -c 'create database cinema;' -U postgres
 
 # используем режим обычного пользователя для сборки проекта.
 sudo: false
