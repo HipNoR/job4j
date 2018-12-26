@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 
@@ -15,7 +17,7 @@ import java.util.*;
  * Accepts a list of vacancies and stores them in a database.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 18.10.2018
  */
@@ -43,11 +45,21 @@ public class DBWorker implements AutoCloseable {
     public DBWorker(Properties properties) {
         this.properties = properties;
         try {
-            setConnection();
-            createStructure();
+            getConnection();
+            checkStructure();
         } catch (SQLException e) {
             log.error("ERROR", e);
         }
+        hashPrepare();
+    }
+
+
+    /**
+     * Only for tests constructor.
+     * @param connection with autocommit=false.
+     */
+    public DBWorker(Connection connection) {
+        this.connection = connection;
         hashPrepare();
     }
 
@@ -58,10 +70,10 @@ public class DBWorker implements AutoCloseable {
      * @return true if added or false.
      */
     public boolean addVacancy(Vacancy vacancy) {
-        Boolean valid = false;
+        boolean valid = false;
         String url = vacancy.getUrl();
         if (!twinsChecker.contains(url)) {
-            Date date = new Date(vacancy.getPosted().getTime());
+            Date date = Date.valueOf(vacancy.getPosted());
             String title = vacancy.getTitle();
             String desc = vacancy.getDescription();
             try (PreparedStatement st = connection.prepareStatement(
@@ -73,6 +85,7 @@ public class DBWorker implements AutoCloseable {
                 st.setString(4, desc);
                 st.executeUpdate();
                 valid = true;
+                twinsChecker.add(url);
             } catch (SQLException e) {
                 log.error("ERROR", e);
             }
@@ -110,7 +123,7 @@ public class DBWorker implements AutoCloseable {
      * Method gets the date of the last check from the database.
      * @return date of last check.
      */
-    public Date lastStartDate() {
+    public LocalDate lastStartDate() {
         Date lastDate = null;
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT date FROM last_start_date WHERE id = 1");
@@ -120,7 +133,7 @@ public class DBWorker implements AutoCloseable {
         } catch (SQLException e) {
             log.error("ERROR", e);
         }
-        return lastDate;
+        return (lastDate != null) ? lastDate.toLocalDate() : LocalDate.now().with(TemporalAdjusters.firstDayOfYear());
     }
 
 
@@ -134,7 +147,7 @@ public class DBWorker implements AutoCloseable {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
             while (rs.next()) {
-                result.add(new Vacancy(rs.getInt("id"), rs.getDate("date"),
+                result.add(new Vacancy(rs.getInt("id"), rs.getDate("date").toLocalDate(),
                         rs.getString("title"), rs.getString("url"), rs.getString("descript")));
             }
         } catch (SQLException e) {
@@ -172,7 +185,7 @@ public class DBWorker implements AutoCloseable {
      * Creates a connection to the database.
      * @throws SQLException if exception.
      */
-    private void setConnection() throws SQLException {
+    private void getConnection() throws SQLException {
         String url = properties.getProperty("jdbc.url");
         String username = properties.getProperty("jdbc.username");
         String password = properties.getProperty("jdbc.password");
@@ -183,7 +196,7 @@ public class DBWorker implements AutoCloseable {
      * Creates a database structure if it does not exist.
      * @throws SQLException if exception.
      */
-    private void createStructure() throws SQLException {
+    private void checkStructure() throws SQLException {
         String table = properties.getProperty("sql.table_init");
         try (Statement st = connection.createStatement()) {
             st.executeUpdate(table);

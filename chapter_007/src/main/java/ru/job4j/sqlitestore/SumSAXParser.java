@@ -1,7 +1,10 @@
 package ru.job4j.sqlitestore;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import ru.job4j.vacparser.DBWorker;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -18,6 +21,8 @@ import java.io.IOException;
  * 11.10.2018
  */
 public class SumSAXParser {
+    private final Logger log = LogManager.getLogger(DBWorker.class);
+
     private long sum;
 
     public void parseSum(File file) throws ParserConfigurationException, SAXException, IOException {
@@ -28,7 +33,7 @@ public class SumSAXParser {
         xmlReader.setContentHandler(counter);
         xmlReader.parse(file.getAbsolutePath());
         sum = counter.getSum();
-        System.out.println(String.format("Sum of all field's is %s", sum));
+        log.info("Sum of all field's is {}", sum);
     }
 
     public long getSum() {

@@ -1,5 +1,9 @@
 package ru.job4j.sqlitestore;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.job4j.vacparser.DBWorker;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,6 +21,8 @@ import java.util.Properties;
  * 09.10.2018
  */
 public class StoreSQL implements AutoCloseable {
+
+    private final Logger log = LogManager.getLogger(DBWorker.class);
     /**
      * Connection to SQLite database.
      */
@@ -31,14 +37,14 @@ public class StoreSQL implements AutoCloseable {
         try {
             prop.load(new FileInputStream(config));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IOException", e);
         }
         String url = String.valueOf(prop.getProperty("CONNECT_TO_DB"));
         try {
             connect = DriverManager.getConnection(url);
             connect.setAutoCommit(false);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException", e);
         }
     }
 
@@ -51,7 +57,7 @@ public class StoreSQL implements AutoCloseable {
             statement.executeUpdate("DROP TABLE IF EXISTS entry");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS entry ( field INTEGER)");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException", e);
         }
     }
 
@@ -61,17 +67,17 @@ public class StoreSQL implements AutoCloseable {
      * @throws SQLException if exception.
      */
     public void generate(int n) throws SQLException {
-        System.out.println(String.format("Start inserting %s items into database", n));
+        log.info("Start inserting {} items into database", n);
         try (Statement statement = connect.createStatement()) {
             for (int index = 1; index <= n; index++) {
                 statement.executeUpdate(String.format("INSERT INTO entry VALUES (%s)", index));
             }
             connect.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException", e);
             connect.rollback();
         }
-        System.out.println(String.format("%s elements inserted", n));
+        log.info("{} elements inserted", n);
     }
 
     /**
@@ -83,13 +89,12 @@ public class StoreSQL implements AutoCloseable {
         try (Statement statement = connect.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM entry");
             while (rs.next()) {
-                Entry entry = new Entry();
-                entry.setField(rs.getInt("field"));
+                Entry entry = new Entry(rs.getInt("field"));
                 result.add(entry);
             }
             rs.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException", e);
         }
         return result;
     }
@@ -99,7 +104,7 @@ public class StoreSQL implements AutoCloseable {
         try {
             connect.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException", e);
         }
     }
 }

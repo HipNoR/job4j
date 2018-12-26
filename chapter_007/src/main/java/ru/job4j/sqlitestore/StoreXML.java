@@ -1,5 +1,9 @@
 package ru.job4j.sqlitestore;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.job4j.vacparser.DBWorker;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -15,6 +19,8 @@ import java.util.List;
  * 09.10.2018
  */
 public class StoreXML {
+    private final Logger log = LogManager.getLogger(DBWorker.class);
+
     /**
      * File to save.
      */
@@ -29,7 +35,7 @@ public class StoreXML {
      * @param list of items to convert.
      */
     public void save(List<Entry> list) {
-        System.out.println("Database conversion to XML started.");
+        log.info("Database conversion to XML started.");
         Entries ent = new Entries();
         ent.entry = list;
         try {
@@ -38,8 +44,8 @@ public class StoreXML {
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(ent, target);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            log.error("JAXBException", e);
         }
-        System.out.println("Database conversion to XML ended.");
+        log.info("Database conversion to XML ended.");
     }
 }

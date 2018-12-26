@@ -14,7 +14,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * Main class of the parser application.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.2$
+ * @version 0.3$
  * @since 0.1
  * 24.10.2018
  */
@@ -30,14 +30,12 @@ public class StartParser {
         Scheduler scheduler = schedulerFactory.getScheduler();
         JobDetail jobDetail = newJob(ParserJob.class).withIdentity("job1").build();
         JobDataMap dm = jobDetail.getJobDataMap();
-        Configurator cfg = new Configurator();
-        Properties properties = cfg.resProperties(prop);
+        Properties properties = Configurator.getProperties(prop);
         dm.put("prop", properties);
         String cron = properties.getProperty("cron.time");
         Trigger trigger = newTrigger().withIdentity("trigger1").withSchedule(cronSchedule(cron))
                 .forJob("job1").build();
         scheduler.scheduleJob(jobDetail, trigger);
-
         scheduler.start();
     }
 

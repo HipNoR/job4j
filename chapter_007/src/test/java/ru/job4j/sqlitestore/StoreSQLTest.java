@@ -4,8 +4,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -24,12 +25,7 @@ public class StoreSQLTest {
         }
         List<Entry> result = store.selectData();
         store.close();
-        List<Entry> expected = new ArrayList<>();
-        for (int index = 1; index <= 10; index++) {
-            Entry toAdd = new Entry();
-            toAdd.setField(index);
-            expected.add(toAdd);
-        }
+        List<Entry> expected = Stream.iterate(1, n -> n + 1).limit(10).map(Entry::new).collect(Collectors.toList());
         assertThat(result, is(expected));
     }
 }

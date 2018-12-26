@@ -9,10 +9,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static java.util.Map.entry;
 
 /**
  * The class scans the forum skl.ru, finds jobs java developer.
@@ -34,23 +38,41 @@ public class HTMLReader {
     private String url;
 
     /**
-     * List of all new vacancies.
+     * Map for month parse, only for sql.ru.
      */
-    private List<Vacancy> vac = new ArrayList<>();
+    private final Map<Long, String> monthMap = Map.ofEntries(
+            entry(1L, "янв"),
+            entry(2L, "фев"),
+            entry(3L, "мар"),
+            entry(4L, "апр"),
+            entry(5L, "май"),
+            entry(6L, "июн"),
+            entry(7L, "июл"),
+            entry(8L, "авг"),
+            entry(9L, "сен"),
+            entry(10L, "окт"),
+            entry(11L, "ноя"),
+            entry(12L, "дек")
+    );
 
     /**
-     * Pattern for date formatting from sql.ru.
+     * Formatter "d MM yy"
      */
-    private SimpleDateFormat format = new SimpleDateFormat("dd MMM yy");
+    private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .appendPattern("d ")
+            .appendText(ChronoField.MONTH_OF_YEAR, monthMap)
+            .appendPattern(" yy")
+            .toFormatter();
+
     /**
      * Start date of the search.
      * Last start date or beginning of year.
      */
-    private Date startDate;
+    private LocalDate startDate;
 
-    public HTMLReader(Properties prop, Date date) {
+    public HTMLReader(Properties prop, LocalDate date) {
         url = prop.getProperty("jsob.url");
-        setStartDate(date);
+        startDate = date;
     }
 
     /**
@@ -60,7 +82,8 @@ public class HTMLReader {
      * Also, if the topic matches the date, it analyzes the first message by the publication date and the Java programmer's filter.
      * If all conditions are met, add to the job list.
      */
-    public void vacSearch() {
+    public List<Vacancy> vacSearch() {
+        List<Vacancy> vac = new ArrayList<>();
         boolean validate = true;
         String pageUrl;
         int pages = 1;
@@ -78,14 +101,14 @@ public class HTMLReader {
             for (Element topic : topicsTable) {
                 String title = topic.text();
                 if (!title.contains("Тема Автор") && !title.contains("Важно:")) {
-                    Date lastDate = getDate(topic.child(5).text());
+                    LocalDate lastDate = getDate(topic.child(5).text());
                     if (checkDate(lastDate)) {
-                        Elements tobicBlock = topic.getElementsByAttributeValue("class", "postslisttopic");
-                        String topicUrl = tobicBlock.get(0).child(0).attr("href");
+                        Elements topicBlock = topic.getElementsByAttributeValue("class", "postslisttopic");
+                        String topicUrl = topicBlock.get(0).child(0).attr("href");
                         Document vacTopic = getDoc(topicUrl);
                         Elements messages = vacTopic.getElementsByAttributeValue("class", "msgTable");
                         Elements msgBlocks = messages.first().getElementsByTag("tr");
-                        Date postDate = getDate(msgBlocks.last().text());
+                        LocalDate postDate = getDate(msgBlocks.last().text());
                         if (checkDate(postDate)) {
                             String description = msgBlocks.get(1).getElementsByAttributeValue("class", "msgBody").last().text();
                             if (javaFilter(description)) {
@@ -104,28 +127,7 @@ public class HTMLReader {
             }
         }
         log.info(String.format("Total vacancies found: %s.", vac.size()));
-    }
-
-    public List<Vacancy> getVac() {
-        vacSearch();
         return vac;
-    }
-
-    /**
-     * Sets the start date of the search.
-     * @param date for starting.
-     */
-    public void setStartDate(Date date) {
-        if (date == null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_YEAR, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            startDate = calendar.getTime();
-        } else {
-            startDate = date;
-        }
     }
 
     /**
@@ -150,23 +152,11 @@ public class HTMLReader {
      * @param postDate input string.
      * @return instance of Date.
      */
-    private Date getDate(String postDate) {
-        Date date = null;
+    private LocalDate getDate(String postDate) {
         String splitted = postDate.split(",")[0];
-        Calendar cal = Calendar.getInstance();
-        if (splitted.equals("сегодня")) {
-            date = new Date();
-        } else if (splitted.equals("вчера")) {
-            cal.add(Calendar.DATE, -1);
-            date = cal.getTime();
-        } else {
-            try {
-                date = format.parse(splitted);
-            } catch (ParseException e) {
-                log.error("ERROR", e);
-            }
-        }
-        return date;
+        return (splitted.equals("сегодня")) ? LocalDate.now()
+                : splitted.equals("вчера") ? LocalDate.now().minusDays(1L)
+                : LocalDate.parse(splitted, formatter);
     }
 
     /**
@@ -174,8 +164,8 @@ public class HTMLReader {
      * @param postDate date for checking.
      * @return true if after.
      */
-    private boolean checkDate(Date postDate) {
-        return postDate.after(startDate);
+    private boolean checkDate(LocalDate postDate) {
+        return postDate.isAfter(startDate);
     }
 
     /**

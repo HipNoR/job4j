@@ -1,6 +1,7 @@
 package ru.job4j.vacparser;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * The class describes the vacancy.
@@ -13,19 +14,19 @@ import java.util.Date;
  */
 public class Vacancy {
     int id;
-    Date posted;
+    LocalDate posted;
     String title;
     String url;
     String description;
 
-    public Vacancy(Date posted, String title, String url, String description) {
+    public Vacancy(LocalDate posted, String title, String url, String description) {
         this.posted = posted;
         this.title = title;
         this.url = url;
         this.description = description;
     }
 
-    public Vacancy(int id, Date posted, String title, String url, String description) {
+    public Vacancy(int id, LocalDate posted, String title, String url, String description) {
         this.id = id;
         this.posted = posted;
         this.title = title;
@@ -37,7 +38,7 @@ public class Vacancy {
         return id;
     }
 
-    public Date getPosted() {
+    public LocalDate getPosted() {
         return posted;
     }
 
@@ -58,4 +59,23 @@ public class Vacancy {
         return String.format("Vacancy id: %s. Date of post: %s. Title %s. URL: %s", id, posted, title, url);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Vacancy vacancy = (Vacancy) o;
+        return Objects.equals(posted, vacancy.posted)
+                && Objects.equals(title, vacancy.title)
+                && Objects.equals(url, vacancy.url)
+                && Objects.equals(description, vacancy.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(posted, title, url, description);
+    }
 }

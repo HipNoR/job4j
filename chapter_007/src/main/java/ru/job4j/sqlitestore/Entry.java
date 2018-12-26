@@ -1,6 +1,7 @@
 package ru.job4j.sqlitestore;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 /**
  * The database item class for converting a database to XML.
@@ -15,6 +16,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Entry {
     private int field;
 
+    public Entry() {
+    }
+
+    public Entry(int i) {
+        this.field = i;
+    }
+
     public int getField() {
         return field;
     }
@@ -24,22 +32,24 @@ public class Entry {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        boolean valid = false;
-        if (obj != null) {
-            if (this == obj) {
-                valid = true;
-            }
-            if (!valid && getClass() == obj.getClass()) {
-                Entry entry = (Entry) obj;
-                valid = this.field == entry.field;
-            }
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return valid;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Entry entry = (Entry) o;
+        return field == entry.field;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(field);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Entry{field=%s}", field);
     }
 }

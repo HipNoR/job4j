@@ -14,5 +14,5 @@ import java.util.List;
  */
 @XmlRootElement
 public class Entries {
-    public List<Entry> entry = new ArrayList();
+    public List<Entry> entry = new ArrayList<>();
 }

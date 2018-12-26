@@ -1,8 +1,11 @@
 package ru.job4j.sqlitestore;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import ru.job4j.vacparser.DBWorker;
 
 /**
  * The class that processes events when parsing the CML file.
@@ -13,6 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 11.10.2018
  */
 public class FieldCounter extends DefaultHandler {
+    private final Logger log = LogManager.getLogger(DBWorker.class);
     private long sum = 0;
 
     public long getSum() {
@@ -20,17 +24,17 @@ public class FieldCounter extends DefaultHandler {
     }
 
     @Override
-    public void startDocument() throws SAXException {
-        System.out.println("Starting XML parsing...");
+    public void startDocument() {
+        log.info("Starting XML parsing...");
     }
 
     @Override
-    public void endDocument() throws SAXException {
-        System.out.println("XML parsing ended.");
+    public void endDocument() {
+        log.info("XML parsing ended.");
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if (qName.equals("entry")) {
             sum += Integer.valueOf(attributes.getValue("field"));
         }

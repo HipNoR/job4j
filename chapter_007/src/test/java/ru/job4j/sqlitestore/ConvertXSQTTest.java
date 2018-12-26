@@ -13,16 +13,11 @@ public class ConvertXSQTTest {
      * Не знаю, что тут сравнить. Если только заморачиваться и сравнивать два XML.
      */
     @Test
-    public void name() {
-
+    public void whenConvertThanTrue() throws TransformerException {
         ConvertXSQT converter = new ConvertXSQT();
-        try {
-            converter.convert(
-                    new File("storexml.xml"),
-                    new File("newstorexml.xml"),
-                    new File("scheme.xsl"));
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
+        converter.convert(
+                new File("storexml.xml"),
+                new File("newstorexml.xml"),
+                new File("scheme.xsl"));
     }
 }
