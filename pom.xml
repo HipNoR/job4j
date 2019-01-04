@@ -11,6 +11,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<argLine>-Dfile.encoding=UTF-8</argLine>
 	</properties>
 
 	<profiles>
@@ -224,7 +225,6 @@
 				<configuration>
 					<forkCount>1</forkCount>
 					<reuseForks>true</reuseForks>
-					<argLine>-Dfile.encoding=UTF-8</argLine>
 				</configuration>
 				<executions>
 					<execution>
