@@ -1,110 +1,61 @@
 package ru.job4j.bomberman;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * BomberMan game.
- * The Bomber passes through the field and turns clockwise, if there is any obstacle.
+ * The Bomber and monsters passes through the field by random steps.
  * @author Roman Bednyashov (hipnorosva@gmail.com)
  * @version 0.4$
  * @since 0.1
  * 03.09.2018
  */
 public class BomberManGame {
-    private final ReentrantLock[][] board;
-    private final BomberMan bomber;
-    private final ArrayList<Monster> monsters = new ArrayList<>();
-    private final int monstersNum;
-    private int monsterOrder;
-    private int moves;
-    private int size;
-    private boolean isRunning = true;
+    private static final Logger LOG = LogManager.getLogger(BomberManGame.class.getName());
 
     /**
-     * Constructor.
+     * Board with locks.
+     */
+    private final Board board;
+    /**
+     * The Hero.
+     */
+    private final BomberMan bomber;
+    /**
+     * Monsters array.
+     */
+    private final Monster[] monsters;
+    /**
+     * The game status.
+     */
+    private boolean isRunning = true;
+    /**
+     * For tests field, the number of movements of the bomber until the closure of the program.
+     */
+    private int moves;
+
+
+    /**
      * By default the Bomber starts the game from (0, 0) cell.
-     * @param size
-     * of the field.
-     *             The field is square (size*size).
+     * @param size of the field.The field is square (size*size).
      * @param moves number of BomberMan steps.
      * @param monsters number of monster on the board.
      * @param barriers number of barriers on the board.
      */
-    public BomberManGame(int size, int moves, int monsters, int barriers) {
-        this.board = new ReentrantLock[size][size];
-        this.monstersNum = monsters;
+    public BomberManGame(int size,  int monsters, int barriers, int moves) {
+        Cell startPos = new Cell(0, 0);
+        this.board = new Board(size);
+        this.bomber = new BomberMan(startPos.getX(), startPos.getY());
+        this.monsters = new Monster[monsters];
         this.moves = moves;
-        this.size = size;
-        for (int out = 0; out < size; out++) {
-            for (int in = 0; in < size; in++) {
-                board[out][in] = new ReentrantLock();
-            }
-        }
-        this.bomber = new BomberMan(0, 0);
         try {
-            createBarriers(barriers);
+            createBarriers(barriers, startPos);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOG.error("Error interrupted", e);
         }
-        System.out.println(bomber);
-    }
-
-    /**
-     * The Method moves the Bomber from point to point.
-     * @param source the point from which Bomber will move.
-     * @param dest the point at which Bomber will move.
-     * @return true or false of this turn.
-     * @throws InterruptedException if tryLock is was interrupted.
-     */
-    public boolean move(Cell source, Cell dest) throws InterruptedException {
-        int curX = source.getPosX();
-        int curY = source.getPosY();
-        int destX = dest.getPosX();
-        int destY = dest.getPosY();
-        System.out.println(String.format("Bomber moving from %s to %s", source, dest));
-        boolean moved = false;
-        if (!(destX < 0 || destX > size - 1 || destY < 0 || destY > size - 1)) {
-            if (board[destX][destY].tryLock(500, TimeUnit.MILLISECONDS)) {
-                moved = true;
-                board[curX][curY].unlock();
-                bomber.setPosition(dest);
-                System.out.println("Bomber - Success!");
-            } else {
-                System.out.println("Bomber - Occupied way");
-            }
-        } else {
-            System.out.println("Bomber - Border on move");
-        }
-        if (moves == 0) {
-            isRunning = false;
-            System.out.println("No more steps.");
-        }
-        return moved;
-    }
-
-    public boolean monsterMove(Monster current, Cell dest) throws InterruptedException {
-        Cell position = current.getPosition();
-        int curX = position.getPosX();
-        int curY = position.getPosY();
-        int destX = dest.getPosX();
-        int destY = dest.getPosY();
-        System.out.println(String.format("Monster#%s moves from %s to %s", current.getNum(), position, dest));
-        boolean moved = false;
-        if (!(destX < 0 || destX > size - 1 || destY < 0 || destY > size - 1)) {
-            if (board[destX][destY].tryLock(500, TimeUnit.MILLISECONDS)) {
-                moved = true;
-                board[curX][curY].unlock();
-                current.setPosition(dest);
-                System.out.println(String.format("Monster#%s - Success!", current.getNum()));
-            } else {
-                System.out.println(String.format("Monster#%s - Occupied way!", current.getNum()));
-            }
-        } else {
-            System.out.println(String.format("Monster#%s - Border on move!", current.getNum()));
-        }
-        return moved;
+        LOG.info(bomber);
     }
 
     /**
@@ -112,46 +63,48 @@ public class BomberManGame {
      * @return cell.
      */
     private Cell randomCell() {
-        return new Cell((int) (Math.random() * size), (int) (Math.random() * size));
+        return new Cell((int) (Math.random() * board.getSize()), (int) (Math.random() * board.getSize()));
     }
 
     /**
      * Creates random barriers on the board.
+     * If the starting position of the bomber falls out, it searches for another cell.
      * @param barriers number of the barriers.
      * @throws InterruptedException if interrupted.
      */
-    private void createBarriers(int barriers) throws InterruptedException {
+    private void createBarriers(int barriers, Cell start) throws InterruptedException {
         Cell temp;
         for (int index = 0; index != barriers; index++) {
             do {
-                temp = randomCell();
-            } while (!board[temp.getPosX()][temp.getPosY()].tryLock(10, TimeUnit.MILLISECONDS));
+                do {
+                    temp = randomCell();
+                } while (temp.equals(start));
+            } while (!board.lockCell(temp));
         }
     }
 
     /**
      * Creates monster on board.
-     * @param number of monster on board.
      * @throws InterruptedException when interrupted.
      */
-    private void monsterCreate(int number) throws InterruptedException {
+    private void monsterCreate() throws InterruptedException {
         Cell temp;
-        for (int index = 0; index != number; index++) {
+        for (int index = 0; index != monsters.length; index++) {
             do {
                 temp = randomCell();
-            } while (!board[temp.getPosX()][temp.getPosY()].tryLock(10, TimeUnit.MILLISECONDS));
-            monsters.add(new Monster(temp, index));
+            } while (!board.lockCell(temp));
+            monsters[index] = new Monster(temp, index);
         }
     }
 
     /**
      * Creates a random next destination.
+     * If the found step is out of the field, it looks for another step.
      * @param source the point from which unit will move.
-     * @param monster monster flag.
      * @return next step.
      */
 
-    private Cell nextStep(Cell source, boolean monster) {
+    private Cell nextStep(Cell source) {
         int deltaX = 0;
         int deltaY = 0;
         int random = (int) (Math.random() * 100);
@@ -164,10 +117,10 @@ public class BomberManGame {
         } else if (random < 100) {
             deltaX = -1;
         }
-        if (!monster) {
-            this.moves--;
-        }
-        return new Cell(source.getPosX() + deltaX, source.getPosY() + deltaY);
+        Cell dest = new Cell(source.getX() + deltaX, source.getY() + deltaY);
+        return ((dest.getX() < 0 || dest.getY() < 0)
+                || (dest.getX() >= board.getSize() || dest.getY() >= board.getSize()))
+                ? nextStep(source) : dest;
     }
 
     /**
@@ -176,51 +129,66 @@ public class BomberManGame {
      * @throws InterruptedException if thread was interrupted.
      */
     public void startGame() throws InterruptedException {
-        Thread move = new Thread("BomberMove") {
+        Thread bomberMove = new Thread("Bomber") {
 
             @Override
             public void run() {
-                Cell currentPos = bomber.getPosition();
-                board[currentPos.getPosX()][currentPos.getPosY()].lock();
-                while (isRunning) {
-                    try {
-                        currentPos = bomber.getPosition();
-                        move(currentPos, nextStep(currentPos, false));
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        System.out.println("BomberMoveERROR");
-                    }
-                }
-                System.out.println("THE END!");
-            }
-        };
-
-        Thread monstersMove = new Thread("MonsterMove") {
-            @Override
-            public void run() {
+                Cell next;
                 try {
-                    monsterCreate(monstersNum);
+                    board.lockCell(bomber.getPosition());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Monster temp;
                 while (isRunning) {
-                    temp = monsters.get(monsterOrder++);
-                    if (monsterOrder == monstersNum) {
+                    try {
+                        next = nextStep(bomber.getPosition());
+                        if (board.move(bomber.getPosition(), next)) {
+                            bomber.setPosition(next);
+                        }
+                        moves--;
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        LOG.error("BomberMoveERROR", e);
+                    }
+                    if (moves == 0) {
+                        isRunning = false;
+                    }
+                }
+                LOG.info("THE END!");
+            }
+        };
+
+        Thread monstersMove = new Thread("Monsters") {
+            @Override
+            public void run() {
+                Monster temp;
+                Cell next;
+                int monsterOrder = 0;
+                try {
+                    monsterCreate();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                while (isRunning) {
+                    temp = monsters[monsterOrder++];
+                    if (monsterOrder == monsters.length) {
                         monsterOrder = 0;
                     }
+                    next = nextStep(temp.getPosition());
                     try {
-                        monsterMove(temp, nextStep(temp.getPosition(), true));
-                        sleep(5000);
+                        if (board.move(temp.getPosition(), next)) {
+                            temp.setPosition(next);
+                        }
+                        sleep(3000);
                     } catch (InterruptedException e) {
-                        System.out.println("MonsterMoveERROR");
-
+                        LOG.error("MonsterMoveERROR", e);
                     }
                 }
             }
         };
-        move.start();
+        bomberMove.start();
+        Thread.sleep(10); //provides a guarantee of locking the starting position of the Bomberman.
         monstersMove.start();
-        move.join();
+        bomberMove.join();
     }
 }

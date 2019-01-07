@@ -24,6 +24,6 @@ public class BomberMan {
 
     @Override
     public String toString() {
-        return String.format("Current Bomber location is %s", position);
+        return String.format("Bomber in %s", position);
     }
 }
