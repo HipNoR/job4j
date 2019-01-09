@@ -1,8 +1,6 @@
 package ru.job4j.list;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +8,7 @@ import java.util.stream.Collectors;
  * Class converter List to 2D array.
  * @author Roman Bednyashov (hipnorosva@gmail.com).
  * @since 0.1
- * @version 0.1
+ * @version 0.2
  */
 public class ConvertList2Array {
     /**
@@ -21,18 +19,15 @@ public class ConvertList2Array {
      */
     public int[][] toArray(List<Integer> list, int rows) {
         int cells = (int) Math.ceil((double) list.size() / (double) rows);
-        int count = 0;
         int[][] array = new int[rows][cells];
-        for (int out = 0; out < rows; out++) {
-            for (int in = 0; in < cells; in++) {
-                if (count >= list.size()) {
-                    array[out][in] = 0;
-                    count++;
-                } else {
-                    array[out][in] = list.get(count);
-                    count++;
-                }
+        int out = 0;
+        int in = 0;
+        for (int i : list) {
+            if (in == cells) {
+                out++;
+                in = 0;
             }
+            array[out][in++] = i;
         }
         return array;
     }

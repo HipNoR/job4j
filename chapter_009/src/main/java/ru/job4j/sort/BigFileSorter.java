@@ -4,12 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.util.stream.Collectors;
 
 /**
  * Class for sorting large text files.
@@ -65,21 +62,19 @@ public class BigFileSorter implements Sorter {
         File[] files = {File.createTempFile("temp", ".txt"), File.createTempFile("temp", ".txt")};
         try (var inputRa = new RandomAccessFile(input, "r")) {
             long delimiter = inputRa.length() / 2;
-            try (
-                    var leftRa = new BufferedWriter(new FileWriter(files[0]));
-                    var rightRa = new BufferedWriter(new FileWriter(files[1]))
+            try (var reader = new BufferedReader(new FileReader(inputRa.getFD()));
+                 var leftRa = new BufferedWriter(new FileWriter(files[0]));
+                 var rightRa = new BufferedWriter(new FileWriter(files[1]))
             ) {
-                inputRa.seek(0);
                 String temp;
                 while (inputRa.getFilePointer() < delimiter) {
-                    temp = decode(inputRa.readLine());
+                    temp = reader.readLine();
                     leftRa.write(temp);
-                    leftRa.write("\n");
+                    leftRa.newLine();
                 }
-                while ((temp = inputRa.readLine()) != null) {
-                    temp = decode(temp);
+                while ((temp = reader.readLine()) != null) {
                     rightRa.write(temp);
-                    rightRa.write("\n");
+                    rightRa.newLine();
                 }
             }
         }
@@ -95,19 +90,22 @@ public class BigFileSorter implements Sorter {
      * @throws IOException if exception.
      */
     public void sortFile(File input, File output) throws IOException {
-        List<String> lines = getListFromFile(input);
-        try (var writer = new BufferedWriter(new FileWriter(output))) {
-            lines.stream()
+        List<String> lines;
+        try (var reader = new BufferedReader(new FileReader(input))) {
+            lines = reader.lines()
                     .filter(line -> line.length() > 0)
                     .sorted(Comparator.comparingInt(String::length))
-                    .forEach(line -> {
-                        try {
-                            writer.write(line);
-                            writer.write("\n");
-                        } catch (IOException e) {
-                            LOG.error("IOException", e);
-                        }
-                    });
+                    .collect(Collectors.toList());
+        }
+        try (var writer = new BufferedWriter(new FileWriter(output))) {
+            lines.forEach(line -> {
+                try {
+                    writer.write(line);
+                    writer.newLine();
+                } catch (IOException e) {
+                    LOG.error("IOException", e);
+                }
+            });
         }
         LOG.info("{} has been sorted", input.getName());
     }
@@ -131,22 +129,22 @@ public class BigFileSorter implements Sorter {
                 if (leftLine  != null && rightLine != null) {
                     if (leftLine.length() < rightLine.length()) {
                         writer.write(leftLine);
-                        writer.write("\n");
+                        writer.newLine();
                         leftLine = leftReader.readLine();
                     } else {
                         writer.write(rightLine);
-                        writer.write("\n");
+                        writer.newLine();
                         rightLine = rightReader.readLine();
                     }
                 }
                 if (leftLine == null && rightLine != null) {
                     writer.write(rightLine);
-                    writer.write("\n");
+                    writer.newLine();
                     rightLine = rightReader.readLine();
                 }
                 if (rightLine == null && leftLine != null) {
                     writer.write(leftLine);
-                    writer.write("\n");
+                    writer.newLine();
                     leftLine = leftReader.readLine();
                 }
                 if (leftLine == null && rightLine == null) {
@@ -157,32 +155,5 @@ public class BigFileSorter implements Sorter {
         LOG.info("{} and {} merged", left.getName(), right.getName());
         LOG.info("{} deleted? {}", left.getName(), left.delete());
         LOG.info("{} deleted? {}", right.getName(), right.delete());
-    }
-
-    /**
-     * The method gets a list of all lines from the file.
-     * @param file to read.
-     * @return list with all lines.
-     */
-    public List<String> getListFromFile(File file) {
-        List<String> result = new ArrayList<>();
-        try (var reader = new BufferedReader(new FileReader(file))) {
-            String temp;
-            while ((temp = reader.readLine()) != null) {
-                result.add(temp);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
-     * Decoding method for strings in UTF-8 format.
-     * @param line to be decoded.
-     * @return decoded string.
-     */
-    private String decode(String line) {
-        return new String(line.getBytes(StandardCharsets.ISO_8859_1), UTF_8);
     }
 }

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -70,7 +71,10 @@ public class BigFileSorterTest {
                 "middle by length line",
                 "this is the longest line in this file"
         );
-        List<String> result = sorter.getListFromFile(sorted);
+        List<String> result;
+        try (var reader = new BufferedReader(new FileReader(sorted))) {
+            result = reader.lines().collect(Collectors.toList());
+        }
         assertThat(result, is(expected));
     }
 
@@ -95,7 +99,10 @@ public class BigFileSorterTest {
         File merged = File.createTempFile("tmp", ".txt");
         merged.deleteOnExit();
         sorter.mergeFiles(leftInput, rigthInput, merged);
-        List<String> result = sorter.getListFromFile(merged);
+        List<String> result;
+        try (var reader = new BufferedReader(new FileReader(merged))) {
+            result = reader.lines().collect(Collectors.toList());
+        }
         List<String> expected = List.of(
                 "left first line",
                 "right first line plus",
@@ -104,5 +111,4 @@ public class BigFileSorterTest {
         );
         assertThat(result, is(expected));
     }
-
 }
