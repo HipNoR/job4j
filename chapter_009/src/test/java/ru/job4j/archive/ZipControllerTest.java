@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -16,28 +17,33 @@ import static org.junit.Assert.assertTrue;
 
 public class ZipControllerTest {
 
-    String testPath = System.getProperty("user.dir") + File.separator;
-    String sep = File.separator;
-
     @Test
-    public void whenSetExtensionsPatternThanReturnListOfExtensions() {
+    public void whenSetExtensionsPatternThanReturnListOfExtensions() throws IllegalAccessException, NoSuchFieldException {
         ZipController zip = new ZipController("test", "txt,java,xml", "test.zip");
-        List<String> result = zip.getExtensions();
+        Field targetZip = zip.getClass().getDeclaredField("extensions");
+        targetZip.setAccessible(true);
+        Object value = targetZip.get(zip);
         List<String> expected = List.of(".txt", ".java", ".xml");
-        assertThat(result, is(expected));
+        assertThat(value, is(expected));
 
     }
 
     @Test
-    public void whenSetPathAndZipFileThanProperPath() {
-
-        ZipController zip = new ZipController(String.format("test dir%1$stest dir 2%1$s", sep), "txt,java,xml", "test.zip");
+    public void whenSetPathAndZipFileThanProperPath() throws NoSuchFieldException, IllegalAccessException {
+        String sep = File.separator;
+        ZipController zip = new ZipController(
+                String.format("test dir%1$stest dir 2%1$s", sep), "txt,java,xml", "test.zip");
         String expected = String.format("test dir%1$stest dir 2%1$stest.zip", sep);
-        assertThat(zip.getTargetZip(), is(expected));
+        Field targetZip = zip.getClass().getDeclaredField("targetZip");
+        targetZip.setAccessible(true);
+        Object value = targetZip.get(zip);
+        assertThat(value, is(expected));
     }
 
     @Test
-    public void whenCreateTwoFilesAndSearchByExtensionTemplateThanTrue() throws IOException {
+    public void whenCreateTwoFilesAndSearchByExtensionTemplateThanTrue()
+            throws IOException, NoSuchFieldException, IllegalAccessException {
+        String testPath = System.getProperty("user.dir") + File.separator;
         List<File> files = List.of(
                 new File(testPath + "first.ziptest"),
                 new File(testPath + "testpack.zip")
@@ -48,12 +54,16 @@ public class ZipControllerTest {
         }
         ZipController zip = new ZipController(testPath, "ziptest", files.get(1).getPath());
         zip.findTargetFiles();
+        Field targetZip = zip.getClass().getDeclaredField("files");
+        targetZip.setAccessible(true);
+        Object value = targetZip.get(zip);
         List<File> expected = List.of(files.get(0));
-        assertThat(zip.getFiles(), is(expected));
+        assertThat(value, is(expected));
     }
 
     @Test
     public void whenZipFileAndUnzipItThanTrue() throws IOException {
+        String testPath = System.getProperty("user.dir") + File.separator;
         List<File> files = List.of(
                 new File(testPath + "first.ziptest"),
                 new File(testPath + "testpack.zip")

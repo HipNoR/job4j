@@ -3,8 +3,6 @@ package ru.job4j.archive;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-
 
 /**
  * The main class for the program of archiving files in a zip archive. <br>
@@ -17,7 +15,7 @@ import java.io.File;
  * [pattern] Enumeration of file extensions through ",", without spaces, e.g. "java,xml,txt". <br>
  * [target] Zip archive name. A new file will be created. e.g. "test.zip". <br>
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 31.12.2018
  */
@@ -33,8 +31,14 @@ public class ZipArchiver {
             LOG.error("Extra parameters entered");
             LOG.info(rec);
         } else {
-            var zip = new ZipController(args[1], args[3], args[5]);
-            zip.doZip();
+            var config = new Config();
+            if (config.loadParameters(args)) {
+                var zip = new ZipController(config.getFolder(), config.getExtensions(), config.getZipName());
+                zip.doZip();
+            } else {
+                LOG.error("Wrong order of parameters");
+                LOG.info(rec);
+            }
         }
     }
 }

@@ -53,18 +53,6 @@ public class ZipController {
         setExtensions(extensions);
     }
 
-    public List<String> getExtensions() {
-        return extensions;
-    }
-
-    public String getTargetZip() {
-        return targetZip;
-    }
-
-    public List<File> getFiles() {
-        return files;
-    }
-
     /**
      * The method starts a search in the directory and archives the found files.
      */
