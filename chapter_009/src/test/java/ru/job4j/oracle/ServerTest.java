@@ -18,7 +18,7 @@ public class ServerTest {
 
     @Test
     public void whenSendExitThanGoodBye() throws IOException {
-        testServer("exit", String.format("GoodBye, my friend, let the force be with you!%s", LN));
+        testServer("exit", String.format("GoodBye, my friend, let the force be with you!%s%s", LN, LN));
     }
 
     @Test
@@ -26,7 +26,7 @@ public class ServerTest {
         testServer(
                 Joiner.on(LN).join("hello", "exit"),
                 Joiner.on(LN).join("Hello, dear friend, I'm a oracle.", "",
-                        "GoodBye, my friend, let the force be with you!", "")
+                        "GoodBye, my friend, let the force be with you!", "", "")
         );
     }
 
@@ -35,7 +35,7 @@ public class ServerTest {
         testServer(
                 Joiner.on(LN).join("unsupported", "exit"),
                 Joiner.on(LN).join("Random phrase.", "",
-                        "GoodBye, my friend, let the force be with you!", "")
+                        "GoodBye, my friend, let the force be with you!", "", "")
         );
     }
 

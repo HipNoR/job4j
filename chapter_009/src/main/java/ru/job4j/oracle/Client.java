@@ -1,5 +1,8 @@
 package ru.job4j.oracle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,11 +15,12 @@ import java.util.Scanner;
  * Client for Oracle chat.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 15.01.2019
  */
 public class Client {
+    private static final Logger LOG = LogManager.getLogger(Client.class.getName());
     private final Socket socket;
 
     public Client(Socket socket) {
@@ -24,25 +28,26 @@ public class Client {
     }
 
     public void start() throws IOException {
-        boolean working = true;
-        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        Scanner console = new Scanner(System.in);
-        String ask;
-        String answer;
-        do {
-            ask = console.nextLine();
-            out.println(ask);
-            answer = in.readLine();
-            while (!answer.isEmpty()) {
-                System.out.println(answer);
+        try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+             Scanner console = new Scanner(System.in)) {
+            boolean working = true;
+            String ask;
+            String answer;
+            do {
+                ask = console.nextLine();
+                out.println(ask);
                 answer = in.readLine();
-            }
-            if (ask.equals("exit")) {
-                working = false;
-            }
-        } while (working);
-        System.out.println("Shutdown chat!");
+                while (!answer.isEmpty()) {
+                    System.out.println(answer);
+                    answer = in.readLine();
+                }
+                if (ask.equals("exit")) {
+                    working = false;
+                }
+            } while (working);
+            System.out.println("Shutdown chat!");
+        }
     }
 
     public static void main(String[] args) {
@@ -50,7 +55,7 @@ public class Client {
             Client client = new Client(socket);
             client.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 }
