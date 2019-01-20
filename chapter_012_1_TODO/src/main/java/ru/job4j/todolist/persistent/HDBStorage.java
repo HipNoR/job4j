@@ -9,12 +9,13 @@ import org.hibernate.cfg.Configuration;
 import ru.job4j.todolist.models.Item;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * The class provides data storage in the database. The Hibernate framework is used.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 17.01.2019
  */
@@ -38,121 +39,63 @@ public class HDBStorage implements Storage {
 
     @Override
     public long add(Item item) {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                return (long) session.save(item);
-            } catch (Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
-                }
-                LOG.error("Add exception", ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        return this.tx(
+                session -> (long) session.save((item))
+        );
     }
 
     @Override
     public void update(Item item) {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                session.update(item);
-            } catch (Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
+        this.tx(
+                session -> {
+                    session.update(item);
+                    return null;
                 }
-                LOG.error("Update exception", ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        );
     }
 
     @Override
     public void delete(Item item) {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                session.delete(item);
-            } catch (Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
+        this.tx(
+                session -> {
+                    session.delete(item);
+                    return null;
                 }
-                LOG.error("Delete exception", ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        );
     }
 
     @Override
     public Item getItemById(long id) {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                return session.get(Item.class, id);
-            } catch (Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
-                }
-                LOG.error("GetById exception", ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        return this.tx(
+                session -> session.get(Item.class, id)
+        );
     }
 
     @Override
     public List<Item> getAll() {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                return session.createQuery("from Item order by created").list();
-            } catch (Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
-                }
-                LOG.error("GetAll exception", ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        return this.tx(
+                session -> (List<Item>) session.createQuery("from Item order by created").list()
+        );
     }
 
     @Override
     public void clearList() {
+        this.tx(
+                session -> session.createQuery("delete Item").executeUpdate()
+        );
+    }
+
+    private <T> T tx(final Function<Session, T> command) {
         try (final Session session = this.factory.openSession()) {
             Transaction tx = null;
             try {
                 tx = session.beginTransaction();
-                session.createQuery("delete Item ").executeUpdate();
-            } catch (Exception ex) {
+                return command.apply(session);
+            } catch (final Exception ex) {
                 if (tx != null) {
                     tx.rollback();
                 }
-                LOG.error("Delete exception", ex);
+                LOG.error(ex);
                 throw ex;
             } finally {
                 if (tx != null) {
