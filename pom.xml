@@ -58,8 +58,8 @@
 		<module>chapter_008</module>
 		<module>chapter_008_1_Cinema</module>
         <module>chapter_009</module>
-        <module>chapter_012</module>
-    </modules>
+        <module>chapter_012_1_TODO</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
