@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import ru.job4j.todolist.models.Item;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -108,22 +109,9 @@ public class HDBStorage implements Storage {
     }
 
     private void tx(final Consumer<Session> command) {
-        try (final Session session = this.factory.openSession()) {
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                command.accept(session);
-            } catch (final Exception ex) {
-                if (tx != null) {
-                    tx.rollback();
-                }
-                LOG.error(ex);
-                throw ex;
-            } finally {
-                if (tx != null) {
-                    tx.commit();
-                }
-            }
-        }
+        this.tx(session -> {
+            command.accept(session);
+            return Optional.empty();
+        });
     }
 }
