@@ -1,0 +1,17 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="ru.job4j.carstorage.models.Person" table="persons">
+        <id name="id" column="person_id">
+            <generator class="identity"/>
+        </id>
+        <property name="login" column="login" unique="true" not-null="true" length="50"/>
+        <property name="password" column="password" not-null="true" length="50"/>
+        <property name="name" column="name" not-null="true" length="50"/>
+        <property name="email" column="email" length="50"/>
+        <property name="phone" column="phone" length="10"/>
+
+        <bag name="cars" inverse="true" cascade="all">
+            <key column="person_id"/>
+            <one-to-many class="ru.job4j.carstorage.models.Car"/>
+        </bag>
+    </class>
+</hibernate-mapping>
