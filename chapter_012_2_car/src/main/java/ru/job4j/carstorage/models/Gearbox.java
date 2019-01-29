@@ -1,19 +1,27 @@
 package ru.job4j.carstorage.models;
 
-
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * The class describes the car's gearbox.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 21.01.2019
  */
+
+@Entity
+@Table(name = "gearboxes")
 public class Gearbox {
 
+    @Id
+    @Column(name = "gearbox_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
     public Gearbox() {

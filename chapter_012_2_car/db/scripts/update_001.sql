@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS persons (
 
 CREATE TABLE IF NOT EXISTS cars (
                                   car_id SERIAL,
-                                  description VARCHAR(255),
                                   person_id INTEGER NOT NULL REFERENCES persons(person_id),
+                                  description VARCHAR(255),
                                   bm_id INTEGER NOT NULL REFERENCES branded_model(bm_id),
                                   engine_id INTEGER NOT NULL REFERENCES engines(engine_id),
                                   gearbox_id INTEGER NOT NULL REFERENCES gearboxes(gearbox_id),

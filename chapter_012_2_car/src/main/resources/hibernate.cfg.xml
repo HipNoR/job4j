@@ -10,15 +10,17 @@
         <property name="hibernate.format_sql">true</property>
         <!--<property name="hbm2ddl.auto">create</property>-->
 
-        <mapping resource="ru/job4j/carstorage/models/Car.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Engine.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Gearbox.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Body.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Colour.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Brand.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Model.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/BrandedModel.hbm.xml"/>
-        <mapping resource="ru/job4j/carstorage/models/Person.hbm.xml"/>
+
+        <mapping class="ru.job4j.carstorage.models.Body"/>
+        <mapping class="ru.job4j.carstorage.models.Brand"/>
+        <mapping class="ru.job4j.carstorage.models.BrandedModel"/>
+        <mapping class="ru.job4j.carstorage.models.Car"/>
+        <mapping class="ru.job4j.carstorage.models.Colour"/>
+        <mapping class="ru.job4j.carstorage.models.Engine"/>
+        <mapping class="ru.job4j.carstorage.models.Gearbox"/>
+        <mapping class="ru.job4j.carstorage.models.Model"/>
+        <mapping class="ru.job4j.carstorage.models.Person"/>
+
 
     </session-factory>
 </hibernate-configuration>

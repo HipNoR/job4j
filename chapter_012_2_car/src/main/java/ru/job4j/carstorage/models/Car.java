@@ -1,25 +1,52 @@
 package ru.job4j.carstorage.models;
 
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * The class describes a specific car model.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 21.01.2019
  */
+
+@Entity
+@Table(name = "cars")
 public class Car {
 
+    @Id
+    @Column(name = "car_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
+
+    @Column(nullable = false)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "bm_id", nullable = false)
     private BrandedModel brandedModel;
+
+    @ManyToOne
+    @JoinColumn(name = "engine_id", nullable = false)
     private Engine engine;
+
+    @ManyToOne
+    @JoinColumn(name = "gearbox_id", nullable = false)
     private Gearbox gearbox;
+
+    @ManyToOne
+    @JoinColumn(name = "body_id", nullable = false)
     private Body body;
+
+    @ManyToOne
+    @JoinColumn(name = "colour_id", nullable = false)
     private Colour colour;
 
     public Car() {

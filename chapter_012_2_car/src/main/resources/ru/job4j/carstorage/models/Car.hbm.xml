@@ -3,10 +3,11 @@
         <id name="id" column="car_id">
             <generator class="identity"/>
         </id>
-        <property name="description" column="description" not-null="true" unique="true"/>
 
         <many-to-one name="person" column="person_id" not-null="true"
-                     class="ru.job4j.carstorage.models.Person"/>
+        class="ru.job4j.carstorage.models.Person"/>
+
+        <property name="description" column="description" not-null="true"/>
 
         <many-to-one name="brandedModel" column="bm_id"
                      class="ru.job4j.carstorage.models.BrandedModel"/>

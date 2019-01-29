@@ -1,18 +1,27 @@
 package ru.job4j.carstorage.models;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * The class describes the car body.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 21.01.2019
  */
+
+@Entity
+@Table(name = "bodies")
 public class Body {
 
+    @Id
+    @Column(name = "body_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
     public Body() {

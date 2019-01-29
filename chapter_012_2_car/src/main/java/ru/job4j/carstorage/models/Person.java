@@ -1,6 +1,6 @@
 package ru.job4j.carstorage.models;
 
-
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,17 +8,37 @@ import java.util.Objects;
  * The class describes the owner of the car.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 24.01.2019
  */
+
+@Entity
+@Table(name = "persons")
 public class Person {
+
+    @Id
+    @Column(name = "person_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false, length = 50)
     private String login;
+
+    @Column(nullable = false, length = 50)
     private String password;
+
+    @Column(nullable = false, length = 50)
     private String name;
+
+    @Column(length = 50)
     private String email;
+
+    @Column(length = 10)
     private int phone;
+
+    @OneToMany
+    @JoinColumn(name = "person_id")
     private List<Car> cars;
 
     public Person() {

@@ -1,18 +1,32 @@
 package ru.job4j.carstorage.models;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * The class describes the model of a specific car brand.
  *
  * @author Roman Bednyashov (hipnorosva@gmail.com)
- * @version 0.1$
+ * @version 0.2$
  * @since 0.1
  * 24.01.2019
  */
+
+@Entity
+@Table(name = "branded_model")
 public class BrandedModel {
+
+    @Id
+    @Column(name = "bm_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id", nullable = false)
     private Model model;
 
     public BrandedModel() {
