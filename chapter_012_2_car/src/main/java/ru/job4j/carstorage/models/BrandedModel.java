@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "branded_model")
+@Table(name = "branded_model", uniqueConstraints = @UniqueConstraint(columnNames = {"brand_id", "model_id"}))
 public class BrandedModel {
 
     @Id

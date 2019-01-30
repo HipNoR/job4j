@@ -1,8 +1,0 @@
-<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
-    <class name="ru.job4j.carstorage.models.Brand" table="brands">
-        <id name="id" column="brand_id">
-            <generator class="identity"/>
-        </id>
-        <property name="name" column="name" not-null="true" unique="true" length="50"/>
-    </class>
-</hibernate-mapping>

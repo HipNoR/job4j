@@ -10,7 +10,6 @@
         <property name="hibernate.format_sql">true</property>
         <!--<property name="hbm2ddl.auto">create</property>-->
 
-
         <mapping class="ru.job4j.carstorage.models.Body"/>
         <mapping class="ru.job4j.carstorage.models.Brand"/>
         <mapping class="ru.job4j.carstorage.models.BrandedModel"/>
@@ -20,7 +19,5 @@
         <mapping class="ru.job4j.carstorage.models.Gearbox"/>
         <mapping class="ru.job4j.carstorage.models.Model"/>
         <mapping class="ru.job4j.carstorage.models.Person"/>
-
-
     </session-factory>
 </hibernate-configuration>
