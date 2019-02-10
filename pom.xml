@@ -57,8 +57,8 @@
 		<module>chapter_007</module>
 		<module>chapter_008</module>
 		<module>chapter_008_1_Cinema</module>
-        <module>chapter_009</module>
-        <module>chapter_012_1_TODO</module>
+		<module>chapter_009</module>
+		<module>chapter_012_1_TODO</module>
 		<module>chapter_012_2_car</module>
 	</modules>
 
@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.2</version>
+			<version>42.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>
@@ -205,13 +205,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.0.Final</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.2.5</version>
 		</dependency>
 
 	</dependencies>

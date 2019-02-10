@@ -5,4 +5,14 @@
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
+    <servlet>
+        <servlet-name>AllCarsServlet</servlet-name>
+        <servlet-class>ru.job4j.carstorage.presentation.CarsListController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AllCarsServlet</servlet-name>
+        <url-pattern>/carslist</url-pattern>
+    </servlet-mapping>
+
 </web-app>

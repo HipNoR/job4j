@@ -1,0 +1,15 @@
+.unit {
+    background: #f7f3f5;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.unit-link {
+    display: block;
+    height: 100%;
+}
+
+.image-preview {
+    border-radius: 5px;
+}

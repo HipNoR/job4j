@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS persons (
 );
 
 CREATE TABLE IF NOT EXISTS cars (
-                                  car_id SERIAL,
+                                  car_id SERIAL PRIMARY KEY ,
                                   person_id INTEGER NOT NULL REFERENCES persons(person_id),
                                   description VARCHAR(255),
                                   bm_id INTEGER NOT NULL REFERENCES branded_model(bm_id),
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS cars (
                                   gearbox_id INTEGER NOT NULL REFERENCES gearboxes(gearbox_id),
                                   body_id INTEGER NOT NULL REFERENCES bodies(body_id),
                                   colour_id INTEGER NOT NULL REFERENCES colours(colour_id),
-                                  PRIMARY KEY (car_id)
+                                  sold BOOLEAN NOT NULL
 );
 
 

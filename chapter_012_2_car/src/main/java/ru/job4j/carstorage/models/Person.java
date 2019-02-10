@@ -1,5 +1,10 @@
 package ru.job4j.carstorage.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +20,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "persons")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.IntSequenceGenerator.class,
+//        property = "id")
 public class Person {
 
     @Id
@@ -37,8 +45,9 @@ public class Person {
     @Column(length = 10)
     private int phone;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
+    @JsonBackReference
     private List<Car> cars;
 
     public Person() {

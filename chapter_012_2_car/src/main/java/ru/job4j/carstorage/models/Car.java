@@ -1,6 +1,10 @@
 package ru.job4j.carstorage.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -15,6 +19,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "cars")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.IntSequenceGenerator.class,
+//        property = "id")
 public class Car {
 
     @Id
@@ -24,6 +31,7 @@ public class Car {
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
+    @JsonManagedReference
     private Person person;
 
     @Column(nullable = false)
@@ -48,6 +56,9 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "colour_id", nullable = false)
     private Colour colour;
+
+    @Column(name = "sold", nullable = false)
+    private boolean sold;
 
     public Car() {
     }
@@ -132,12 +143,20 @@ public class Car {
         this.colour = colour;
     }
 
+    public boolean isSold() {
+        return sold;
+    }
+
+    public void setSold(boolean sold) {
+        this.sold = sold;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "Car{id=%s, person = %s, name=%s, brand=%s, model=%s, engine=%s, gearbox=%s, body=%s, colour=%s}",
+                "Car{id=%s, person = %s, name=%s, brand=%s, model=%s, engine=%s, gearbox=%s, body=%s, colour=%s, sold=%s}",
                 id, person.getName(), description, brandedModel.getBrand().getName(), brandedModel.getModel().getName(),
-                engine.getName(), gearbox.getName(), body.getName(), colour.getName()
+                engine.getName(), gearbox.getName(), body.getName(), colour.getName(), sold
         );
     }
 
