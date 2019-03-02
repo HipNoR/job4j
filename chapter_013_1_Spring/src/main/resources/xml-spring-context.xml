@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="memoryStorage" class="ru.job4j.springxml.MemoryStorageImpl"/>
+
+    <bean id="userStorage" class="ru.job4j.springxml.UserStorage">
+        <constructor-arg name="storage" ref="memoryStorage"/>
+    </bean>
+</beans>

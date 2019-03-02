@@ -60,7 +60,8 @@
 		<module>chapter_009</module>
 		<module>chapter_012_1_TODO</module>
 		<module>chapter_012_2_car</module>
-	</modules>
+        <module>chapter_013_1_Spring</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
