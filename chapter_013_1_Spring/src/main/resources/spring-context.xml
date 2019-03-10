@@ -7,6 +7,7 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="ru.job4j.springannotations"/>
-    <!--<context:component-scan base-package="ru.job4j.model"/>-->
+    <context:component-scan base-package="ru.job4j.userstorage"/>
+
+
 </beans>

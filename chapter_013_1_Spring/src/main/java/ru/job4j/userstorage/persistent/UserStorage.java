@@ -1,6 +1,9 @@
-package ru.job4j.springxml;
+package ru.job4j.userstorage.persistent;
 
-import ru.job4j.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import ru.job4j.userstorage.entity.User;
 
 import java.util.List;
 
@@ -12,11 +15,13 @@ import java.util.List;
  * @since 0.1
  * 17.02.2019
  */
+@Component
 public class UserStorage {
 
     private final Storage<User> storage;
 
-    public UserStorage(final Storage<User> storage) {
+    @Autowired
+    public UserStorage(@Qualifier(value = "jdbcStorageImpl") final Storage<User> storage) {
         this.storage = storage;
     }
 
