@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/HipNoR/job4j.svg?branch=master)](https://travis-ci.org/HipNoR/job4j)
+﻿[![Build Status](https://travis-ci.org/HipNoR/job4j.svg?branch=master)](https://travis-ci.org/HipNoR/job4j)
 [![codecov](https://codecov.io/gh/HipNoR/job4j/branch/master/graph/badge.svg)](https://codecov.io/gh/HipNoR/job4j)
 
 # Репозиторий содержит проекты выполненные за время прохождения стажировки в job4j
@@ -45,3 +45,4 @@ chapter_012_2_car. Hibernate.
   Мини-проект: Площадка для продажи машин. Клиентская сторона HTML+CSS+JS. Серверная Servlet+Hibernate.
   
 
+Создания новой ветки через IDEA 
