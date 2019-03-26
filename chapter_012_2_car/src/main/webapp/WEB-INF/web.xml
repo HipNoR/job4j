@@ -15,4 +15,14 @@
         <url-pattern>/carslist</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SignInServlet</servlet-name>
+        <servlet-class>ru.job4j.carstorage.presentation.SignInController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SignInServlet</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+
 </web-app>

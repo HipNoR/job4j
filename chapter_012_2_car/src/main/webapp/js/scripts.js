@@ -29,3 +29,11 @@ function getAllCars() {
 $(document).ready(function () {
     getAllCars();
 });
+
+function signIn() {
+    $.ajax({
+        url: "signin",
+        method: "get"
+    });
+
+}

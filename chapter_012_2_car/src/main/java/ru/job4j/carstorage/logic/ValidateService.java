@@ -38,4 +38,15 @@ public class ValidateService {
     public List<Person> getAllPersons() {
         return this.store.getAllPersons();
     }
+
+    public int isRegistered(final String login, final String password) {
+        int id = -1;
+        List<Person> persons = getAllPersons();
+        for (Person person : persons) {
+            if (person.getLogin().equals(login) && person.getPassword().equals(password)) {
+                id = person.getId();
+            }
+        }
+        return id;
+    }
 }
